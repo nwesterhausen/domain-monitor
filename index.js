@@ -6,7 +6,7 @@ const server = require('./lib/server');
 // TODO: set expectation that app config is in config.yaml
 // TODO: set expectation that domain config is in domain.yaml
 
-// TODO: how to handle WHOIS results and where to keep track of that.
+// TODO: where to keep track of whoisdata.
 
 // May end up doing more in this, but for now just launches the server.
 server.startServer();
