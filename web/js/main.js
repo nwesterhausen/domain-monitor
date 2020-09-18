@@ -22,6 +22,10 @@ socket.on(SCK_LOADED_CFG, function(data) {
     updateConfigPlaceholders(data);
 })
 
+socket.on(SCK_LOADED_DOMAINS, function(data) {
+    console.log("Domain configuration received", data);
+})
+
 /**
  * Fill in the 'placeholder' attribute on the configuration form with configuration
  * data we get from the server (hopefully live config or something).
