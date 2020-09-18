@@ -27,6 +27,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="nav nav-tabs" id="pageTab" role="tablist">
                     <a class="nav-link active" id="dashboard-tab" role="tab" data-toggle="tab" href="#dashboard">Dashboard</a>
+                    <a class="nav-link" id="domains-tab" role="tab" data-toggle="tab" href="#domains">Domain Config</a>
                     <a class="nav-link" id="config-tab" role="tab" data-toggle="tab" href="#config">Configuration</a>
                 </div>
             </div>
@@ -43,6 +44,9 @@
                     <span class="ml-1" id="status-message">Waiting for data from server.</span>
                 </div>
             </div>
+        </div>
+        <div role="tabpanel" id="domains" class="tab-pane fade">
+            <h1>Domains to Monitor</h1>
         </div>
         <div role="tabpanel" id="config" class="tab-pane fade">
             <h1>Configuration</h1>
@@ -90,6 +94,7 @@
 
     <!--suppress HtmlUnknownTarget -->
     <script src="socket.io/socket.io.js"></script>
+    <script src="js/constants.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
