@@ -8,15 +8,53 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
 
+    <!-- Bootstrap CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
 
     <title>Domain Monitor</title>
 </head>
 <body>
-<h2>Placeholder</h2>
+    <!--Nav bar-->
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/bsicon/eye-fill.svg" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+                Domain Monitor
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="nav nav-tabs" id="pageTab" role="tablist">
+                    <a class="nav-link active" id="dashboard-tab" role="tab" data-toggle="tab" href="#dashboard">Dashboard</a>
+                    <a class="nav-link" id="config-tab" role="tab" data-toggle="tab" href="#config">Configuration</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<!-- JS Imports -->
-<!--suppress HtmlUnknownTarget -->
-<script src="socket.io/socket.io.js"></script>
-<script src="js/main.js"></script>
+    <div class="tab-content container mt-1" id="pageTabContent">
+        <div role="tabpanel" id="dashboard" class="tab-pane fade show active">
+            <div class="row justify-content-md-center">
+                <div class="col-md-auto">
+                    <div class="spinner-border text-secondary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="ml-1" id="status-message">Waiting for data from server.</span>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" id="config" class="tab-pane fade">
+            <h2>Configuration</h2>
+        </div>
+    </div>
+
+    <!-- JavaScript and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+
+    <!--suppress HtmlUnknownTarget -->
+    <script src="socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
