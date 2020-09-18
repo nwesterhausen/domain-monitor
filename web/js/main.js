@@ -15,4 +15,14 @@ socket.on('server restart', function() {
         socket.connect();
     }, 8000);
     console.log("Attempting socket reconnection in 8s.");
+});
+
+socket.on('101', function(data) {
+    console.log("Configuration", data);
+    document.querySelector("#webappPort").setAttribute('placeholder', data.app.port);
+    document.querySelector("#smtpHost").setAttribute('placeholder', data.smtp.host);
+    document.querySelector("#smtpPort").setAttribute('placeholder', data.smtp.port);
+    document.querySelector("#secureSmtpCheck").setAttribute('placeholder', data.smtp.secure);
+    document.querySelector("#smtpUser").setAttribute('placeholder', data.smtp.auth.user);
+    document.querySelector("#smtpPass").setAttribute('placeholder', '*****');
 })

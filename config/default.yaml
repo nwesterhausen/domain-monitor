@@ -1,2 +1,10 @@
 app:
   port: 4201
+
+smtp:
+  host: localhost
+  port: 25
+  secure: false
+  auth:
+    user: domain-alert@example.com
+    pass: SECRET-PASS
