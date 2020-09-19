@@ -1,0 +1,7 @@
+domains:
+  - name: Sample Domain
+    fqdn: example.com
+    alerts: on
+  - name: Store Page (sample)
+    fqdn: webstore.link
+    alerts: on
