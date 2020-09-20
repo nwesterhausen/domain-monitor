@@ -1,6 +1,10 @@
 app:
   port: 4201
 
+alerts:
+  admin: admin@example.com
+  sendalerts: yes
+
 smtp:
   host: localhost
   port: 25
