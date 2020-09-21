@@ -50,17 +50,17 @@
         </div>
         <div role="tabpanel" id="config" class="tab-pane fade">
             <h1>Configuration</h1>
-            <p>Change your configuration files from the web gui using these tabs.</p>
-            <ul class="nav nav-tabs" id="configTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="domains-tab" data-toggle="tab" href="#domains" role="tab" aria-controls="home" aria-selected="true">Domain Settings</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="appsettings-tab" data-toggle="tab" href="#appsettings" role="tab" aria-controls="profile" aria-selected="false">App Settings</a>
-                </li>
-            </ul>
-            <div role="tabpanel" id="domains" class="active  show tab-pane fade pt-2">
-                <h2>Monitored Domains</h2>
+            <p>
+                Changes here are applied to the two config files located in a config dir where you run this server.
+                If you want to modify those files directly, changes will be realized upon restarting the server.
+                Committing changes using this configuration page will cause the server to restart so whatever changes
+                you make take immediate effect.
+            </p>
+                <h3>Monitored Domains</h3>
+                <p>
+                    If you attempt to update a domain and change its FQDN, right now it will just add a new domain
+                    entry to watch. In the future, there will be an uuid for each entry.
+                </p>
                 <table class="table" id="configuredDomainTable">
                     <thead>
                     <tr>
@@ -73,8 +73,6 @@
                     <tbody>
                     </tbody>
                 </table>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="appsettings">
                 <form>
                     <h3>Web App</h3>
                     <div class="mb-3">
@@ -122,6 +120,43 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Commit Changes</button>
                 </form>
+        </div>
+    </div>
+
+    <!--    Edit Domain Modal-->
+    <div class="modal fade" tabindex="-1" id="editDomainModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id='modalDomainTitle' class="modal-title">Edit Domain</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form">
+                        <div class="mb-3">
+                            <label for="modalDomainName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="modalDomainName" aria-describedby="modalDomainNameHelp">
+                            <div id="modalDomainNameHelp" class="form-text">A shortname or description for the domain.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modalDomainFqdn" class="form-label">Domain Name</label>
+                            <input type="text" class="form-control" id="modalDomainFqdn" aria-describedby="modalDomainFqdnHelp">
+                            <div id="modalDomainFqdnHelp" class="form-text">FQDN for the domain to watch.</div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="modalDomainAlert">
+                            <label class="form-check-label" for="modalDomainAlert">Alert on Changes</label>
+                            <div id="modalDomainAlertHelp" class="form-text">Uncheck this to prevent this domain from generating alerts.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="modalDomainBtnDelete" type="button" class="btn btn-danger">Delete Domain</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="modalDomainBtnCommit" type="button" class="btn btn-primary">Commit Changes</button>
+                </div>
             </div>
         </div>
     </div>
