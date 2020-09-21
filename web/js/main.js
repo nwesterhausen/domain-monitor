@@ -73,6 +73,7 @@ function updateDomainConfigurationFeedback(domainData) {
     }
     let addBtn = document.createElement('A');
     addBtn.setAttribute('href','#')
+    addBtn.classList.add('text-success');
     addBtn.id = 'btnNewDomain';
     addBtn.addEventListener('click', handleNewDomain);
     addBtn.innerHTML = ADD_SVG;
