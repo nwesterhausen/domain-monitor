@@ -17,5 +17,9 @@
     "nodemailer": "^6.4.11",
     "socket.io": "^2.3.0",
     "whois": "^2.13.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
