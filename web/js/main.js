@@ -12,35 +12,38 @@ const EDIT_SVG = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi
 const DOMAIN_EDIT_MODAL = new bootstrap.Modal(document.querySelector('#editDomainModal'), {
     backdrop: 'static',
 });
+const LOG_MESSAGE_MODAL = new bootstrap.Modal(document.querySelector('#socketLogModal'));
 
 
 // Listeners
 socket.on("connect",function ()  {
-    console.log("Connection established via socket.");
+    updateMessageGui("Socket Connection Established")
 });
 socket.on("disconnect",function ()  {
-    console.log("Connection via socket closed.");
+    updateMessageGui("Connection via socket closed.");
 });
 socket.on(SCK_SERVER_RESTART, function() {
-    console.warn("Server sent server restart message, closing socket!");
+    updateMessageGui("Server sent server restart message, closing socket!");
     socket.disconnect();
     setTimeout(() => {
         socket.connect();
     }, 8000);
-    console.log("Attempting socket reconnection in 8s.");
+    updateMessageGui("Attempting socket reconnection in 8s.");
 });
 socket.on(SCK_LOADED_CFG, function(data) {
-    console.log("Configuration data received", data);
+    updateMessageGui("Configuration data received.", data);
     updateConfigPlaceholders(data);
 });
 socket.on(SCK_LOADED_DOMAINS, function(data) {
-    console.log("Domain configuration received", data);
+    updateMessageGui("Domain configuration received.", data);
     updateDomainConfigurationFeedback(data);
 });
 
 document.querySelector('#modalDomainBtnCommit').addEventListener('click', updateDomainInfo);
 document.querySelector('#modalDomainBtnDelete').addEventListener('click', deleteDomainInfo);
-
+document.querySelector('#btnShowFullLog').addEventListener('click', function(e) {
+    LOG_MESSAGE_MODAL.show();
+})
 
 /**
  * Fill in the 'placeholder' attribute on the configuration form with configuration
@@ -176,4 +179,18 @@ function deleteDomainInfo() {
     }
     socket.emit(SCK_DELETE_DOMAIN, domainData);
     DOMAIN_EDIT_MODAL.hide();
+}
+
+function updateMessageGui(message, extraData) {
+    let time = (new Date()).toLocaleString();
+    let messageStr = `${time}: ${message}`;
+    document.querySelector('#last-message').innerText = messageStr;
+    console.log(messageStr);
+
+    if (extraData) console.log(time, extraData);
+
+    let logEntry = document.createElement('li');
+    logEntry.classList.add('list-group-item');
+    logEntry.innerText = messageStr;
+    document.querySelector('#modalLogMessageList').appendChild(logEntry);
 }
