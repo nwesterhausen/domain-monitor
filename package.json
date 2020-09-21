@@ -4,7 +4,7 @@
   "description": "Node-js server for monitoring domain WHOIS records.",
   "main": "index.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint **/*.js",
+    "lint": "./node_modules/.bin/eslint web/js/*.js lib/*.js index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
