@@ -167,6 +167,7 @@ function updateDomainInfo() {
         alerts: document.querySelector('#modalDomainAlert').value,
     }
     socket.emit(SCK_UPDATE_DOMAIN, domainData);
+    updateMessageGui(`Domain update message sent. (${domainData.fqdn})`,domainData)
     DOMAIN_EDIT_MODAL.hide();
 }
 
@@ -178,6 +179,7 @@ function deleteDomainInfo() {
         alerts: document.querySelector('#modalDomainAlert').value,
     }
     socket.emit(SCK_DELETE_DOMAIN, domainData);
+    updateMessageGui(`Domain deletion message sent. (${domainData.fqdn})`,domainData)
     DOMAIN_EDIT_MODAL.hide();
 }
 
