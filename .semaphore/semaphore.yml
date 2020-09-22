@@ -1,0 +1,32 @@
+version: v1.0
+name: Compliance Check
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Install dependencies
+    task:
+      jobs:
+        - name: yarn install and cache
+          commands:
+            - checkout
+            - cache restore
+            - yarn install --frozen-lockfile
+            - cache store
+    dependencies: []
+  - name: Checks
+    dependencies:
+      - Install dependencies
+    task:
+      jobs:
+        - name: Lint-Check
+          commands:
+            - checkout
+            - cache restore
+            - yarn lint-check
+        - name: Prettier-Check
+          commands:
+            - checkout
+            - cache restore
+            - yarn pretty-check
