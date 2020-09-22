@@ -4,7 +4,11 @@
   "description": "Node-js server for monitoring domain WHOIS records.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint-check": "eslint index.js lib/*.js web/**/*.js",
+    "lint": "eslint --fix index.js lib/*.js web/**/*.js",
+    "pretty-check": "prettier --check index.js lib/*.js web/**/*.js web/**/*.html web/**/*.css",
+    "pretty": "prettier --write index.js lib/*.js web/**/*.js web/**/*.html web/**/*.css"
   },
   "keywords": [],
   "author": "Nicholas Westerhausen",
