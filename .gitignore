@@ -118,3 +118,4 @@ dist
 # Specific to this project
 # Don't include anything from config unless manually added
 config
+.idea/
