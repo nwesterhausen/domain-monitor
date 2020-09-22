@@ -20,6 +20,20 @@
   },
   "devDependencies": {
     "eslint": "^7.9.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^6.11.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "prettier": "^2.1.2"
+  },
+    "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix","prettier --write"],
+    "*.html": ["prettier --write"],
+    "*.css": ["prettier --write"],
   }
 }
