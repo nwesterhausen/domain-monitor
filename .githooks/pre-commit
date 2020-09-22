@@ -5,19 +5,23 @@ JSFILES=$(git diff --cached --name-only --diff-filter=ACMR "*.js" "*.jsx" | sed 
 FILES=$(git diff --cached --name-only --diff-filter=ACMR "*.css" "*.html" | sed 's| |\\ |g')
 [ -z "$FILES""$JSFILES" ] && exit 0
 
-# ESLINT FIX
-echo "$JSFILES" | xargs ./node_modules/.bin/eslint --fix
+# RUN CORRECTIONS ON JS FILES
+if [ "$JSFILES" ]; then
+	echo "Linting $JSFILES"
+	# ESLINT FIX
+	echo "$JSFILES" | xargs ./node_modules/.bin/eslint --fix
 
-[ $? -ne 0 ] && exit $?
+	[ $? -ne 0 ] && exit $?
+	echo "Running prettier on $JSFILES"
+	# Prettify
+	echo "$JSFILES" | xargs ./node_modules/.bin/prettier --write
 
-# Prettify all selected js files
-echo "$JSFILES" | xargs ./node_modules/.bin/prettier --write
-
-# Add back the modified/prettified files to staging
-echo "$JSFILES" | xargs git add
+	# Add back the modified/prettified files to staging
+	echo "$JSFILES" | xargs git add
+fi
 
 [ -z "$FILES" ] && exit 0
-
+echo "Running prettier on $FILES"
 echo "$FILES" | xargs git add
 echo "$FILES" | xargs ./node_modules/.bin/prettier --write
 
