@@ -1,17 +1,16 @@
 footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    border-top: #ccc 1px solid;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border-top: #ccc 1px solid;
 }
 
 footer p {
-
-    text-align: center;
+  text-align: center;
 }
 
 .log-div {
-    overflow-y: scroll;
-    height: 20em;
+  overflow-y: scroll;
+  height: 20em;
 }
