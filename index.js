@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const server = require('./lib/server');
+	const server = require('./lib/server');
 
 // Config file checking
 const SAMPLE_CONFIG_PATH = path.join(__dirname, "config", "sample.config.yaml");
-const SAMPLE_DOMAIN_PATH = path.join(__dirname, "config", "sample.domain.yaml");
+	const SAMPLE_DOMAIN_PATH = path.join(__dirname, "config", "sample.domain.yaml");
 const USED_CONFIG_PATH = path.join(__dirname, "config", "config.yaml");
 const USED_DOMAIN_PATH = path.join(__dirname, "config", "domain.yaml");
 
