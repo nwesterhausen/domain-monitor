@@ -7,14 +7,14 @@ agent:
 global_job_config:
   prologue:
     commands:
-      - checkout
-      - nvm use
+      - sem-version node 14.12.0
 blocks:
   - name: Install dependencies
     task:
       jobs:
         - name: yarn install and cache
           commands:
+            - checkout
             - cache restore
             - yarn install --frozen-lockfile
             - cache store
@@ -26,13 +26,11 @@ blocks:
       jobs:
         - name: Lint-Check
           commands:
+            - checkout
             - cache restore
             - yarn lint-check
         - name: Prettier-Check
           commands:
+            - checkout
             - cache restore
             - yarn pretty-check
-      prologue:
-        commands:
-          - checkout
-          - nvm use
