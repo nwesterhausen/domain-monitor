@@ -1,0 +1,19 @@
+#!/bin/sh
+JSFILES=$(git diff --cached --name-only --diff-filter=ACMR "*.js" "*.jsx" | sed 's| |\\ |g')
+FILES=$(git diff --cached --name-only --diff-filter=ACMR "*.css" "*.html" | sed 's| |\\ |g')
+[ -z "$FILES" ] || [ -z "$JSFILES" ] && exit 0
+
+# ESLINT FIX
+echo "$JSFILES" | xargs ./node_modules/.bin/eslint --fix
+
+[ $? -ne 0 ] && exit $?
+
+# Prettify all selected files
+echo "$FILES" | xargs ./node_modules/.bin/prettier --write
+echo "$JSFILES" | xargs ./node_modules/.bin/prettier --write
+
+# Add back the modified/prettified files to staging
+echo "$FILES" | xargs git add
+echo "$JSFILES" | xargs git add
+
+exit 0
