@@ -11,7 +11,7 @@ if [ "$JSFILES" ]; then
 	# ESLINT FIX
 	echo "$JSFILES" | xargs ./node_modules/.bin/eslint --fix
 
-	[ $? -ne 0 ] && exit $?
+	[ $? -ne 0 ] && exit 1
 	echo "Running prettier on $JSFILES"
 	# Prettify
 	echo "$JSFILES" | xargs ./node_modules/.bin/prettier --write

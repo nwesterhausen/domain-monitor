@@ -1,4 +1,6 @@
 # domain-monitor
+[![Semaphore Status](https://nwest.semaphoreci.com/badges/domain-monitor/branches/master.svg)](https://nwest.semaphoreci.com/projects/domain-monitor)
+
 Self-hosted server to monitor WHOIS records for specified domains, to help alert you of unwanted/unexpected changes
 to your domains and to help remind you when they need renewed.
 
