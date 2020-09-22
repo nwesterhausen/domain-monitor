@@ -26,11 +26,13 @@ blocks:
       jobs:
         - name: Lint-Check
           commands:
-            - checkout
             - cache restore
             - yarn lint-check
         - name: Prettier-Check
           commands:
-            - checkout
             - cache restore
             - yarn pretty-check
+      prologue:
+        commands:
+          - checkout
+          - nvm use
