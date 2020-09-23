@@ -108,6 +108,7 @@
               <th scope="col">Name</th>
               <th scope="col">FQDN</th>
               <th scope="col">Send Alert</th>
+              <th scope="col">WHOIS Enabled</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -312,6 +313,19 @@
                   Uncheck this to prevent this domain from generating alerts.
                 </div>
               </div>
+              <div class="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="modalDomainEnabled"
+                />
+                <label class="form-check-label" for="modalDomainEnabled"
+                  >Enable WHOIS Lookups</label
+                >
+                <div id="modalDomainEnabledHelp" class="form-text">
+                  Uncheck this to prevent WHOIS queries for this domain.
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -383,7 +397,6 @@
 
     <!--suppress HtmlUnknownTarget -->
     <script src="socket.io/socket.io.js"></script>
-    <script src="js/constants.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>

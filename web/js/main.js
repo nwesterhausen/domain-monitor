@@ -138,6 +138,7 @@ function updateDomainConfigurationFeedback(domainData) {
  *    name: Sample Domain
  *    fqdn: example.com
  *    alerts: on
+ *    enabled: on
  * @param {number} index The index in the domain list.
  * @return {Node}
  */
@@ -156,10 +157,16 @@ function buildDomainEntry(domainDetails, index) {
   const alerts = document.createElement("td");
   alerts.innerHTML = domainDetails.alerts ? "Yes" : "No";
 
+  // Enabled
+  const enabled = document.createElement("td");
+  console.log(`enabled?${domainDetails.enabled}`);
+  enabled.innerHTML = domainDetails.enabled ? "Yes" : "No";
+
   // Edit
   const edit = document.createElement("td");
   const a = document.createElement("a");
   a.setAttribute("href", "#");
+  a.classList.add("btn", "btn-sm");
   a.setAttribute("id", `edit-${index}`);
   a.innerHTML = EDIT_SVG;
   a.addEventListener("click", handleEditRow);
@@ -168,6 +175,7 @@ function buildDomainEntry(domainDetails, index) {
   row.appendChild(name);
   row.appendChild(fqdn);
   row.appendChild(alerts);
+  row.appendChild(enabled);
   row.appendChild(edit);
 
   return row;
@@ -179,6 +187,7 @@ function buildDomainEntry(domainDetails, index) {
  */
 function handleEditRow(e) {
   let targetId = e.target.id;
+  console.log(`Click caught on ${targetId}`);
   if (e.target.tagName !== "A") {
     if (e.target.tagName === "path")
       targetId = e.target.parentElement.parentElement.id;
@@ -195,7 +204,9 @@ function handleEditRow(e) {
     name: targetCells[0].innerText,
     fqdn: targetCells[1].innerText,
     alerts: targetCells[2].innerText === "Yes",
+    enabled: targetCells[3].innerText === "Yes",
   };
+  console.log(targetCells);
 
   document
     .querySelector("#modalDomainName")
@@ -206,6 +217,9 @@ function handleEditRow(e) {
   document
     .querySelector("#modalDomainAlert")
     .setAttribute("checked", domainData.alerts);
+  document
+    .querySelector("#modalDomainEnabled")
+    .setAttribute("checked", domainData.enabled);
   document.querySelector("#modalDomainTitle").innerText = "Edit Domain";
   document.querySelector("#modalDomainBtnDelete").classList.remove("d-none");
 
@@ -223,7 +237,8 @@ function updateDomainInfo() {
   const domainData = {
     name: document.querySelector("#modalDomainName").value,
     fqdn: document.querySelector("#modalDomainFqdn").value,
-    alerts: document.querySelector("#modalDomainAlert").value,
+    alerts: document.querySelector("#modalDomainAlert").checked,
+    enabled: document.querySelector("#modalDomainEnabled").checked,
   };
   socket.emit(SCK_UPDATE_DOMAIN, domainData);
   updateMessageGui(
@@ -242,7 +257,8 @@ function deleteDomainInfo() {
   const domainData = {
     name: document.querySelector("#modalDomainName").value,
     fqdn: document.querySelector("#modalDomainFqdn").value,
-    alerts: document.querySelector("#modalDomainAlert").value,
+    alerts: document.querySelector("#modalDomainAlert").checked,
+    enabled: document.querySelector("#modalDomainEnabled").checked,
   };
   socket.emit(SCK_DELETE_DOMAIN, domainData);
   updateMessageGui(
