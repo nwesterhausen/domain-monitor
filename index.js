@@ -1,8 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 
-const server = require("./lib/server");
-
 // Config file checking
 const SAMPLE_CONFIG_PATH = path.join(__dirname, "config", "sample.config.yaml");
 const SAMPLE_DOMAIN_PATH = path.join(__dirname, "config", "sample.domain.yaml");
@@ -21,4 +19,4 @@ if (!fs.existsSync(USED_DOMAIN_PATH)) {
 }
 
 // May end up doing more in this, but for now just launches the server.
-server.startServer();
+require("./lib/server").startServer();
