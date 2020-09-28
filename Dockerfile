@@ -1,7 +1,7 @@
 FROM node:14
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # App Dependecies
 COPY package.json yarn.lock ./
@@ -12,8 +12,8 @@ RUN yarn install --frozen-lockfile
 COPY . .
 
 # Create volumes
-VOLUME /usr/src/app/config \
-    /usr/src/app/whois-data
+VOLUME /app/config \
+    /app/whois-data
 
 EXPOSE 4201
 
