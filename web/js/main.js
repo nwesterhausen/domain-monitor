@@ -4,6 +4,8 @@ const SCK_DELETE_DOMAIN = "51";
 const SCK_UPDATE_CONFIG = "52";
 const SCK_SERVER_RESTART = "10";
 const SCK_LOADED_DOMAINS = "102";
+const SCK_LOADED_WHOIS = "103";
+const SCK_WHOIS_CACHE_MISS = "104";
 
 // eslint-disable-next-line no-undef
 const socket = io();
@@ -54,6 +56,19 @@ socket.on(SCK_LOADED_DOMAINS, function (data) {
   updateMessageGui("Domain configuration received.", data);
   updateDomainDashboardInformation(data);
   updateDomainConfigurationFeedback(data);
+});
+socket.on(SCK_LOADED_WHOIS, function (data) {
+  updateMessageGui(`WHOIS data recieved for ${data.domain_name}`, data);
+  updateDomainCard(data);
+});
+socket.on(SCK_WHOIS_CACHE_MISS, function (data) {
+  updateMessageGui(`WHOIS cache miss for ${data}`);
+  document
+    .querySelector(`#${getCardIdTagFromDomain(data)} .card-header`)
+    .classList.add("bg-warning");
+  document.querySelector(
+    `#${getCardIdTagFromDomain(data)} .card-body`
+  ).innerHTML = `<p>No WHOIS cache for ${data}</p>`;
 });
 
 document
@@ -314,7 +329,7 @@ function updateMessageGui(message, extraData) {
 function createDomainCard(domainObj) {
   const card = document.createElement("div");
   card.classList.add("card", "mb-2");
-  card.id = `card-${domainObj.fqdn}`;
+  card.id = getCardIdTagFromDomain(domainObj.fqdn);
 
   const header = document.createElement("div");
   header.classList.add("card-header");
@@ -322,7 +337,10 @@ function createDomainCard(domainObj) {
 
   const body = document.createElement("div");
   body.classList.add("card-body");
-  body.innerHTML = "<p>Here's some sample inner text.</p>";
+  body.innerHTML =
+    '<div class="spinner-border text-secondary" role="status">' +
+    '<span class="sr-only">Loading...</span></div>' +
+    '<span class="ml-2">Waiting for WHOIS update from server</span>';
 
   card.appendChild(header);
   card.appendChild(body);
@@ -366,4 +384,34 @@ function updateConfig() {
   };
   socket.emit(SCK_UPDATE_CONFIG, configObj);
   updateMessageGui("Sent server config update.", configObj);
+}
+
+/**
+ *
+ * @param {object} whoisdata
+ */
+function updateDomainCard(whoisdata) {
+  const cardid = getCardIdTagFromDomain(whoisdata.domain_name);
+  document.querySelector(`#${cardid} .card-body`).innerHTML = `<table><tbody>
+    <tr><td>Registrar</td><td>${whoisdata.registrar.name}</td></tr>
+    <tr><td>Registered On</td><td>${whoisdata.created_date}</td></tr>
+    <tr><td>Expiration</td><td>${
+      whoisdata.registrar.registration_expiration
+    }</td></tr>
+    <tr><td>Name Servers</td><td>${JSON.stringify(
+      whoisdata.name_server
+    )}</td></tr>
+    <tr><td>WHOIS query time</td><td>${
+      whoisdata.whois_db_update_time
+    }</td></tr>    
+    </tbody></table>`;
+  document.querySelector(`#${cardid} .card-header`).classList.add("bg-success");
+}
+
+/**
+ * @param {string} fqdn
+ * @return {string} domain card idtag
+ */
+function getCardIdTagFromDomain(fqdn) {
+  return `card-${fqdn.replace(/\./g, "-")}`;
 }
