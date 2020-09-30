@@ -29,22 +29,20 @@ If they don't, this triggers an alert (and a prompt to force update the WHOIS re
 ## Installation
 
 ### Docker
-Included is a Dockerfile.
-
-1. Clone the repo
-2. Build the docker image 
-
-  `docker build -t local/domain-monitor .`
-  
-3. Run the container
+Simply run and go.
 
   ```
   docker run -d \
-    -v ~/dmconfig:/app/config \
-    -v ~/dmwhois:/app/whois-data \
     -p 4201:4201 \
     local/domain-monitor
   ```
+The docker image uses two volumes, be aware if you want to manually edit the configs or
+view the cached whois data.
+
+Image Mount     | Contains
+------------    | ------------
+/app/config     | config.yaml and domain.yaml
+/app/whois-data | cached whois data in yaml files
 
 ### Running with node
 Should by OS agnostic. Requires nodejs >= 12
