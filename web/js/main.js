@@ -1,6 +1,7 @@
 const SCK_LOADED_CFG = "101";
 const SCK_UPDATE_DOMAIN = "50";
 const SCK_DELETE_DOMAIN = "51";
+const SCK_UPDATE_CONFIG = "52";
 const SCK_SERVER_RESTART = "10";
 const SCK_LOADED_DOMAINS = "102";
 
@@ -66,6 +67,9 @@ document
   .addEventListener("click", function (e) {
     LOG_MESSAGE_MODAL.show();
   });
+document
+  .querySelector("#btnCommitConfigChanges")
+  .addEventListener("click", updateConfig);
 
 /**
  * Fill in the 'placeholder' attribute on the configuration form with configuration
@@ -207,7 +211,6 @@ function handleEditRow(e) {
     alerts: targetCells[2].innerText === "Yes",
     enabled: targetCells[3].innerText === "Yes",
   };
-  console.log(targetCells);
 
   document
     .querySelector("#modalDomainName")
@@ -230,22 +233,41 @@ function handleEditRow(e) {
 }
 
 /**
- * Send message to a server to update a domain (or create it) from
- * the values in the field
+ * Gets the domain information presented in the modal.
+ * @return {object}
  */
-function updateDomainInfo() {
-  console.log("Attempting domain update.");
-  const domainData = {
+function getDomainFromModal() {
+  return {
     name: document.querySelector("#modalDomainName").value,
     fqdn: document.querySelector("#modalDomainFqdn").value,
     alerts: document.querySelector("#modalDomainAlert").checked,
     enabled: document.querySelector("#modalDomainEnabled").checked,
   };
+}
+
+/**
+ * Reset the domain update modal to empty values
+ */
+function resetDomainModalForm() {
+  document.querySelector("#modalDomainName").setAttribute("value", "");
+  document.querySelector("#modalDomainFqdn").setAttribute("value", "");
+  document.querySelector("#modalDomainAlert").setAttribute("checked", false);
+  document.querySelector("#modalDomainEnabled").setAttribute("checked", false);
+}
+
+/**
+ * Send message to a server to update a domain (or create it) from
+ * the values in the field
+ */
+function updateDomainInfo() {
+  console.log("Attempting domain update.");
+  const domainData = getDomainFromModal();
   socket.emit(SCK_UPDATE_DOMAIN, domainData);
   updateMessageGui(
     `Domain update message sent. (${domainData.fqdn})`,
     domainData
   );
+  resetDomainModalForm();
   DOMAIN_EDIT_MODAL.hide();
 }
 
@@ -255,17 +277,13 @@ function updateDomainInfo() {
  */
 function deleteDomainInfo() {
   console.log("Attempting domain deletion");
-  const domainData = {
-    name: document.querySelector("#modalDomainName").value,
-    fqdn: document.querySelector("#modalDomainFqdn").value,
-    alerts: document.querySelector("#modalDomainAlert").checked,
-    enabled: document.querySelector("#modalDomainEnabled").checked,
-  };
+  const domainData = getDomainFromModal();
   socket.emit(SCK_DELETE_DOMAIN, domainData);
   updateMessageGui(
     `Domain deletion message sent. (${domainData.fqdn})`,
     domainData
   );
+  resetDomainModalForm();
   DOMAIN_EDIT_MODAL.hide();
 }
 
@@ -322,4 +340,30 @@ function updateDomainDashboardInformation(data) {
   for (let i = 0; i < data.domains.length; i++) {
     dashboard.appendChild(createDomainCard(data.domains[i]));
   }
+}
+
+/**
+ * Reads value in config form and sends update to server
+ */
+function updateConfig() {
+  const configObj = {
+    app: {
+      port: document.querySelector("#webappPort").value,
+    },
+    smtp: {
+      host: document.querySelector("#smtpHost").value,
+      port: document.querySelector("#smtpPort").value,
+      secure: document.querySelector("#secureSmtpCheck").checked,
+      auth: {
+        user: document.querySelector("#smtpUser").value,
+        pass: document.querySelector("#smtpPass").value,
+      },
+    },
+    alerts: {
+      admin: document.querySelector("#smtpTarget").value,
+      sendalerts: document.querySelector("#enableSmtpCheck").checked,
+    },
+  };
+  socket.emit(SCK_UPDATE_CONFIG, configObj);
+  updateMessageGui("Sent server config update.", configObj);
 }
