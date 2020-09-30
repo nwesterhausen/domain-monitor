@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:14-alpine
 
 # Create app directory
 WORKDIR /app
@@ -6,7 +6,7 @@ WORKDIR /app
 # App Dependecies
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --production=true
 
 # Bundle app source
 COPY . .
