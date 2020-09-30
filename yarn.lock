@@ -1458,6 +1458,11 @@ v8-compile-cache@^2.0.3:
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.1.1.tgz#54bc3cdd43317bca91e35dcaf305b1a7237de745"
   integrity sha512-8OQ9CL+VWyt3JStj7HX7/ciTL2V3Rl1Wf5OL+SNTm0yK1KvtReVulksyeRnCANHHuUxHlQig+JJDlUhBt1NQDQ==
 
+validator@^9.4.0:
+  version "9.4.1"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-9.4.1.tgz#abf466d398b561cd243050112c6ff1de6cc12663"
+  integrity sha512-YV5KjzvRmSyJ1ee/Dm5UED0G+1L4GZnLN3w6/T+zZm8scVua4sOhYKWTUrKa0H/tMiJyO9QLHMPN+9mB/aMunA==
+
 vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
@@ -1475,7 +1480,15 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
-whois@^2.13.0:
+whois-promise@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/whois-promise/-/whois-promise-1.2.4.tgz#39ccaa7aace8d8556e0504b52290348c97e7a85b"
+  integrity sha512-7PACAYN9tan6iG+Th6ewqr6MnLIMZbLUmOxL6/OFb7wZJKDlGGNElH71jDHyGEJWfjj7Q35KAJJZ1AZk297Ymg==
+  dependencies:
+    validator "^9.4.0"
+    whois "^2.5.9"
+
+whois@^2.5.9:
   version "2.13.1"
   resolved "https://registry.yarnpkg.com/whois/-/whois-2.13.1.tgz#ea464e05111ee198d3759f06dc6b09ce7a827da2"
   integrity sha512-9hlASP9I8mKgnZ5PyxqAyViPk4eCoph9BUHeXSARWUDWySnWAiw3ZuatVMQkC2w/dwng/LY/o9kzp9GB22+Zlg==
