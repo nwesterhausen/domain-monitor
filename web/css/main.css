@@ -15,6 +15,6 @@ footer p {
   height: 20em;
 }
 
-#config {
+.tab-pane {
   margin-bottom: 15%;
 }
