@@ -27,7 +27,27 @@ whois databases. domain-monitor acts in this way:
 If they don't, this triggers an alert (and a prompt to force update the WHOIS reference).
 
 ## Installation
-Should by OS agnostic.
+
+### Docker
+Included is a Dockerfile.
+
+1. Clone the repo
+2. Build the docker image 
+
+  `docker build -t local/domain-monitor .`
+  
+3. Run the container
+
+  ```
+  docker run -d \
+    -v ~/dmconfig:/app/config \
+    -v ~/dmwhois:/app/whois-data \
+    -p 4201:4201 \
+    local/domain-monitor
+  ```
+
+### Running with node
+Should by OS agnostic. Requires nodejs >= 12
 
 Simply clone this repository, install dependencies and `node index.js`.
 
