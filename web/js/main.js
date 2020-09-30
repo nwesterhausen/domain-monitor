@@ -1,6 +1,7 @@
 const SCK_LOADED_CFG = "101";
 const SCK_UPDATE_DOMAIN = "50";
 const SCK_DELETE_DOMAIN = "51";
+const SCK_UPDATE_CONFIG = "52";
 const SCK_SERVER_RESTART = "10";
 const SCK_LOADED_DOMAINS = "102";
 
@@ -344,4 +345,25 @@ function updateDomainDashboardInformation(data) {
 /**
  * Reads value in config form and sends update to server
  */
-function updateConfig() {}
+function updateConfig() {
+  const configObj = {
+    app: {
+      port: document.querySelector("#webappPort").value,
+    },
+    smtp: {
+      host: document.querySelector("#smtpHost").value,
+      port: document.querySelector("#smtpPort").value,
+      secure: document.querySelector("#secureSmtpCheck").checked,
+      auth: {
+        user: document.querySelector("#smtpUser").value,
+        pass: document.querySelector("#smtpPass").value,
+      },
+    },
+    alerts: {
+      admin: document.querySelector("#smtpTarget").value,
+      sendalerts: document.querySelector("#enableSmtpCheck").checked,
+    },
+  };
+  socket.emit(SCK_UPDATE_CONFIG, configObj);
+  updateMessageGui("Sent server config update.", configObj);
+}
