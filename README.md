@@ -34,7 +34,7 @@ Simply run and go.
   ```
   docker run -d \
     -p 4201:4201 \
-    local/domain-monitor
+    nwesterhausen/domain-monitor
   ```
 The docker image uses two volumes, be aware if you want to manually edit the configs or
 view the cached whois data.
