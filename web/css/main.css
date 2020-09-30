@@ -14,3 +14,7 @@ footer p {
   overflow-y: scroll;
   height: 20em;
 }
+
+#config {
+  margin-bottom: 15%;
+}
