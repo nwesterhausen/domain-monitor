@@ -51,6 +51,7 @@ socket.on(SCK_LOADED_CFG, function (data) {
 });
 socket.on(SCK_LOADED_DOMAINS, function (data) {
   updateMessageGui("Domain configuration received.", data);
+  updateDomainDashboardInformation(data);
   updateDomainConfigurationFeedback(data);
 });
 
@@ -285,4 +286,40 @@ function updateMessageGui(message, extraData) {
   logEntry.classList.add("list-group-item");
   logEntry.innerText = messageStr;
   document.querySelector("#modalLogMessageList").appendChild(logEntry);
+}
+
+/**
+ * Create a domain info card for the domain object
+ * @param {object} domainObj
+ * @return {object}
+ */
+function createDomainCard(domainObj) {
+  const card = document.createElement("div");
+  card.classList.add("card", "mb-2");
+  card.id = `card-${domainObj.fqdn}`;
+
+  const header = document.createElement("div");
+  header.classList.add("card-header");
+  header.innerText = domainObj.fqdn;
+
+  const body = document.createElement("div");
+  body.classList.add("card-body");
+  body.innerHTML = "<p>Here's some sample inner text.</p>";
+
+  card.appendChild(header);
+  card.appendChild(body);
+
+  return card;
+}
+
+/**
+ * Add domain cards or update them on the dashboard
+ * @param {object} data
+ */
+function updateDomainDashboardInformation(data) {
+  const dashboard = document.querySelector("#dashboard");
+  dashboard.innerHTML = "";
+  for (let i = 0; i < data.domains.length; i++) {
+    dashboard.appendChild(createDomainCard(data.domains[i]));
+  }
 }
