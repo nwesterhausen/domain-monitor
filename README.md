@@ -29,9 +29,9 @@ If they don't, this triggers an alert (and a prompt to force update the WHOIS re
 ## Installation
 
 ### Docker
-See github package release (sidebar link) for versioned docker images and instructions for pulling.
+Current docker images are hosted on [Github Packages](https://github.com/nwesterhausen/domain-monitor/packages/).
 
-The docker image exposes one port, 4201 TCP.
+The *server* image is the main image.
 
 The docker image uses two volumes, be aware if you want to manually edit the configs or
 view the cached whois data.
@@ -40,6 +40,10 @@ Image Mount     | Contains
 ------------    | ------------
 /app/config     | config.yaml and domain.yaml
 /app/whois-data | cached whois data in yaml files
+
+Exposed Ports   | Use
+------------    | ----------
+4201/tcp        | WEB GUI
 
 ### Running with node
 Should by OS agnostic. Requires nodejs >= 12
