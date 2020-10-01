@@ -5,13 +5,12 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url":  "https://github.com/nwesterhausen/domain-monitor.git"
+    "url": "https://github.com/nwesterhausen/domain-monitor.git"
   },
   "bugs": {
-    "url":  "https://github.com/nwesterhausen/domain-monitor/issues"
-},
-"homepage": "https://github.com/nwesterhausen/domain-monitor",
-
+    "url": "https://github.com/nwesterhausen/domain-monitor/issues"
+  },
+  "homepage": "https://github.com/nwesterhausen/domain-monitor",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint-check": "eslint index.js lib/*.js web/**/*.js",
@@ -27,6 +26,7 @@
     "js-yaml": "^3.14.0",
     "morgan": "^1.10.0",
     "nodemailer": "^6.4.11",
+    "slugid": "^2.0.0",
     "socket.io": "^2.3.0",
     "whois-promise": "^1.2.4"
   },

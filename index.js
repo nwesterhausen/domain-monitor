@@ -23,5 +23,6 @@ if (!fs.existsSync(WHOIS_DATA_PATH)) {
 }
 
 // May end up doing more in this, but for now just launches the server.
+require("./lib/domains").validateDomainYaml();
 require("./lib/server").startServer();
 require("./lib/whois-manager");

@@ -10,6 +10,8 @@ const SCK_WHOIS_CACHE_MISS = "104";
 // eslint-disable-next-line no-undef
 const socket = io();
 
+let domainIdMap = {};
+
 const EDIT_SVG =
   '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
   '  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>\n' +
@@ -56,6 +58,10 @@ socket.on(SCK_LOADED_DOMAINS, function (data) {
   updateMessageGui("Domain configuration received.", data);
   updateDomainDashboardInformation(data);
   updateDomainConfigurationFeedback(data);
+  domainIdMap = {};
+  data.domains.map((d) => {
+    domainIdMap[d.fqdn] = d.id;
+  });
 });
 socket.on(SCK_LOADED_WHOIS, function (data) {
   updateMessageGui(`WHOIS data recieved for ${data.domain_name}`, data);
@@ -64,10 +70,10 @@ socket.on(SCK_LOADED_WHOIS, function (data) {
 socket.on(SCK_WHOIS_CACHE_MISS, function (data) {
   updateMessageGui(`WHOIS cache miss for ${data}`);
   document
-    .querySelector(`#${getCardIdTagFromDomain(data)} .card-header`)
+    .querySelector(`#${data.id} .card-header`)
     .classList.add("bg-warning");
   document.querySelector(
-    `#${getCardIdTagFromDomain(data)} .card-body`
+    `#${data.id} .card-body`
   ).innerHTML = `<p>No WHOIS cache for ${data}</p>`;
 });
 
@@ -122,6 +128,7 @@ function updateConfigPlaceholders(configData) {
  * React to clicking the 'add domain' button
  */
 function handleNewDomain() {
+  resetDomainModalForm();
   document.querySelector("#modalDomainTitle").innerText = "Create Domain";
   document.querySelector("#modalDomainBtnDelete").classList.add("d-none");
 
@@ -164,6 +171,7 @@ function updateDomainConfigurationFeedback(domainData) {
  */
 function buildDomainEntry(domainDetails, index) {
   const row = document.createElement("tr");
+  row.id = domainDetails.id;
 
   // Name Field
   const name = document.createElement("td");
@@ -225,6 +233,7 @@ function handleEditRow(e) {
     fqdn: targetCells[1].innerText,
     alerts: targetCells[2].innerText === "Yes",
     enabled: targetCells[3].innerText === "Yes",
+    id: targetRow[index].id,
   };
 
   document
@@ -239,6 +248,7 @@ function handleEditRow(e) {
   document
     .querySelector("#modalDomainEnabled")
     .setAttribute("checked", domainData.enabled);
+  document.querySelector("#modalDomainIdDisplay").innerText = domainData.id;
   document.querySelector("#modalDomainTitle").innerText = "Edit Domain";
   document.querySelector("#modalDomainBtnDelete").classList.remove("d-none");
 
@@ -257,6 +267,7 @@ function getDomainFromModal() {
     fqdn: document.querySelector("#modalDomainFqdn").value,
     alerts: document.querySelector("#modalDomainAlert").checked,
     enabled: document.querySelector("#modalDomainEnabled").checked,
+    id: document.querySelector("#modalDomainIdDisplay").innerText,
   };
 }
 
@@ -268,6 +279,7 @@ function resetDomainModalForm() {
   document.querySelector("#modalDomainFqdn").setAttribute("value", "");
   document.querySelector("#modalDomainAlert").setAttribute("checked", false);
   document.querySelector("#modalDomainEnabled").setAttribute("checked", false);
+  document.querySelector("#modalDomainIdDisplay").innerText = "";
 }
 
 /**
@@ -329,7 +341,7 @@ function updateMessageGui(message, extraData) {
 function createDomainCard(domainObj) {
   const card = document.createElement("div");
   card.classList.add("card", "mb-2");
-  card.id = getCardIdTagFromDomain(domainObj.fqdn);
+  card.id = domainObj.id;
 
   const header = document.createElement("div");
   header.classList.add("card-header");
@@ -391,7 +403,12 @@ function updateConfig() {
  * @param {object} whoisdata
  */
 function updateDomainCard(whoisdata) {
-  const cardid = getCardIdTagFromDomain(whoisdata.domain_name);
+  console.log(
+    domainIdMap,
+    whoisdata.domain_name,
+    domainIdMap[whoisdata.domain_name]
+  );
+  const cardid = domainIdMap[whoisdata.domain_name];
   document.querySelector(`#${cardid} .card-body`).innerHTML = `<table><tbody>
     <tr><td>Registrar</td><td>${whoisdata.registrar.name}</td></tr>
     <tr><td>Registered On</td><td>${whoisdata.created_date}</td></tr>
@@ -406,12 +423,4 @@ function updateDomainCard(whoisdata) {
     }</td></tr>    
     </tbody></table>`;
   document.querySelector(`#${cardid} .card-header`).classList.add("bg-success");
-}
-
-/**
- * @param {string} fqdn
- * @return {string} domain card idtag
- */
-function getCardIdTagFromDomain(fqdn) {
-  return `card-${fqdn.replace(/\./g, "-")}`;
 }
