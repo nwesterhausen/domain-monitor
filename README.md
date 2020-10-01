@@ -29,13 +29,10 @@ If they don't, this triggers an alert (and a prompt to force update the WHOIS re
 ## Installation
 
 ### Docker
-Simply run and go.
+See github package release (sidebar link) for versioned docker images and instructions for pulling.
 
-  ```
-  docker run -d \
-    -p 4201:4201 \
-    nwesterhausen/domain-monitor
-  ```
+The docker image exposes one port, 4201 TCP.
+
 The docker image uses two volumes, be aware if you want to manually edit the configs or
 view the cached whois data.
 
