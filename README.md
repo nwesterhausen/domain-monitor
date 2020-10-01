@@ -41,7 +41,7 @@ Image Mount     | Contains
 /app/config     | config.yaml and domain.yaml
 /app/whois-data | cached whois data in yaml files
 
-Exposed Ports   | Use
+Exposed Ports   | Used for
 ------------    | ----------
 4201/tcp        | WEB GUI
 
