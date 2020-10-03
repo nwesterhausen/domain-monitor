@@ -29,9 +29,6 @@ If they don't, this triggers an alert (and a prompt to force update the WHOIS re
 ## Installation
 
 ### Docker
-Current docker images are hosted on [Github Packages](https://github.com/nwesterhausen/domain-monitor/packages/).
-
-The *server* image is the main image.
 
 The docker image uses two volumes, be aware if you want to manually edit the configs or
 view the cached whois data.
@@ -44,6 +41,15 @@ Image Mount     | Contains
 Exposed Ports   | Used for
 ------------    | ----------
 4201/tcp        | WEB GUI
+
+
+#### Using [Github Packages](https://github.com/nwesterhausen/domain-monitor/packages/)
+
+The *server* image is the main image.
+
+#### Using [Docker Hub](https://hub.docker.com/repository/docker/nwesterhausen/domain-monitor)
+
+Image is just `nwesterhausen/domain-monitor`, latest tag will be the most recent version, or pull by tagged version.
 
 ### Running with node
 Should by OS agnostic. Requires nodejs >= 12
