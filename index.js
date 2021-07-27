@@ -5,10 +5,15 @@ const path = require("path");
 const WHOIS_DATA_PATH = path.join(__dirname, "whois-data");
 const SAMPLE_CONFIG_PATH = path.join(__dirname, "sample.config.yaml");
 const SAMPLE_DOMAIN_PATH = path.join(__dirname, "sample.domain.yaml");
-const USED_CONFIG_PATH = path.join(__dirname, "config", "config.yaml");
-const USED_DOMAIN_PATH = path.join(__dirname, "config", "domain.yaml");
+const CONFIG_DIR = path.join(__dirname, "config");
+const USED_CONFIG_PATH = path.join(CONFIG_DIR, "config.yaml");
+const USED_DOMAIN_PATH = path.join(CONFIG_DIR, "domain.yaml");
 
 // Check for and create if used paths don't exist.
+if (!fs.existsSync(CONFIG_DIR)) {
+  console.log("Creating a config directory");
+  fs.mkdirSync(CONFIG_DIR);
+}
 if (!fs.existsSync(USED_CONFIG_PATH)) {
   console.log("Copying sample config to config.yaml");
   fs.copyFileSync(SAMPLE_CONFIG_PATH, USED_CONFIG_PATH);
