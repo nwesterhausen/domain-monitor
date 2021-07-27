@@ -19,17 +19,15 @@ GH_TAGBASE="docker.pkg.github.com/$USERNAME/$IMAGE_PREFIX/$IMAGE"
 DOCKER_TAGBASE="$USERNAME/$IMAGE_PREFIX"
 
 # Build the docker image
-docker build -t "$DOCKER_TAGBASE" .
+docker build \
+    -t "$DOCKER_TAGBASE" \
+    -t "$DOCKER_TAGBASE:$TAG" \
+    -t "$GH_TAGBASE" \
+    -t "$GH_TAGBASE:$TAG" .
 
 # Grab the image ID
 IMAGE_ID=$(docker images -q "$DOCKER_TAGBASE")
 echo $IMAGE_ID
-
-# Tag the image
-docker tag $IMAGE_ID "$GH_TAGBASE:$TAG"
-docker tag $IMAGE_ID "$GH_TAGBASE:latest"
-docker tag $IMAGE_ID "$DOCKER_TAGBASE:$TAG"
-docker tag $IMAGE_ID "$DOCKER_TAGBASE:latest"
 
 # Login to gh packages docker repo
 cat ~/.gh_token | docker login docker.pkg.github.com -u nwesterhausen --password-stdin
