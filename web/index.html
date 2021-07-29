@@ -10,11 +10,13 @@
 
     <!-- Bootstrap CSS -->
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-      integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
 
     <link rel="stylesheet" href="./css/main.css" />
 
@@ -38,7 +40,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" type="button" data-bs-target="#dashboard">Dashboard</button>
+            <button
+              class="nav-link active"
+              id="dashboard-tab"
+              data-bs-toggle="tab"
+              type="button"
+              data-bs-target="#dashboard"
+            >
+              Dashboard
+            </button>
             <button class="nav-link" id="config-tab" data-bs-toggle="tab" type="button" data-bs-target="#config">
               <svg
                 width="1em"
@@ -87,6 +97,12 @@
           If you attempt to update a domain and change its FQDN, right now it will just add a new domain entry to watch.
           In the future, there will be an uuid for each entry.
         </p>
+        <div>
+          <a href="#" class="btn btn-success" id="btnNewDomain">
+            <i class="bi bi-plus-square"></i>
+            &nbsp;Add Domain
+          </a>
+        </div>
         <table class="table" id="configuredDomainTable">
           <thead>
             <tr>
