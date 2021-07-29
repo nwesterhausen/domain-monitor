@@ -37,9 +37,9 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="nav nav-pills" id="pageTab" role="tablist">
-            <a class="nav-link active" id="dashboard-tab" role="tab" data-toggle="pill" href="#dashboard">Dashboard</a>
-            <a class="nav-link" id="config-tab" role="tab" data-toggle="pill" href="#config">
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" type="button" data-bs-target="#dashboard">Dashboard</button>
+            <button class="nav-link" id="config-tab" data-bs-toggle="tab" type="button" data-bs-target="#config">
               <svg
                 width="1em"
                 height="1em"
@@ -54,7 +54,7 @@
                 />
               </svg>
               Configuration
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -63,12 +63,14 @@
     <!--    Main Content-->
     <div class="tab-content container mt-1" id="pageTabContent">
       <div role="tabpanel" id="dashboard" class="tab-pane fade show active">
-        <div class="row justify-content-md-center">
-          <div class="col-md-auto">
-            <div class="spinner-border text-secondary" role="status">
-              <span class="sr-only">Loading...</span>
+        <div id="dashContent" class="d-flex flex-wrap">
+          <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+              <div class="spinner-border text-secondary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <span class="ml-1" id="status-message">Waiting for data from server.</span>
             </div>
-            <span class="ml-1" id="status-message">Waiting for data from server.</span>
           </div>
         </div>
       </div>

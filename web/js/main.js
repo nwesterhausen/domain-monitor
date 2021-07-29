@@ -328,11 +328,11 @@ function updateMessageGui(message, extraData) {
  */
 function createDomainCard(domainObj) {
   const card = document.createElement("div");
-  card.classList.add("card", "mb-2");
+  card.classList.add("card", "m-2", "col-3");
   card.id = getCardIdTagFromDomain(domainObj.fqdn);
 
   const header = document.createElement("div");
-  header.classList.add("card-header");
+  header.classList.add("card-header", "h3");
   header.innerText = domainObj.fqdn;
 
   const body = document.createElement("div");
@@ -353,7 +353,7 @@ function createDomainCard(domainObj) {
  * @param {object} data
  */
 function updateDomainDashboardInformation(data) {
-  const dashboard = document.querySelector("#dashboard");
+  const dashboard = document.querySelector("#dashContent");
   dashboard.innerHTML = "";
   for (let i = 0; i < data.domains.length; i++) {
     dashboard.appendChild(createDomainCard(data.domains[i]));
@@ -392,19 +392,19 @@ function updateConfig() {
  */
 function updateDomainCard(whoisdata) {
   const cardid = getCardIdTagFromDomain(whoisdata.domain_name);
-  document.querySelector(`#${cardid} .card-body`).innerHTML = `<table><tbody>
-    <tr><td>Registrar</td><td>${whoisdata.registrar.name}</td></tr>
-    <tr><td>Registered On</td><td>${whoisdata.created_date}</td></tr>
-    <tr><td>Expiration</td><td>${
-      whoisdata.registrar.registration_expiration
-    }</td></tr>
-    <tr><td>Name Servers</td><td>${JSON.stringify(
-      whoisdata.name_server
-    )}</td></tr>
-    <tr><td>WHOIS query time</td><td>${
-      whoisdata.whois_db_update_time
-    }</td></tr>    
-    </tbody></table>`;
+  let nameserverList = "<ul>";
+  for (const ns of whoisdata.name_server) {
+    nameserverList += `<li>${ns}</li>`;
+  }
+  nameserverList += "</ul>";
+
+  document.querySelector(`#${cardid} .card-body`).innerHTML = `<dl>
+    <dt>Registrar</dt><dd>${whoisdata.registrar.name}</dd>
+    <dt>Registered On</dt><dd>${whoisdata.created_date}</dd>
+    <dt>Expiration</dt><dd>${whoisdata.registrar.registration_expiration}</dd>
+    <dt>Name Servers</dt><dd>${nameserverList}</dd>
+    <dt>WHOIS query time</dt><dd>${whoisdata.whois_db_update_time}</dd>
+    </dl>`;
   document.querySelector(`#${cardid} .card-header`).classList.add("bg-success");
 }
 
