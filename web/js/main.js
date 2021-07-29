@@ -10,17 +10,6 @@ const SCK_WHOIS_CACHE_MISS = "104";
 // eslint-disable-next-line no-undef
 const socket = io();
 
-const EDIT_SVG =
-  '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
-  '  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>\n' +
-  '  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>\n' +
-  "</svg>";
-const ADD_SVG =
-  '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
-  '  <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>\n' +
-  '  <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>\n' +
-  "</svg>";
-
 // eslint-disable-next-line no-undef
 const DOMAIN_EDIT_MODAL = new bootstrap.Modal(
   document.querySelector("#editDomainModal"),
@@ -85,6 +74,9 @@ document
 document
   .querySelector("#btnCommitConfigChanges")
   .addEventListener("click", updateConfig);
+document
+  .getElementById("btnNewDomain")
+  .addEventListener("click", handleNewDomain);
 
 /**
  * Fill in the 'placeholder' attribute on the configuration form with configuration
@@ -138,18 +130,6 @@ function updateDomainConfigurationFeedback(domainData) {
   for (let i = 0; i < domainData.domains.length; i++) {
     tbody.appendChild(buildDomainEntry(domainData.domains[i], i));
   }
-  const addBtn = document.createElement("A");
-  addBtn.setAttribute("href", "#");
-  addBtn.classList.add("text-success");
-  addBtn.id = "btnNewDomain";
-  addBtn.addEventListener("click", handleNewDomain);
-  addBtn.innerHTML = ADD_SVG;
-
-  const addRow = document.createElement("tr");
-  addRow.innerHTML = "<td></td><td></td><td></td>";
-  addRow.appendChild(addBtn);
-
-  tbody.appendChild(addRow);
 }
 
 /**
@@ -188,7 +168,7 @@ function buildDomainEntry(domainDetails, index) {
   a.setAttribute("href", "#");
   a.classList.add("btn", "btn-sm");
   a.setAttribute("id", `edit-${index}`);
-  a.innerHTML = EDIT_SVG;
+  a.innerHTML = `<i class="bi bi-pencil-square"></i>`;
   a.addEventListener("click", handleEditRow);
   edit.appendChild(a);
 
@@ -328,11 +308,11 @@ function updateMessageGui(message, extraData) {
  */
 function createDomainCard(domainObj) {
   const card = document.createElement("div");
-  card.classList.add("card", "mb-2");
+  card.classList.add("card", "m-2", "col-3");
   card.id = getCardIdTagFromDomain(domainObj.fqdn);
 
   const header = document.createElement("div");
-  header.classList.add("card-header");
+  header.classList.add("card-header", "h3");
   header.innerText = domainObj.fqdn;
 
   const body = document.createElement("div");
@@ -353,7 +333,7 @@ function createDomainCard(domainObj) {
  * @param {object} data
  */
 function updateDomainDashboardInformation(data) {
-  const dashboard = document.querySelector("#dashboard");
+  const dashboard = document.querySelector("#dashContent");
   dashboard.innerHTML = "";
   for (let i = 0; i < data.domains.length; i++) {
     dashboard.appendChild(createDomainCard(data.domains[i]));
@@ -392,19 +372,19 @@ function updateConfig() {
  */
 function updateDomainCard(whoisdata) {
   const cardid = getCardIdTagFromDomain(whoisdata.domain_name);
-  document.querySelector(`#${cardid} .card-body`).innerHTML = `<table><tbody>
-    <tr><td>Registrar</td><td>${whoisdata.registrar.name}</td></tr>
-    <tr><td>Registered On</td><td>${whoisdata.created_date}</td></tr>
-    <tr><td>Expiration</td><td>${
-      whoisdata.registrar.registration_expiration
-    }</td></tr>
-    <tr><td>Name Servers</td><td>${JSON.stringify(
-      whoisdata.name_server
-    )}</td></tr>
-    <tr><td>WHOIS query time</td><td>${
-      whoisdata.whois_db_update_time
-    }</td></tr>    
-    </tbody></table>`;
+  let nameserverList = "<ul>";
+  for (const ns of whoisdata.name_server) {
+    nameserverList += `<li>${ns}</li>`;
+  }
+  nameserverList += "</ul>";
+
+  document.querySelector(`#${cardid} .card-body`).innerHTML = `<dl>
+    <dt>Registrar</dt><dd>${whoisdata.registrar.name}</dd>
+    <dt>Registered On</dt><dd>${whoisdata.created_date}</dd>
+    <dt>Expiration</dt><dd>${whoisdata.registrar.registration_expiration}</dd>
+    <dt>Name Servers</dt><dd>${nameserverList}</dd>
+    <dt>WHOIS query time</dt><dd>${whoisdata.whois_db_update_time}</dd>
+    </dl>`;
   document.querySelector(`#${cardid} .card-header`).classList.add("bg-success");
 }
 
