@@ -2,3 +2,7 @@ overrides:
   - files: "*.html"
     options:
       printWidth: 120
+  - files: "*.njk"
+    options:
+      parser: "html"
+      printWidth: 120

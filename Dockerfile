@@ -9,7 +9,9 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --production=true
 
 # Bundle app source
-COPY . .
+COPY server/sample* server/index.js ./
+COPY server/lib ./lib
+COPY client/dist ./client
 
 # Create volumes
 VOLUME /app/config \

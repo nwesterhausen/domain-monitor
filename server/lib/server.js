@@ -13,7 +13,11 @@ const sockets = require("./sockets");
 const yamler = require("./yamler");
 const constants = require("./constants");
 
-const WEB_DIR = path.join(__dirname, "..", "web");
+var WEB_DIR = path.join(__dirname, "..", "..", "client", "dist");
+if (!require("fs").existsSync(WEB_DIR)) {
+  WEB_DIR = path.join(__dirname, "..", "client");
+}
+console.log(`Serving static site from ${WEB_DIR}`);
 
 // Logging
 app.use(morgan("short"));

@@ -1,8 +1,8 @@
 {
   "name": "domain-monitor",
-  "version": "0.2.0",
+  "version": "0.3.0-dev",
   "description": "Node-js server for monitoring domain WHOIS records.",
-  "main": "index.js",
+  "main": "server/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/nwesterhausen/domain-monitor.git"
@@ -13,10 +13,11 @@
   "homepage": "https://github.com/nwesterhausen/domain-monitor",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint-check": "eslint index.js lib/*.js web/**/*.js",
-    "lint": "eslint --fix index.js lib/*.js web/**/*.js",
-    "pretty-check": "prettier --check index.js lib/*.js web/**/*.js web/**/*.html web/**/*.css",
-    "pretty": "prettier --write index.js lib/*.js web/**/*.js web/**/*.html web/**/*.css"
+    "lint-check": "eslint server/lib/**/*.js client/src/**/*.js",
+    "lint": "eslint --fix server/lib/**/*.js client/src/**/*.js",
+    "pretty-check": "prettier --check server/**/*.js client/src/**/*.js client/src/**/*.css client/src/_includes/*/*.njk",
+    "pretty": "prettier --write server/**/*.js client/src/**/*.js client/src/**/*.css client/src/_includes/*/*.njk",
+    "build": "eleventy"
   },
   "keywords": [],
   "author": "Nicholas Westerhausen",
@@ -30,9 +31,12 @@
     "whois-promise": "^1.2.4"
   },
   "devDependencies": {
+    "@11ty/eleventy": "^0.12.1",
+    "clean-css": "^5.1.4",
     "eslint": "^7.9.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^6.11.0",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "rollup": "^2.55.1"
   }
 }
