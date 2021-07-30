@@ -1,0 +1,8 @@
+<!-- capture the CSS content as a Nunjucks variable -->
+{% set css %}
+  {% include "../css/main.css" %}
+{% endset %}
+<!-- feed it through our cssmin filter to minify -->
+<style>
+  {{ css | cssmin | safe }}
+</style>
