@@ -13,7 +13,7 @@ const sockets = require("./sockets");
 const yamler = require("./yamler");
 const constants = require("./constants");
 
-var WEB_DIR = path.join(__dirname, "..", "..", "client", "dist");
+let WEB_DIR = path.join(__dirname, "..", "..", "client", "dist");
 if (!require("fs").existsSync(WEB_DIR)) {
   WEB_DIR = path.join(__dirname, "..", "client");
 }
