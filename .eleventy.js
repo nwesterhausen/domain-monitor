@@ -22,7 +22,9 @@ function findInDir(dir, filter, fileList = []) {
 // js concatnation
 const JS_DEST = path.resolve("client/dist/js");
 const JS_FILE = path.join(JS_DEST, "main.js");
-if (!fs.existsSync(JS_DEST)) fs.mkdirSync(JS_DEST);
+fs.mkdirSync(JS_DEST, {
+  recursive: true,
+});
 if (fs.existsSync(JS_FILE)) fs.rmSync(JS_FILE);
 let sourceJsFiles = findInDir("./client/src/js/", /\.js$/);
 console.log(
