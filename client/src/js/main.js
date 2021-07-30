@@ -10,18 +10,6 @@ const SCK_WHOIS_CACHE_MISS = "104";
 // eslint-disable-next-line no-undef
 const socket = io();
 
-// eslint-disable-next-line no-undef
-const DOMAIN_EDIT_MODAL = new bootstrap.Modal(
-  document.querySelector("#editDomainModal"),
-  {
-    backdrop: "static",
-  }
-);
-// eslint-disable-next-line no-undef
-const LOG_MESSAGE_MODAL = new bootstrap.Modal(
-  document.querySelector("#socketLogModal")
-);
-
 // Listeners
 socket.on("connect", function () {
   updateMessageGui("Socket Connection Established");
@@ -60,6 +48,19 @@ socket.on(SCK_WHOIS_CACHE_MISS, function (data) {
   ).innerHTML = `<p>No WHOIS cache for ${data}</p>`;
 });
 
+// eslint-disable-next-line no-undef
+const DOMAIN_EDIT_MODAL = new bootstrap.Modal(
+  document.querySelector("#editDomainModal"),
+  {
+    backdrop: "static",
+  }
+);
+// eslint-disable-next-line no-undef
+const LOG_MESSAGE_MODAL = new bootstrap.Modal(
+  document.querySelector("#socketLogModal")
+);
+
+// Button defs
 document
   .querySelector("#modalDomainBtnCommit")
   .addEventListener("click", updateDomainInfo);

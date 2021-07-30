@@ -5,6 +5,9 @@
 #
 # Requires jq and ~/.gh_token
 
+# Install / Build if needed
+yarn
+
 # Github Username
 USERNAME=nwesterhausen
 # Get repo part of repository
