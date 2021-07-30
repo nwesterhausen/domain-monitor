@@ -17,7 +17,8 @@
     "lint": "eslint --fix server/lib/**/*.js client/src/**/*.js",
     "pretty-check": "prettier --check server/**/*.js client/src/**/*.js client/src/**/*.css client/src/_includes/*/*.njk",
     "pretty": "prettier --write server/**/*.js client/src/**/*.js client/src/**/*.css client/src/_includes/*/*.njk",
-    "build": "eleventy"
+    "build": "eleventy",
+    "postinstall": "eleventy"
   },
   "keywords": [],
   "author": "Nicholas Westerhausen",
