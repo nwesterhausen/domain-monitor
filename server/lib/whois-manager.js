@@ -224,12 +224,9 @@ function simplifyWhois(whoisdata) {
     );
 
     const tmpWhoisObject = whoisdata.split(/\n/);
-    let rootkey = "",
-      currkey = "";
+    let rootkey = "";
     for (let i = 0; i < tmpWhoisObject.length; i++) {
       const matched = tmpWhoisObject[i].match(ATTRIBUTE_REGEX);
-
-      currkey = tmpWhoisObject[i].match(ATTRIBUTE_REGEX);
       if (/:$/.test(tmpWhoisObject[i])) {
         // console.debug("Matched rootkey");
         rootkey = tmpWhoisObject[i].split(":")[0];
