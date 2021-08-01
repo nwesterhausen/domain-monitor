@@ -31,7 +31,7 @@ io.on("connection", sockets.handler);
  */
 function startServer() {
   // Grab most current config settings
-  fs.readFile(yamler.CONFIG_YAML_PATH)
+  fs.readFile(yamler.CONFIG_YAML_PATH,{encoding: "utf-8"})
     .then(yamler.parseObjectFromYaml)
     .then((config) => {
       const RUNNING_PORT = config.app.port;
