@@ -237,9 +237,10 @@ function simplifyWhois(whoisdata) {
   for (let i = 0; i < whoisObject.length; i++) {
     const matched = whoisObject[i].match(ATTRIBUTE_REGEX);
     if (matched && matched.length > 1) {
-      switch (matched[1]) {
+      switch (matched[1].trim()) {
         case "Domain name":
         case "Domain Name":
+        case "Domain":
           simplifiedObject.domain_name = matched[2].toLowerCase();
           break;
         case "Registry Domain ID":
