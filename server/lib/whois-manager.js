@@ -286,6 +286,7 @@ function simplifyWhois(whoisdata) {
           simplifiedObject.domain_status.push(matched[2]);
           break;
         case "Name Server":
+        case "Name servers":
           simplifiedObject.name_server.push(matched[2]);
           break;
         case "Reseller":
@@ -420,5 +421,15 @@ function simplifyWhois(whoisdata) {
       simplifiedObject.tos = whoisObject[i];
     }
   }
+  if (!simplifiedObject.domain_name) {
+    console.error(`No domain name found in whois response.`);
+    return {};
+  }
+  if (simplifiedObject.name_server.length == 0) {
+    console.warn(
+      `${simplifiedObject.doamin_name} WHOIS: unable to parse name servers.`
+    );
+  }
+
   return simplifiedObject;
 }
