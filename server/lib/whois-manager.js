@@ -216,8 +216,43 @@ function writeWhoisData(ypath, whoisObj) {
  */
 function simplifyWhois(whoisdata) {
   console.info(`${typeof whoisdata} received.`, whoisdata);
-  const whoisObject = whoisdata.split(/\n/);
+
+  const whoisObject = [];
+  if (/:\n/.test(whoisdata)) {
+    console.info(
+      "Key found before newline, attempting to elaborate whois data."
+    );
+
+    const tmpWhoisObject = whoisdata.split(/\n/);
+    let rootkey = "";
+    for (let i = 0; i < tmpWhoisObject.length; i++) {
+      const matched = tmpWhoisObject[i].match(ATTRIBUTE_REGEX);
+      if (/:$/.test(tmpWhoisObject[i])) {
+        // console.debug("Matched rootkey");
+        rootkey = tmpWhoisObject[i].split(":")[0];
+      } else if (/\s{8}/.test(tmpWhoisObject[i])) {
+        // console.debug("Matched childkey or value");
+        if (matched && matched.length > 1) {
+          // console.debug("Determined child key, so combining");
+          whoisObject.push(
+            `${rootkey}_${matched[1].trim()}: ${matched[2].trim()}`
+          );
+        } else {
+          // console.debug("Determined child value.");
+          whoisObject.push(`${rootkey}: ${tmpWhoisObject[i].trim()}`);
+        }
+      } else if (matched && matched.length > 1) {
+        // console.debug("Matched root key and value");
+        whoisObject.push(tmpWhoisObject[i]);
+      } else {
+        // console.debug(`unable to match ${tmpWhoisObject[i]}`);
+      }
+    }
+  } else {
+    whoisObject.concat(whoisdata.split(/\n/));
+  }
   console.info(whoisObject.length, "entries in whoisdata");
+  // console.dir(whoisObject);
   if (whoisdata.endsWith("was refused.")) {
     console.error(whoisdata);
   }
@@ -237,9 +272,10 @@ function simplifyWhois(whoisdata) {
   for (let i = 0; i < whoisObject.length; i++) {
     const matched = whoisObject[i].match(ATTRIBUTE_REGEX);
     if (matched && matched.length > 1) {
-      switch (matched[1]) {
+      switch (matched[1].trim()) {
         case "Domain name":
         case "Domain Name":
+        case "Domain":
           simplifiedObject.domain_name = matched[2].toLowerCase();
           break;
         case "Registry Domain ID":
@@ -285,6 +321,7 @@ function simplifyWhois(whoisdata) {
           simplifiedObject.domain_status.push(matched[2]);
           break;
         case "Name Server":
+        case "Name servers":
           simplifiedObject.name_server.push(matched[2]);
           break;
         case "Reseller":
@@ -419,5 +456,24 @@ function simplifyWhois(whoisdata) {
       simplifiedObject.tos = whoisObject[i];
     }
   }
+  if (!simplifiedObject.domain_name) {
+    console.error(`No domain name found in whois response.`);
+    return {};
+  }
+  if (simplifiedObject.name_server.length == 0) {
+    console.warn(
+      `${simplifiedObject.doamin_name} WHOIS: unable to parse name servers.`
+    );
+  }
+  if (!simplifiedObject.whois_db_update_time) {
+    console.warn(
+      "WHOIS query did not attached a timestamp, using current time."
+    );
+    simplifiedObject.whois_db_update_time = new Date().toISOString();
+  }
   return simplifiedObject;
 }
+
+module.exports = {
+  simplifyWhois,
+};
