@@ -216,8 +216,46 @@ function writeWhoisData(ypath, whoisObj) {
  */
 function simplifyWhois(whoisdata) {
   console.info(`${typeof whoisdata} received.`, whoisdata);
-  const whoisObject = whoisdata.split(/\n/);
+
+  const whoisObject = [];
+  if (/:\n/.test(whoisdata)) {
+    console.info(
+      "Key found before newline, attempting to elaborate whois data."
+    );
+
+    const tmpWhoisObject = whoisdata.split(/\n/);
+    let rootkey = "",
+      currkey = "";
+    for (let i = 0; i < tmpWhoisObject.length; i++) {
+      const matched = tmpWhoisObject[i].match(ATTRIBUTE_REGEX);
+
+      currkey = tmpWhoisObject[i].match(ATTRIBUTE_REGEX);
+      if (/:$/.test(tmpWhoisObject[i])) {
+        // console.debug("Matched rootkey");
+        rootkey = tmpWhoisObject[i].split(":")[0];
+      } else if (/\s{8}/.test(tmpWhoisObject[i])) {
+        // console.debug("Matched childkey or value");
+        if (matched && matched.length > 1) {
+          // console.debug("Determined child key, so combining");
+          whoisObject.push(
+            `${rootkey}_${matched[1].trim()}: ${matched[2].trim()}`
+          );
+        } else {
+          // console.debug("Determined child value.");
+          whoisObject.push(`${rootkey}: ${tmpWhoisObject[i].trim()}`);
+        }
+      } else if (matched && matched.length > 1) {
+        // console.debug("Matched root key and value");
+        whoisObject.push(tmpWhoisObject[i]);
+      } else {
+        // console.debug(`unable to match ${tmpWhoisObject[i]}`);
+      }
+    }
+  } else {
+    whoisObject.concat(whoisdata.split(/\n/));
+  }
   console.info(whoisObject.length, "entries in whoisdata");
+  // console.dir(whoisObject);
   if (whoisdata.endsWith("was refused.")) {
     console.error(whoisdata);
   }
@@ -433,3 +471,7 @@ function simplifyWhois(whoisdata) {
 
   return simplifiedObject;
 }
+
+module.exports = {
+  simplifyWhois,
+};
