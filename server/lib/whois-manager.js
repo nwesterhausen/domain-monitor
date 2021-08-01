@@ -468,7 +468,12 @@ function simplifyWhois(whoisdata) {
       `${simplifiedObject.doamin_name} WHOIS: unable to parse name servers.`
     );
   }
-
+  if (!simplifiedObject.whois_db_update_time) {
+    console.warn(
+      "WHOIS query did not attached a timestamp, using current time."
+    );
+    simplifiedObject.whois_db_update_time = new Date().toISOString();
+  }
   return simplifiedObject;
 }
 
