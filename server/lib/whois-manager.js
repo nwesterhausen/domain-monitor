@@ -26,7 +26,7 @@ setTimeout(function go() {
  * Run the whois updates
  */
 function doWhoisUpdates() {
-  fs.readFile(yamler.DOMAIN_YAML_PATH)
+  fs.readFile(yamler.DOMAIN_YAML_PATH,{encoding: "utf-8"})
     .then(yamler.parseObjectFromYaml)
     .then((domainInfo) => {
       const whoisPromises = [];
@@ -62,7 +62,7 @@ function updateWhoisIfNeeded(domain) {
       return resolve(updateWhoisYamlFor(ypath, domain));
     }
     console.info(`WHOIS: Validating cached whois data for ${domain}`);
-    fs.readFile(ypath)
+    fs.readFile(ypath,{encoding: "utf-8"})
       .then((filedata) => {
         return yamler.parseObjectFromYaml(filedata);
       })
