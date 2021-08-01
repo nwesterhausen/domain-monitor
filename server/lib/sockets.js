@@ -38,7 +38,7 @@ function sendCachedWHOISData(socket, domainInfo) {
         sendWhoisPromises.push(
           fs
             .readFile(path.join(yamler.WHOIS_DIR_PATH, whoisFiles[i]), {
-              encoding: "utf-8"
+              encoding: "utf-8",
             })
             .then(yamler.parseObjectFromYaml)
             .then((whoisObj) => {
@@ -65,7 +65,7 @@ function socketHandler(socket) {
   // Log connection
   logSocketTraffic(socket, "connection");
   // Send configuration to client on connection
-  fs.readFile(yamler.CONFIG_YAML_PATH,{encoding: "utf-8"})
+  fs.readFile(yamler.CONFIG_YAML_PATH, { encoding: "utf-8" })
     .then(yamler.parseObjectFromYaml)
     .then((configInfo) => {
       socket.emit(constants.SCK_LOADED_CFG, configInfo);
@@ -76,7 +76,7 @@ function socketHandler(socket) {
     });
   // Send domain list to client on connection
   fs.readFile(yamler.DOMAIN_YAML_PATH, {
-    encoding: "utf-8"
+    encoding: "utf-8",
   })
     .then(yamler.parseObjectFromYaml)
     .then((domainInfo) => {
@@ -95,8 +95,8 @@ function socketHandler(socket) {
   socket.on(constants.SCK_UPDATE_DOMAIN, (val) => {
     logSocketTraffic(socket, `SCK_UPDATE_DOMAIN: ${JSON.stringify(val)}`);
     fs.readFile(yamler.DOMAIN_YAML_PATH, {
-    encoding: "utf-8"
-  })
+      encoding: "utf-8",
+    })
       .then(yamler.parseObjectFromYaml)
       .then((domainInfo) => {
         const domainList = domainInfo.domains;
@@ -134,8 +134,8 @@ function socketHandler(socket) {
   socket.on(constants.SCK_DELETE_DOMAIN, (val) => {
     logSocketTraffic(socket, `SCK_DELETE_DOMAIN: ${JSON.stringify(val)}`);
     fs.readFile(yamler.DOMAIN_YAML_PATH, {
-    encoding: "utf-8"
-  })
+      encoding: "utf-8",
+    })
       .then(yamler.parseObjectFromYaml)
       .then((domainInfo) => {
         const domainList = [];
@@ -145,10 +145,12 @@ function socketHandler(socket) {
           }
         }
         const domainYaml = yamler.parseYamlFromObj({ domains: domainList });
-        return fs.writeFile(yamler.DOMAIN_YAML_PATH, domainYaml,{encoding: "utf-8"});
+        return fs.writeFile(yamler.DOMAIN_YAML_PATH, domainYaml, {
+          encoding: "utf-8",
+        });
       })
       .then(() => {
-        return fs.readFile(yamler.DOMAIN_YAML_PATH, { encoding: "utf-8" })
+        return fs.readFile(yamler.DOMAIN_YAML_PATH, { encoding: "utf-8" });
       })
       .then(yamler.parseObjectFromYaml)
       .then((domainInfo) => {
@@ -164,11 +166,11 @@ function socketHandler(socket) {
     logSocketTraffic(socket, `SCK_UPDATE_CONFIG: ${JSON.stringify(val)}`);
     const configYaml = yamler.parseYamlFromObj(val);
     fs.writeFile(yamler.CONFIG_YAML_PATH, configYaml, {
-      encoding: "utf-8"
+      encoding: "utf-8",
     })
       .then(() => {
         return fs.readFile(yamler.CONFIG_YAML_PATH, {
-          encoding: "utf-8"
+          encoding: "utf-8",
         });
       })
       .then(yamler.parseObjectFromYaml)
