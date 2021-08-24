@@ -216,6 +216,8 @@ function writeWhoisData(ypath, whoisObj) {
  */
 function simplifyWhois(whoisdata) {
   console.info(`${typeof whoisdata} received.`, whoisdata);
+  // Clean CRLF into LF
+  whoisdata = whoisdata.replace(/\r\n/g, "\n");
 
   const whoisObject = [];
   if (/:\n/.test(whoisdata)) {
@@ -257,6 +259,8 @@ function simplifyWhois(whoisdata) {
     console.error(whoisdata);
   }
   if (Object.keys(whoisObject).length <= 10) {
+    console.error("Parsing seems to have failed, writing dump.")
+    fs.writeFile("./whois.dump", whoisdata);
     return { raw: whoisdata };
   }
   const simplifiedObject = {
