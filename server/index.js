@@ -1,6 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 
+// Log running version
+try {
+  console.log(`domain-monitor v${require('./package.json').version}`);
+} catch {
+  console.log(`domain-monitor v${require('../package.json').version}`)
+}
+
 // Config file checking
 const WHOIS_DATA_PATH = path.join(__dirname, "whois-data");
 const SAMPLE_CONFIG_PATH = path.join(__dirname, "sample.config.yaml");
