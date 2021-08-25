@@ -35,20 +35,24 @@ function sendCachedWHOISData(socket, domainInfo) {
       }
       const sendWhoisPromises = [];
       for (let i = 0; i < whoisFiles.length; i++) {
-        sendWhoisPromises.push(
-          fs
-            .readFile(path.join(yamler.WHOIS_DIR_PATH, whoisFiles[i]), {
-              encoding: "utf-8",
-            })
-            .then(yamler.parseObjectFromYaml)
-            .then((whoisObj) => {
-              logSocketTraffic(
-                socket,
-                `Sent WHOIS for ${whoisObj.domain_name}`
-              );
-              socket.emit(constants.SCK_LOADED_WHOIS, whoisObj);
-            })
-        );
+        if (!path.extname(whoisFiles[i]).match(/yaml|yml/i)) {
+          console.debug(`WHOIS: Skipping ${whoisFiles[i]} due to extension mismatch.`)
+        } else {
+          sendWhoisPromises.push(
+            fs
+              .readFile(path.join(yamler.WHOIS_DIR_PATH, whoisFiles[i]), {
+                encoding: "utf-8",
+              })
+              .then(yamler.parseObjectFromYaml)
+              .then((whoisObj) => {
+                logSocketTraffic(
+                  socket,
+                  `Sent WHOIS for ${whoisObj.domain_name}`
+                );
+                socket.emit(constants.SCK_LOADED_WHOIS, whoisObj);
+              })
+          );
+        }
       }
       return Promise.all(sendWhoisPromises);
     })
