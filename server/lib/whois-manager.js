@@ -225,7 +225,7 @@ function simplifyWhois(whoisdata) {
   // Clean CRLF into LF
   whoisdata = whoisdata.replace(/\r\n/g, "\n");
 
-  const whoisObject = [];
+  let whoisObject = [];
   if (/:\n/.test(whoisdata)) {
     console.info(
       "Key found before newline, attempting to elaborate whois data."
@@ -257,7 +257,7 @@ function simplifyWhois(whoisdata) {
       }
     }
   } else {
-    whoisObject.concat(whoisdata.split(/\n/));
+    whoisObject = whoisdata.split(/\n/);
   }
   console.info(whoisObject.length, "entries in whoisdata");
   // console.dir(whoisObject);
