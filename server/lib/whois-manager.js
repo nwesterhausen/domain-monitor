@@ -267,7 +267,10 @@ function simplifyWhois(whoisdata) {
     console.error(whoisdata);
   }
   if (Object.keys(whoisObject).length == 0) {
-    let dumpath = path.join(yamler.WHOIS_DIR_PATH, "./whois.parse-error.dump");
+    const dumpath = path.join(
+      yamler.WHOIS_DIR_PATH,
+      "./whois.parse-error.dump"
+    );
     console.error(`Parsing seems to have failed, writing dump: ${dumpath}`);
     fs.writeFile(dumpath, whoisdata).catch(console.error);
     return { raw: whoisdata };
