@@ -182,7 +182,7 @@ function updateWhoisYamlFor(ypath, domain) {
   return whois
     .raw(domain, {})
     .then((data) => {
-      if (data.match(/^No match for/i)) {
+      if (data.match(/no match for|not found/i)) {
         console.info(`WHOIS Request for ${domain} returned no match!`)
         console.debug(`-- BEGIN WHOIS RESPONSE --\n${data}\n-- END WHOIS RESPONSE --`);
         console.info(`Skipping writing to cache, will try again soon.`)
