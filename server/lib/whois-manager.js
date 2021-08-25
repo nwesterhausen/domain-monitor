@@ -182,6 +182,12 @@ function updateWhoisYamlFor(ypath, domain) {
   return whois
     .raw(domain, {})
     .then((data) => {
+      if (data.match(/^No match for/i)) {
+        console.info(`WHOIS Request for ${domain} returned no match!`)
+        console.debug(`-- BEGIN WHOIS RESPONSE --\n${data}\n-- END WHOIS RESPONSE --`);
+        console.info(`Skipping writing to cache, will try again soon.`)
+        return;
+      }
       const whoisData = simplifyWhois(data);
       return writeWhoisData(ypath, whoisData);
     })
@@ -258,9 +264,10 @@ function simplifyWhois(whoisdata) {
   if (whoisdata.endsWith("was refused.")) {
     console.error(whoisdata);
   }
-  if (Object.keys(whoisObject).length <= 10) {
-    console.error("Parsing seems to have failed, writing dump.");
-    fs.writeFile("./whois.dump", whoisdata);
+  if (Object.keys(whoisObject).length == 0) {
+    let dumpath = path.join(yamler.WHOIS_DIR_PATH,"./whois.parse-error.dump");
+    console.error(`Parsing seems to have failed, writing dump: ${dumpath}`);
+    fs.writeFile(dumpath, whoisdata).catch(console.error);
     return { raw: whoisdata };
   }
   const simplifiedObject = {
