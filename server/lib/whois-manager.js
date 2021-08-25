@@ -183,9 +183,11 @@ function updateWhoisYamlFor(ypath, domain) {
     .raw(domain, {})
     .then((data) => {
       if (data.match(/no match for|not found/i)) {
-        console.info(`WHOIS Request for ${domain} returned no match!`)
-        console.debug(`-- BEGIN WHOIS RESPONSE --\n${data}\n-- END WHOIS RESPONSE --`);
-        console.info(`Skipping writing to cache, will try again soon.`)
+        console.info(`WHOIS Request for ${domain} returned no match!`);
+        console.debug(
+          `-- BEGIN WHOIS RESPONSE --\n${data}\n-- END WHOIS RESPONSE --`
+        );
+        console.info(`Skipping writing to cache, will try again soon.`);
         return;
       }
       const whoisData = simplifyWhois(data);
@@ -265,7 +267,7 @@ function simplifyWhois(whoisdata) {
     console.error(whoisdata);
   }
   if (Object.keys(whoisObject).length == 0) {
-    let dumpath = path.join(yamler.WHOIS_DIR_PATH,"./whois.parse-error.dump");
+    let dumpath = path.join(yamler.WHOIS_DIR_PATH, "./whois.parse-error.dump");
     console.error(`Parsing seems to have failed, writing dump: ${dumpath}`);
     fs.writeFile(dumpath, whoisdata).catch(console.error);
     return { raw: whoisdata };

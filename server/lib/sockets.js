@@ -36,7 +36,9 @@ function sendCachedWHOISData(socket, domainInfo) {
       const sendWhoisPromises = [];
       for (let i = 0; i < whoisFiles.length; i++) {
         if (!path.extname(whoisFiles[i]).match(/yaml|yml/i)) {
-          console.debug(`WHOIS: Skipping ${whoisFiles[i]} due to extension mismatch.`)
+          console.debug(
+            `WHOIS: Skipping ${whoisFiles[i]} due to extension mismatch.`
+          );
         } else {
           sendWhoisPromises.push(
             fs
