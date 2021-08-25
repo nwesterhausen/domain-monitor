@@ -45,11 +45,27 @@ view the cached whois data.
 
 #### Using [Github Packages](https://github.com/nwesterhausen/domain-monitor/packages/)
 
-The _server_ image is the main image.
+`docker run -p 127.0.0.1:4201:4201 ghcr.io/nwesterhausen/domain-monitor/server`
+
+Example docker-compose:
+
+```yaml
+services:
+  dm:
+    image: ghcr.io/nwesterhausen/domain-monitor/server:latest
+    ports:
+    - 127.0.0.1:4201:4201/tcp
+    volumes:
+    - ./config:/app/config:rw
+    - ./whois:/app/whois-data:rw
+version: '3.9'
+```
 
 #### Using [Docker Hub](https://hub.docker.com/repository/docker/nwesterhausen/domain-monitor)
 
 Image is just `nwesterhausen/domain-monitor`, latest tag will be the most recent version, or pull by tagged version.
+
+`docker run -p 127.0.0.1:4201:4201 nwesterhausen/domain-monitor`
 
 ### Running with node
 
