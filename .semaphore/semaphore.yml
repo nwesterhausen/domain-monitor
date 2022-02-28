@@ -12,11 +12,14 @@ blocks:
   - name: Install dependencies
     task:
       jobs:
-        - name: yarn install and cache
+        - name: pnpm install
           commands:
+            - curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
             - checkout
-            - cache restore
-            - yarn install --frozen-lockfile
+            - cache restore node-$(checksum pnpm-lock.yaml)
+            - pnpm install
+            - cache store node-$(checksum pnpm-lock.yaml) ~/.pnpm-store 
+            - cache store pnpm /home/semaphore/.nvm/versions/node/v14.12.0/bin/
             - cache store
     dependencies: []
   - name: Checks
@@ -27,10 +30,14 @@ blocks:
         - name: Lint-Check
           commands:
             - checkout
+            - cache restore node-$(checksum pnpm-lock.yaml)
+            - cache restore pnpm
             - cache restore
-            - yarn lint-check
+            - pnpm lint-check
         - name: Prettier-Check
           commands:
             - checkout
+            - cache restore node-$(checksum pnpm-lock.yaml)
+            - cache restore pnpm
             - cache restore
-            - yarn pretty-check
+            - pnpm pretty-check

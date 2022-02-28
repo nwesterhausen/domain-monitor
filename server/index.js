@@ -3,9 +3,9 @@ const path = require("path");
 
 // Log running version
 try {
-  console.log(`domain-monitor v${require('./package.json').version}`);
+  console.log(`domain-monitor v${require("./package.json").version}`);
 } catch {
-  console.log(`domain-monitor v${require('../package.json').version}`)
+  console.log(`domain-monitor v${require("../package.json").version}`);
 }
 
 // Config file checking
