@@ -28,10 +28,10 @@ blocks:
         - name: Lint-Check
           commands:
             - checkout
-            - cache restore
-            - npm run lint-check
+            - cache restore node-$(checksum pnpm-lock.yaml)
+            - pnpm lint-check
         - name: Prettier-Check
           commands:
             - checkout
-            - cache restore
-            - npm run pretty-check
+            - cache restore node-$(checksum pnpm-lock.yaml)
+            - pnpm pretty-check
