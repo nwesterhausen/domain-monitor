@@ -18,7 +18,8 @@ blocks:
             - checkout
             - cache restore node-$(checksum pnpm-lock.yaml)
             - pnpm install
-            - npm list -g
+            - npm list -g --depth=0
+            - which pnpm
             - cache store node-$(checksum pnpm-lock.yaml) ~/.pnpm-store 
             - cache store pnpm $(npm list -g | head -1)
     dependencies: []
