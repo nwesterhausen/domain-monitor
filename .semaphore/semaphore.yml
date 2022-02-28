@@ -18,7 +18,8 @@ blocks:
             - checkout
             - cache restore node-$(checksum pnpm-lock.yaml)
             - pnpm install
-            - cache store node-$(checksum pnpm-lock.yaml) ~/.pnpm-store $(npm list -g | head -1)
+            - cache store node-$(checksum pnpm-lock.yaml) ~/.pnpm-store 
+            - cache store pnpm $(npm list -g | head -1)
     dependencies: []
   - name: Checks
     dependencies:
@@ -29,9 +30,11 @@ blocks:
           commands:
             - checkout
             - cache restore node-$(checksum pnpm-lock.yaml)
+            - cache restore pnpm
             - pnpm lint-check
         - name: Prettier-Check
           commands:
             - checkout
             - cache restore node-$(checksum pnpm-lock.yaml)
+            - cache restore pnpm
             - pnpm pretty-check
