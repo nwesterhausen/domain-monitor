@@ -12,12 +12,13 @@ blocks:
   - name: Install dependencies
     task:
       jobs:
-        - name: yarn install and cache
+        - name: pnpm install
           commands:
+            - curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@6
             - checkout
-            - cache restore
-            - yarn install --frozen-lockfile
-            - cache store
+            - cache restore node-$(checksum pnpm-lock.yaml)
+            - pnpm install
+            - cache store node-$(checksum pnpm-lock.yaml) ~/.pnpm-store
     dependencies: []
   - name: Checks
     dependencies:
