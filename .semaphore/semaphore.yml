@@ -19,8 +19,8 @@ blocks:
             - cache restore node-$(checksum pnpm-lock.yaml)
             - pnpm install
             - cache store node-$(checksum pnpm-lock.yaml) ~/.pnpm-store 
+            - cache delete pnpm
             - cache store pnpm /home/semaphore/.nvm/versions/node/v14.12.0/bin/
-            - cache store
     dependencies: []
   - name: Checks
     dependencies:
@@ -32,12 +32,12 @@ blocks:
             - checkout
             - cache restore node-$(checksum pnpm-lock.yaml)
             - cache restore pnpm
-            - cache restore
+            - pnpm install
             - pnpm lint-check
         - name: Prettier-Check
           commands:
             - checkout
             - cache restore node-$(checksum pnpm-lock.yaml)
             - cache restore pnpm
-            - cache restore
+            - pnpm install
             - pnpm pretty-check
