@@ -29,9 +29,9 @@ blocks:
           commands:
             - checkout
             - cache restore
-            - pnpm lint-check
+            - yarn lint-check
         - name: Prettier-Check
           commands:
             - checkout
             - cache restore
-            - pnpm pretty-check
+            - yarn pretty-check
