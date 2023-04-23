@@ -13,7 +13,7 @@ const WHOIS_DIR_PATH = path.join(__dirname, "..", "whois-data");
 function parseObjectFromYaml(yamldoc) {
   const promisedObject = function (resolve, reject) {
     try {
-      resolve(yaml.safeLoad(yamldoc));
+      resolve(yaml.load(yamldoc));
     } catch (e) {
       console.error(`YAML: Unable to parse from doc:`);
       console.error(yamldoc);
@@ -29,7 +29,7 @@ function parseObjectFromYaml(yamldoc) {
  * @return {string}
  */
 function parseYamlFromObj(obj) {
-  return yaml.safeDump(obj);
+  return yaml.dump(obj);
 }
 
 module.exports = {

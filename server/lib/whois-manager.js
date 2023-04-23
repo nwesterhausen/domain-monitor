@@ -319,6 +319,7 @@ function simplifyWhois(whoisdata) {
           simplifiedObject.created_date = matched[2];
           break;
         case "Registrar Registration Expiration Date":
+        case "Registry Expiry Date":
           simplifiedObject.registrar.registration_expiration = matched[2];
           break;
         case "Registrar":
