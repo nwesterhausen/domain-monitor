@@ -1,26 +1,37 @@
 package configuration
 
 type AppConfiguration struct {
-	Port int `yaml:"port"`
+	// The port the application listens on
+	Port int `yaml:"port" json:"port"`
 }
 
 type AlertsConfiguration struct {
-	Admin      string `yaml:"admin"`
-	SendAlerts bool  `yaml:"send_alerts"`
+	// The admin email address for receiving alerts
+	Admin string `yaml:"admin" json:"admin"`
+	// Send alerts for monitored domains
+	SendAlerts bool `yaml:"send_alerts" json:"send_alerts"`
 }
 
 type SMTPConfiguration struct {
-	Host     string `yaml:"host"`
-	Port     int 	`yaml:"port"`
-	Secure   bool 	`yaml:"secure"`
-	AuthUser string `yaml:"auth_user"`
-	AuthPass string `yaml:"auth_pass"`
+	// SMTP host
+	Host string `yaml:"host" json:"host"`
+	// SMTP port
+	Port int `yaml:"port" json:"port"`
+	// Use secure connection (TLS)
+	Secure bool `yaml:"secure" json:"secure"`
+	// SMTP user name
+	AuthUser string `yaml:"auth_user" json:"auth_user"`
+	// SMTP user password
+	AuthPass string `yaml:"auth_pass" json:"auth_pass"`
 }
 
 type Configuration struct {
-	App    AppConfiguration `yaml:"app"`
-	Alerts AlertsConfiguration `yaml:"alerts"`
-	SMTP   SMTPConfiguration `yaml:"smtp"`
+	// The application configuration
+	App AppConfiguration `yaml:"app" json:"app"`
+	// The alerts configuration
+	Alerts AlertsConfiguration `yaml:"alerts" json:"alerts"`
+	// The SMTP configuration
+	SMTP SMTPConfiguration `yaml:"smtp" json:"smtp"`
 }
 
 // returns default configuration
@@ -39,7 +50,6 @@ func DefaultConfiguration() Configuration {
 			Secure:   true,
 			AuthUser: "",
 			AuthPass: "",
-
 		},
 	}
 }

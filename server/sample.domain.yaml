@@ -1,9 +1,0 @@
-domains:
-  - name: Sample Domain
-    fqdn: example.com
-    alerts: true
-    enabled: false
-  - name: Store Page (sample)
-    fqdn: webstore.link
-    alerts: true
-    enabled: false

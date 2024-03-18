@@ -12,6 +12,7 @@ import (
 
 func main() {
 	config := configuration.ReadAppConfig()
+	domains := configuration.ReadDomains()
 
 	app := echo.New()
 
@@ -21,6 +22,8 @@ func main() {
 	app.Use(middleware.Logger())
 
 	handlers.SetupRoutes(app)
+	handlers.SetupConfigRoutes(app, config)
+	handlers.SetupDomainRoutes(app, domains)
 
 	// Start server on configured port
 	app.Logger.Fatal(app.Start("localhost:" + fmt.Sprint(config.App.Port)))

@@ -12,7 +12,7 @@ assets/js/*.min.js
 
 # project files
 config.yaml
-domains.yaml
+domain.yaml
 
 # Logs
 logs
