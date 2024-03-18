@@ -1,44 +1,45 @@
 package configuration
 
 type AppConfiguration struct {
-	port int
+	Port int `yaml:"port"`
 }
 
 type AlertsConfiguration struct {
-	admin      string
-	sendalerts bool
+	Admin      string `yaml:"admin"`
+	SendAlerts bool  `yaml:"send_alerts"`
 }
 
 type SMTPConfiguration struct {
-	host     string
-	port     int
-	secure   bool
-	authUser string
-	authPass string
+	Host     string `yaml:"host"`
+	Port     int 	`yaml:"port"`
+	Secure   bool 	`yaml:"secure"`
+	AuthUser string `yaml:"auth_user"`
+	AuthPass string `yaml:"auth_pass"`
 }
 
 type Configuration struct {
-	App    AppConfiguration
-	alerts AlertsConfiguration
-	smtp   SMTPConfiguration
+	App    AppConfiguration `yaml:"app"`
+	Alerts AlertsConfiguration `yaml:"alerts"`
+	SMTP   SMTPConfiguration `yaml:"smtp"`
 }
 
 // returns default configuration
 func DefaultConfiguration() Configuration {
 	return Configuration{
 		App: AppConfiguration{
-			port: 3124,
+			Port: 3124,
 		},
-		alerts: AlertsConfiguration{
-			admin:      "",
-			sendalerts: false,
+		Alerts: AlertsConfiguration{
+			Admin:      "",
+			SendAlerts: false,
 		},
-		smtp: SMTPConfiguration{
-			host:     "localhost",
-			port:     25,
-			secure:   false,
-			authUser: "",
-			authPass: "",
+		SMTP: SMTPConfiguration{
+			Host:     "smtp.example.com",
+			Port:     587,
+			Secure:   true,
+			AuthUser: "",
+			AuthPass: "",
+
 		},
 	}
 }

@@ -1,6 +1,7 @@
 package configuration
 
 import (
+	"io"
 	"log"
 	"os"
 
@@ -17,31 +18,44 @@ func ReadAppConfig() Configuration {
 	config := Configuration{}
 
 	// read config file
-	file, err := os.Open(AppConfig)
+	file, err := os.ReadFile(AppConfig)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		log.Printf("\nerror: %v\n", err)
 		config = DefaultConfiguration()
-		log.info("Using default configuration")
+		log.Println("🆕 Using default configuration to create "+AppConfig)
 		// write default config to file
 		WriteAppConfig(config)
 		return config
 	}
 
-	err := yaml.Unmarshal(file, &config)
+	// use file to parse yaml
+	err = yaml.Unmarshal(file, &config)
 	if err != nil {
+		log.Println("Error while unmarshalling configuration")
 		log.Fatalf("error: %v", err)
-		log.Panic("Unusable configuration file")
 	}
+
+	return config
 }
 
 func WriteAppConfig(config Configuration) {
-	data, err := yaml.Marshal(config)
-	if err != nil {
-		log.Fatalf("error: %v", err)
+	data, dataErr := yaml.Marshal(config)
+	if dataErr != nil {
+		log.Println("Error while marshalling configuration")
+		log.Fatalf("error: %v", dataErr)
 	}
+
 	file, err := os.Create(AppConfig)
 	if err != nil {
+		log.Println("Error while creating configuration file")
 		log.Fatalf("error: %v", err)
 	}
 
+ defer file.Close()
+
+ _, err = io.WriteString(file, string(data))
+ if err != nil {
+	 log.Println("Error while writing configuration file")
+	log.Fatalf("error: %v", err)
+ }
 }
