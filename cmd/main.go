@@ -1,6 +1,7 @@
 package main
 
 import (
+	"nwest.one/domain-monitor/configuration"
 	"nwest.one/domain-monitor/handlers"
 
 	"github.com/labstack/echo/v4"
@@ -8,6 +9,8 @@ import (
 )
 
 func main() {
+	config := configuration.ReadAppConfig()
+
 	app := echo.New()
 
 	app.HTTPErrorHandler = handlers.CustomHTTPErrorHandler
@@ -17,5 +20,6 @@ func main() {
 
 	handlers.SetupRoutes(app)
 
-	app.Logger.Fatal(app.Start("localhost:1324"))
+	// Start server on configured port
+	app.Logger.Fatal(app.Start("localhost:" + string(config.App.Port)))
 }

@@ -5,6 +5,7 @@ go 1.22.1
 require (
 	github.com/a-h/templ v0.2.639
 	github.com/labstack/echo/v4 v4.11.4
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
