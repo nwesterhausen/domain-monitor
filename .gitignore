@@ -10,6 +10,10 @@ server
 assets/css/tailwind.css
 assets/js/*.min.js
 
+# project files
+config.yaml
+domains.yaml
+
 # Logs
 logs
 *.log
