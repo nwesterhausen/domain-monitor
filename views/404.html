@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <meta name="google" content="notranslate" />
+        <link rel="shortcut icon" href="/img/templ.png" type="image/png" />
+        <link rel="stylesheet" href="/css/tailwind.css" />
+        <title>Domain Monitor | Error (404)</title>
+        <script src="js/htmx.min.js"></script>
+    </head>
+
+    <body class="sample-transition" hx-boost="true">
+        <main>
+            <section
+                class="flex h-[100vh] flex-col items-center justify-center gap-4"
+            >
+                <div class="flex flex-col items-center justify-center gap-4">
+                    <h1
+                        class="text-9xl font-extrabold tracking-widest text-gray-700"
+                    >
+                        404
+                    </h1>
+                    <h2
+                        class="absolute rotate-[20deg] rounded bg-rose-700 px-2 text-sm"
+                    >
+                        Resource not found
+                    </h2>
+                </div>
+                <p class="text-center text-xs text-gray-400 md:text-sm">
+                    The requested resource could not be found but may be
+                    available again in the future.
+                </p>
+                <a
+                    hx-swap="transition:true"
+                    href="/"
+                    class="btn btn-secondary btn-outline"
+                >
+                    Go Home
+                </a>
+            </section>
+        </main>
+    </body>
+</html>

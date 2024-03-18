@@ -1,0 +1,19 @@
+package layout
+
+templ Navigation() {
+<div class="navbar bg-base-100">
+  <div class="navbar-start">
+    <a class="btn btn-ghost text-xl" hx-indicator="#loading-indication" hx-get="/dashboard" hx-target="#content">Domain Monitor</a>
+  </div>
+  <div class="navbar-center">
+    <div id="loading-indication" class="htmx-indicator">
+        Loading <span class="loading loading-dots loading-xs"></span>
+    </div>
+  </div>
+  <div class="navbar-end">
+    <ul class="menu menu-horizontal px-1">
+      <li><a hx-get="/configuration" hx-indicator="#loading-indication" hx-target="#content">Configuration</a></li>
+    </ul>
+  </div>
+</div>
+}

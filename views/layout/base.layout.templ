@@ -1,0 +1,31 @@
+package layout
+
+import "nwest.one/domain-monitor/views/modal"
+
+templ Base() {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <link rel="stylesheet" href="/css/tailwind.css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
+
+    <title>Domain Monitor</title>
+    <script src="/js/htmx.min.js"></script>
+    <script src="/js/_hyperscript.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    @Navigation()
+    <div class="container" id="content"></div>
+    @modal.EditDomain()
+</div>
+</body>
+</html>
+}

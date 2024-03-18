@@ -1,3 +1,15 @@
+# go stuff
+bin
+tmp
+
+# old project files
+client
+server
+
+# "built" assets
+assets/css/tailwind.css
+assets/js/*.min.js
+
 # Logs
 logs
 *.log
