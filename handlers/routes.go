@@ -15,7 +15,7 @@ func SetupRoutes(app *echo.Echo) {
 }
 
 func SetupDomainRoutes(app *echo.Echo, domains configuration.DomainConfiguration) {
-	domainGroup := app.Group("/domain")
+	domainGroup := app.Group("/api/domain")
 
 	ds := service.NewDomainService(domains)
 	dh := NewDomainHandler(ds)

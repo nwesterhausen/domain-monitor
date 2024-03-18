@@ -13,6 +13,7 @@ assets/js/*.min.js
 # project files
 config.yaml
 domain.yaml
+whois-cache.yaml
 
 # Logs
 logs

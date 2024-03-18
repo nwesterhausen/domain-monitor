@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"nwest.one/domain-monitor/configuration"
 	"nwest.one/domain-monitor/handlers"
@@ -13,6 +14,10 @@ import (
 func main() {
 	config := configuration.ReadAppConfig()
 	domains := configuration.ReadDomains()
+	whoisCache := configuration.ReadWhoisCache()
+
+	log.Printf("Loaded %d domains from domain list", len(domains.Domains))
+	log.Printf("Found %d cached whois entries", len(whoisCache.Entries))
 
 	app := echo.New()
 
