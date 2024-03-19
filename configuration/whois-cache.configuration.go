@@ -60,12 +60,30 @@ func (w *WhoisCacheStorage) Add(fqdn string) {
 }
 
 func (w *WhoisCacheStorage) Refresh() {
+	nothingRefreshed := true
 	// Only refresh the entries that are expired
 	for i := range w.Entries {
 		if w.Entries[i].IsExpired() {
 			w.Entries[i].Refresh()
+			nothingRefreshed = false
 		}
 	}
+
+	// If nothing was refreshed, log a short message that the cache is up to date
+	if nothingRefreshed {
+		log.Println("✅ WHOIS cache not reporting any expired entries. Cache is up to date.")
+	}
+}
+
+func (w *WhoisCacheStorage) RefreshWithDomains(domains DomainConfiguration) {
+	// Make sure we have whois entries for all the domains
+	for _, domain := range domains.Domains {
+		if w.Get(domain.FQDN) == nil {
+			w.Add(domain.FQDN)
+		}
+	}
+	// Refresh the entries
+	w.Refresh()
 }
 
 func (w *WhoisCacheStorage) Remove(fqdn string) {
@@ -104,4 +122,10 @@ func (w *WhoisCache) Refresh() {
 	w.LastUpdated = time.Now()
 
 	log.Printf("Refreshed whois for %s", w.FQDN)
+}
+
+// Flush the whois cache to its storage
+func (w WhoisCacheStorage) Flush() {
+	// Write the cache to the file
+	WriteWhoisCache(w)
 }

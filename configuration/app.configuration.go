@@ -3,6 +3,8 @@ package configuration
 type AppConfiguration struct {
 	// The port the application listens on
 	Port int `yaml:"port" json:"port"`
+	// WHOIS Cache Refresh Interval in hours
+	WhoisRefreshInterval int `yaml:"whoisRefreshInterval" json:"whoisRefreshInterval"`
 }
 
 type AlertsConfiguration struct {
@@ -23,6 +25,8 @@ type SMTPConfiguration struct {
 	AuthUser string `yaml:"auth_user" json:"auth_user"`
 	// SMTP user password
 	AuthPass string `yaml:"auth_pass" json:"auth_pass"`
+	// Enable SMTP
+	Enabled bool `yaml:"enabled" json:"enabled"`
 }
 
 type Configuration struct {
@@ -38,7 +42,8 @@ type Configuration struct {
 func DefaultConfiguration() Configuration {
 	return Configuration{
 		App: AppConfiguration{
-			Port: 3124,
+			Port:                 3124,
+			WhoisRefreshInterval: 5,
 		},
 		Alerts: AlertsConfiguration{
 			Admin:      "",
@@ -50,6 +55,7 @@ func DefaultConfiguration() Configuration {
 			Secure:   true,
 			AuthUser: "",
 			AuthPass: "",
+			Enabled:  false,
 		},
 	}
 }
