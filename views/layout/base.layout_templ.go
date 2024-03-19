@@ -10,7 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-import "nwest.one/domain-monitor/views/modal"
+import "github.com/nwesterhausen/domain-monitor/views/modal"
 
 func Base() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {

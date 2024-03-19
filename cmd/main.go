@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"nwest.one/domain-monitor/configuration"
-	"nwest.one/domain-monitor/handlers"
+	"github.com/nwesterhausen/domain-monitor/configuration"
+	"github.com/nwesterhausen/domain-monitor/handlers"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"

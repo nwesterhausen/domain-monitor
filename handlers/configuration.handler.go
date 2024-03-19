@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/labstack/echo/v4"
-	"nwest.one/domain-monitor/views/configuration"
+	"github.com/nwesterhausen/domain-monitor/views/configuration"
 )
 
 func HandlerRenderConfiguration(c echo.Context) error {

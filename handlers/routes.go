@@ -3,8 +3,8 @@ package handlers
 import (
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
-	"nwest.one/domain-monitor/configuration"
-	"nwest.one/domain-monitor/service"
+	"github.com/nwesterhausen/domain-monitor/configuration"
+	"github.com/nwesterhausen/domain-monitor/service"
 )
 
 func SetupRoutes(app *echo.Echo) {

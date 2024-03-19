@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 
-	"nwest.one/domain-monitor/configuration"
+	"github.com/nwesterhausen/domain-monitor/configuration"
 )
 
 type ServicesDomain struct {

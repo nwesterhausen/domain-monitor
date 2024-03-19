@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"nwest.one/domain-monitor/configuration"
+	"github.com/nwesterhausen/domain-monitor/configuration"
 )
 
 type DomainService interface {
