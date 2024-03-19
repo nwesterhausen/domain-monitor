@@ -10,6 +10,7 @@ import (
 	"github.com/nwesterhausen/domain-monitor/configuration"
 	"github.com/nwesterhausen/domain-monitor/handlers"
 	"github.com/nwesterhausen/domain-monitor/mailer"
+	"github.com/nwesterhausen/domain-monitor/service"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -61,6 +62,10 @@ func main() {
 	handlers.SetupConfigRoutes(app, config)
 	handlers.SetupDomainRoutes(app, domains)
 	handlers.SetupMailerRoutes(app, _mailer, config.Config.Alerts.Admin)
+
+	// Setup whois routes
+	_whoisService := service.NewWhoisService(whoisCache)
+	handlers.SetupWhoisRoutes(app, _whoisService)
 
 	// Connect scheduler for whois cache updates. First delay is after 5 seconds, then every (configured amount) of hours
 	// Does not automatically update the interval if the config changes, so a server reset is required to change the interval

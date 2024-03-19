@@ -51,6 +51,14 @@ func SetupMailerRoutes(app *echo.Echo, ms *mailer.MailerService, alertRecipient 
 	mailerGroup.POST("/test", mh.HandleTestMail)
 }
 
+func SetupWhoisRoutes(app *echo.Echo, ws *service.ServicesWhois) {
+	whoisGroup := app.Group("/whois")
+
+	wh := NewWhoisHandler(ws)
+
+	whoisGroup.GET("/:fqdn", wh.GetCard)
+}
+
 func View(c echo.Context, cmp templ.Component) error {
 	c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
 

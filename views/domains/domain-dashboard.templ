@@ -1,12 +1,16 @@
 package domains
 
-import "github.com/nwesterhausen/domain-monitor/configuration"
+import (
+    "github.com/nwesterhausen/domain-monitor/configuration"
+    "strings"
+)
 
 templ DomainCard(domain configuration.Domain) {
     <div class="card w-72 bg-base-100 text-light shadow-xl">
       <div class="card-body">
         <h2 class="card-title">{ domain.Name }</h2>
         <pre>{ domain.FQDN }</pre>
+        <div hx-get={"/whois/" + domain.FQDN} hx-trigger="load" ></div>
         <div class="card-actions justify-end">
         <div class={ "badge", templ.KV("badge-outline", !domain.Enabled), templ.KV("badge-success", domain.Enabled) }>Periodic Updates</div>
           <div class={ "badge", templ.KV("badge-outline", !domain.Alerts), templ.KV("badge-success", domain.Alerts) }>Alerts Enabled</div>
@@ -21,4 +25,13 @@ templ DomainCards(domains []configuration.Domain) {
             @DomainCard(domain)
         }
         </div>
+}
+
+templ WhoisDetail(whois configuration.WhoisCache) {
+    <div class="flex flex-col">
+    <pre>Registrar: { whois.WhoisInfo.Registrar.Name }</pre>
+    <pre>Name Servers: { strings.Join(whois.WhoisInfo.Domain.NameServers, ", ") }</pre>
+    <pre>Creation Date: { whois.WhoisInfo.Domain.CreatedDate }</pre>
+    <pre>Expiration Date: { whois.WhoisInfo.Domain.ExpirationDate }</pre>
+    </div>
 }
