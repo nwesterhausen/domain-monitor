@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1
-
 FROM docker.io/golang:1.22-alpine
+
+LABEL maintainer="Nicholas Westerhausen <nicholas@mail.nwest.one>"
+LABEL description="A simple domain monitoring tool, which tracts the expiration date of domains and sends notifications."
 
 WORKDIR /app
 
