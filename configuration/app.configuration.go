@@ -1,5 +1,13 @@
 package configuration
 
+import (
+	"io"
+	"log"
+	"os"
+
+	"gopkg.in/yaml.v3"
+)
+
 type AppConfiguration struct {
 	// The port the application listens on
 	Port int `yaml:"port" json:"port"`
@@ -22,14 +30,18 @@ type SMTPConfiguration struct {
 	// Use secure connection (TLS)
 	Secure bool `yaml:"secure" json:"secure"`
 	// SMTP user name
-	AuthUser string `yaml:"auth_user" json:"auth_user"`
+	AuthUser string `yaml:"authUser" json:"authUser"`
 	// SMTP user password
-	AuthPass string `yaml:"auth_pass" json:"auth_pass"`
+	AuthPass string `yaml:"authPass" json:"authPass"`
 	// Enable SMTP
 	Enabled bool `yaml:"enabled" json:"enabled"`
+	// Name of the sender
+	FromName string `yaml:"fromName" json:"fromName"`
+	// Email address of the sender
+	FromAddress string `yaml:"fromAddress" json:"fromAddress"`
 }
 
-type Configuration struct {
+type ConfigurationFile struct {
 	// The application configuration
 	App AppConfiguration `yaml:"app" json:"app"`
 	// The alerts configuration
@@ -38,24 +50,56 @@ type Configuration struct {
 	SMTP SMTPConfiguration `yaml:"smtp" json:"smtp"`
 }
 
+type Configuration struct {
+	// The config data
+	Config ConfigurationFile
+	// The path to the config file
+	Filepath string
+}
+
 // returns default configuration
-func DefaultConfiguration() Configuration {
+func DefaultConfiguration(filepath string) Configuration {
 	return Configuration{
-		App: AppConfiguration{
-			Port:                 3124,
-			WhoisRefreshInterval: 5,
-		},
-		Alerts: AlertsConfiguration{
-			Admin:      "",
-			SendAlerts: false,
-		},
-		SMTP: SMTPConfiguration{
-			Host:     "smtp.example.com",
-			Port:     587,
-			Secure:   true,
-			AuthUser: "",
-			AuthPass: "",
-			Enabled:  false,
-		},
+		Filepath: filepath,
+		Config: ConfigurationFile{
+			App: AppConfiguration{
+				Port:                 3124,
+				WhoisRefreshInterval: 5,
+			},
+			Alerts: AlertsConfiguration{
+				Admin:      "",
+				SendAlerts: false,
+			},
+			SMTP: SMTPConfiguration{
+				Host:     "smtp.example.com",
+				Port:     587,
+				Secure:   true,
+				AuthUser: "",
+				AuthPass: "",
+				Enabled:  false,
+			},
+		}}
+}
+
+// Write the app configuration to the config file
+func (c Configuration) Flush() {
+	data, dataErr := yaml.Marshal(c.Config)
+	if dataErr != nil {
+		log.Println("Error while marshalling configuration")
+		log.Fatalf("error: %v", dataErr)
+	}
+
+	file, err := os.Create(c.Filepath)
+	if err != nil {
+		log.Println("Error while creating configuration file")
+		log.Fatalf("error: %v", err)
+	}
+
+	defer file.Close()
+
+	_, err = io.WriteString(file, string(data))
+	if err != nil {
+		log.Println("Error while writing configuration file")
+		log.Fatalf("error: %v", err)
 	}
 }

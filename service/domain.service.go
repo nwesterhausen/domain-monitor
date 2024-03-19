@@ -17,7 +17,7 @@ func NewDomainService(store configuration.DomainConfiguration) *ServicesDomain {
 func (s *ServicesDomain) CreateDomain(domain configuration.Domain) (int, error) {
 	s.store.AddDomain(domain)
 	// Return the index of the domain in the list
-	for i, d := range s.store.Domains {
+	for i, d := range s.store.DomainFile.Domains {
 		if d.FQDN == domain.FQDN {
 			return i, nil
 		}
@@ -27,7 +27,7 @@ func (s *ServicesDomain) CreateDomain(domain configuration.Domain) (int, error) 
 }
 
 func (s *ServicesDomain) GetDomain(fqdn string) (configuration.Domain, error) {
-	for _, d := range s.store.Domains {
+	for _, d := range s.store.DomainFile.Domains {
 		if d.FQDN == fqdn {
 			return d, nil
 		}
@@ -36,13 +36,13 @@ func (s *ServicesDomain) GetDomain(fqdn string) (configuration.Domain, error) {
 }
 
 func (s *ServicesDomain) GetDomains() ([]configuration.Domain, error) {
-	return s.store.Domains, nil
+	return s.store.DomainFile.Domains, nil
 }
 
 func (s *ServicesDomain) UpdateDomain(domain configuration.Domain) error {
 	s.store.UpdateDomain(domain)
 	// Return nil to indicate success (we can confirm the domain was updated by checking the list)
-	for _, d := range s.store.Domains {
+	for _, d := range s.store.DomainFile.Domains {
 		if d.FQDN == domain.FQDN {
 			return nil
 		}
@@ -53,13 +53,13 @@ func (s *ServicesDomain) UpdateDomain(domain configuration.Domain) error {
 
 func (s *ServicesDomain) DeleteDomain(fqdn string) error {
 	// Get the domain to pass to RemoveDomain
-	for _, d := range s.store.Domains {
+	for _, d := range s.store.DomainFile.Domains {
 		if d.FQDN == fqdn {
 			s.store.RemoveDomain(d)
 		}
 	}
 	// Return nil to indicate success (we can confirm the domain was deleted by checking the list)
-	for _, d := range s.store.Domains {
+	for _, d := range s.store.DomainFile.Domains {
 		if d.FQDN == fqdn {
 			return errors.New("Failed to delete domain")
 		}

@@ -4,6 +4,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/nwesterhausen/domain-monitor/configuration"
+	"github.com/nwesterhausen/domain-monitor/mailer"
 	"github.com/nwesterhausen/domain-monitor/service"
 )
 
@@ -40,6 +41,14 @@ func SetupConfigRoutes(app *echo.Echo, config configuration.Configuration) {
 
 	// configGroup.GET("/", ch.HandleConfigShow)
 	// configGroup.PUT("/", ch.HandleConfigUpdate)
+}
+
+func SetupMailerRoutes(app *echo.Echo, ms *mailer.MailerService, alertRecipient string) {
+	mailerGroup := app.Group("/mailer")
+
+	mh := NewMailerHandler(ms, alertRecipient)
+
+	mailerGroup.POST("/test", mh.HandleTestMail)
 }
 
 func View(c echo.Context, cmp templ.Component) error {

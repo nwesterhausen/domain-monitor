@@ -28,15 +28,15 @@ type WhoisCacheStorage struct {
 	// The whois file contents
 	FileContents WhoisCacheFile
 	// The path to the whois cache file
-	FilePath string
+	Filepath string
 }
 
 func DefaultWhoisCacheStorage(path string) WhoisCacheStorage {
 	return WhoisCacheStorage{
 		FileContents: WhoisCacheFile{
-		Entries: []WhoisCache{},
+			Entries: []WhoisCache{},
 		},
-		FilePath: path,
+		Filepath: path,
 	}
 }
 
@@ -89,7 +89,7 @@ func (w *WhoisCacheStorage) Refresh() {
 
 func (w *WhoisCacheStorage) RefreshWithDomains(domains DomainConfiguration) {
 	// Make sure we have whois entries for all the domains
-	for _, domain := range domains.Domains {
+	for _, domain := range domains.DomainFile.Domains {
 		if w.Get(domain.FQDN) == nil {
 			w.Add(domain.FQDN)
 		}
@@ -138,15 +138,15 @@ func (w *WhoisCache) Refresh() {
 
 // Flush the whois cache to its storage
 func (w WhoisCacheStorage) Flush() {
-	log.Println("Flushing WHOIS cache to " + w.FilePath)
+	log.Println("Flushing WHOIS cache to " + w.Filepath)
 	// Write the FileContents to the FilePath
-  yaml, yamlerr := yaml.Marshal(w.FileContents)
+	yaml, yamlerr := yaml.Marshal(w.FileContents)
 	if yamlerr != nil {
 		log.Println("Error while marshalling WHOIS cache")
 		log.Fatalf("error: %v", yamlerr)
 	}
 
-	file, err := os.Create(w.FilePath)
+	file, err := os.Create(w.Filepath)
 	if err != nil {
 		log.Println("Error while creating WHOIS cache file")
 		log.Fatalf("error: %v", err)
