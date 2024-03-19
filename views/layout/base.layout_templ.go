@@ -25,7 +25,7 @@ func Base() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"apple-touch-icon.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"favicon-32x32.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"favicon-16x16.png\"><link rel=\"manifest\" href=\"site.webmanifest\"><link rel=\"stylesheet\" href=\"/css/tailwind.css\"><link rel=\"stylesheet\" href=\"/css/styles.css\"><title>Domain Monitor</title><script src=\"/js/htmx.min.js\"></script><script src=\"/js/_hyperscript.min.js\"></script></head><body><div class=\"container-fluid\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\" class=\"bg-neutral\"><head><meta charset=\"UTF-8\"><link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"apple-touch-icon.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"favicon-32x32.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"favicon-16x16.png\"><link rel=\"manifest\" href=\"site.webmanifest\"><link rel=\"stylesheet\" href=\"/css/tailwind.css\"><link rel=\"stylesheet\" href=\"/css/styles.css\"><title>Domain Monitor</title><script src=\"/js/htmx.min.js\"></script><script src=\"/js/_hyperscript.min.js\"></script></head><body><div class=\"container-fluid\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -33,7 +33,7 @@ func Base() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container\" id=\"content\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container-fluid\" id=\"content\"><div hx-get=\"/dashboard\" hx-trigger=\"load\"><p class=\"htmx-indicator\">Loading dashboard <span class=\"loading loading-ring loading-sm\"></span></p></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

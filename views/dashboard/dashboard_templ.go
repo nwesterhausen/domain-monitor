@@ -23,7 +23,7 @@ func Dashboard() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto\"><h3>Dashboard</h3><a class=\"btn btn-sm\" id=\"addDomain\">Add Domain</a><div class=\"flex flex-col place-items-center\"></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-100\"><div class=\"px-4\"><h1 class=\"text-xl bold text-accent\">Monitored Domains</h1><p class=\"text-xs p-1\">These are the domains that are currently being monitored. More can be added in the app configuration page. SMTP settings, who gets alerts, and whether domains should generate alerts can all be configured there.</p></div><div hx-swap=\"outerHTML\" hx-get=\"/domain/cards\" hx-trigger=\"load\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

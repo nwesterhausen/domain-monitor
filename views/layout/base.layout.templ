@@ -4,7 +4,7 @@ import "github.com/nwesterhausen/domain-monitor/views/modal"
 
 templ Base() {
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-neutral">
 <head>
      <meta charset="UTF-8" />
 
@@ -23,7 +23,14 @@ templ Base() {
 <body>
 <div class="container-fluid">
     @Navigation()
-    <div class="container" id="content"></div>
+    <div class="container-fluid" id="content">
+    <div hx-get="/dashboard" hx-trigger="load">
+    <p class="htmx-indicator">
+        Loading dashboard <span class="loading loading-ring loading-sm"></span>
+    </p>
+    </div>
+
+    </div>
     @modal.EditDomain()
 </div>
 </body>

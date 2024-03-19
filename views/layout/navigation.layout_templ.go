@@ -23,7 +23,7 @@ func Navigation() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"navbar bg-base-100\"><div class=\"navbar-start\"><a class=\"btn btn-ghost text-xl\" hx-indicator=\"#loading-indication\" hx-get=\"/dashboard\" hx-target=\"#content\">Domain Monitor</a></div><div class=\"navbar-center\"><div id=\"loading-indication\" class=\"htmx-indicator\">Loading <span class=\"loading loading-dots loading-xs\"></span></div></div><div class=\"navbar-end\"><ul class=\"menu menu-horizontal px-1\"><li><a hx-get=\"/configuration\" hx-indicator=\"#loading-indication\" hx-target=\"#content\">Configuration</a></li></ul></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"navbar bg-base-100\"><div class=\"navbar-start\"><span class=\"text-xl\">Domain Monitor</span><ul class=\"menu menu-horizontal px-1\"><li><a hx-indicator=\"#loading-indication\" hx-get=\"/dashboard\" hx-target=\"#content\">Dashboard</a></li></ul></div><div class=\"navbar-center\"><div id=\"loading-indication\" class=\"htmx-indicator\">Loading <span class=\"loading loading-dots loading-xs\"></span></div></div><div class=\"navbar-end\"><ul class=\"menu menu-horizontal px-1\"><li><a hx-get=\"/configuration\" hx-indicator=\"#loading-indication\" hx-target=\"#content\">Configuration</a></li></ul></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

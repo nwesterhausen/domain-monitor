@@ -15,16 +15,21 @@ func SetupRoutes(app *echo.Echo) {
 }
 
 func SetupDomainRoutes(app *echo.Echo, domains configuration.DomainConfiguration) {
-	domainGroup := app.Group("/api/domain")
+	domainHtmx := app.Group("/domain")
+	domainApi := app.Group("/api/domain")
 
 	ds := service.NewDomainService(domains)
+	dhapi := NewApiDomainHandler(ds)
 	dh := NewDomainHandler(ds)
 
-	domainGroup.POST("/create", dh.HandleDomainCreate)
-	domainGroup.GET("", dh.HandleDomainList)
-	domainGroup.GET("/:fqdn", dh.HandleDomainShow)
-	domainGroup.PUT("/:fqdn", dh.HandleDomainUpdate)
-	domainGroup.DELETE("/:fqdn", dh.HandleDomainDelete)
+	domainApi.POST("/create", dhapi.HandleDomainCreate)
+	domainApi.GET("", dhapi.HandleDomainList)
+	domainApi.GET("/:fqdn", dhapi.HandleDomainShow)
+	domainApi.PUT("/:fqdn", dhapi.HandleDomainUpdate)
+	domainApi.DELETE("/:fqdn", dhapi.HandleDomainDelete)
+
+	domainHtmx.GET("/:fqdn/card", dh.GetCard)
+	domainHtmx.GET("/cards", dh.GetCards)
 }
 
 func SetupConfigRoutes(app *echo.Echo, config configuration.Configuration) {
