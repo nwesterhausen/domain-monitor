@@ -5,9 +5,10 @@ go 1.22.1
 require (
 	github.com/a-h/templ v0.2.639
 	github.com/labstack/echo/v4 v4.11.4
-	gopkg.in/yaml.v3 v3.0.1
 	github.com/likexian/whois v1.15.1
 	github.com/likexian/whois-parser v1.24.11
+	github.com/wneessen/go-mail v0.4.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
