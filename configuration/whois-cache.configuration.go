@@ -2,10 +2,12 @@ package configuration
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/likexian/whois"
 	whoisparser "github.com/likexian/whois-parser"
+	"gopkg.in/yaml.v3"
 )
 
 type WhoisCache struct {
@@ -17,22 +19,32 @@ type WhoisCache struct {
 	LastUpdated time.Time `yaml:"lastUpdated" json:"lastUpdated"`
 }
 
-type WhoisCacheStorage struct {
+type WhoisCacheFile struct {
 	// The whois cache entries
 	Entries []WhoisCache `yaml:"entries" json:"entries"`
 }
 
-func DefaultWhoisCacheStorage() WhoisCacheStorage {
+type WhoisCacheStorage struct {
+	// The whois file contents
+	FileContents WhoisCacheFile
+	// The path to the whois cache file
+	FilePath string
+}
+
+func DefaultWhoisCacheStorage(path string) WhoisCacheStorage {
 	return WhoisCacheStorage{
+		FileContents: WhoisCacheFile{
 		Entries: []WhoisCache{},
+		},
+		FilePath: path,
 	}
 }
 
 func (w *WhoisCacheStorage) Get(fqdn string) *WhoisCache {
 	// Find the entry
-	for i := range w.Entries {
-		if w.Entries[i].FQDN == fqdn {
-			return &w.Entries[i]
+	for i := range w.FileContents.Entries {
+		if w.FileContents.Entries[i].FQDN == fqdn {
+			return &w.FileContents.Entries[i]
 		}
 	}
 
@@ -41,7 +53,7 @@ func (w *WhoisCacheStorage) Get(fqdn string) *WhoisCache {
 }
 
 func (w *WhoisCacheStorage) GetAll() []WhoisCache {
-	return w.Entries
+	return w.FileContents.Entries
 }
 
 func (w *WhoisCacheStorage) Add(fqdn string) {
@@ -56,15 +68,15 @@ func (w *WhoisCacheStorage) Add(fqdn string) {
 	newEntry.Refresh()
 
 	// Add the entry to the list
-	w.Entries = append(w.Entries, newEntry)
+	w.FileContents.Entries = append(w.FileContents.Entries, newEntry)
 }
 
 func (w *WhoisCacheStorage) Refresh() {
 	nothingRefreshed := true
 	// Only refresh the entries that are expired
-	for i := range w.Entries {
-		if w.Entries[i].IsExpired() {
-			w.Entries[i].Refresh()
+	for i := range w.FileContents.Entries {
+		if w.FileContents.Entries[i].IsExpired() {
+			w.FileContents.Entries[i].Refresh()
 			nothingRefreshed = false
 		}
 	}
@@ -88,10 +100,10 @@ func (w *WhoisCacheStorage) RefreshWithDomains(domains DomainConfiguration) {
 
 func (w *WhoisCacheStorage) Remove(fqdn string) {
 	// Find the entry
-	for i := range w.Entries {
-		if w.Entries[i].FQDN == fqdn {
+	for i := range w.FileContents.Entries {
+		if w.FileContents.Entries[i].FQDN == fqdn {
 			// Remove the entry
-			w.Entries = append(w.Entries[:i], w.Entries[i+1:]...)
+			w.FileContents.Entries = append(w.FileContents.Entries[:i], w.FileContents.Entries[i+1:]...)
 			return
 		}
 	}
@@ -99,7 +111,7 @@ func (w *WhoisCacheStorage) Remove(fqdn string) {
 
 func (w *WhoisCache) IsExpired() bool {
 	// If the last update was more than 30 days ago, then it's expired
-	return time.Now().Sub(w.LastUpdated) > 30*24*time.Hour
+	return time.Since(w.LastUpdated) > 30*24*time.Hour
 }
 
 func (w *WhoisCache) Refresh() {
@@ -126,6 +138,25 @@ func (w *WhoisCache) Refresh() {
 
 // Flush the whois cache to its storage
 func (w WhoisCacheStorage) Flush() {
-	// Write the cache to the file
-	WriteWhoisCache(w)
+	log.Println("Flushing WHOIS cache to " + w.FilePath)
+	// Write the FileContents to the FilePath
+  yaml, yamlerr := yaml.Marshal(w.FileContents)
+	if yamlerr != nil {
+		log.Println("Error while marshalling WHOIS cache")
+		log.Fatalf("error: %v", yamlerr)
+	}
+
+	file, err := os.Create(w.FilePath)
+	if err != nil {
+		log.Println("Error while creating WHOIS cache file")
+		log.Fatalf("error: %v", err)
+	}
+
+	defer file.Close()
+
+	_, err = file.Write(yaml)
+	if err != nil {
+		log.Println("Error while writing WHOIS cache file")
+		log.Fatalf("error: %v", err)
+	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"time"
@@ -12,10 +13,19 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+
 func main() {
+
+dataDirectory := flag.String("data-dir", "data", "Directory to store configuration and cache files")
+flag.Parse()
+
+log.Println("Data directory set to", *dataDirectory)
+configDirectory := configuration.ConfigDirectory{DataDir: *dataDirectory}
+
+
 	log.Println("Loading configuration and cache files...")
 
-	config := configuration.ReadAppConfig()
+	config := configDirectory.ReadAppConfig()
 
 	if config.Alerts.SendAlerts {
 		if !config.SMTP.Enabled {
@@ -31,11 +41,11 @@ func main() {
 	}
 	log.Printf("WHOIS cache refresh interval set to %d hours", config.App.WhoisRefreshInterval)
 
-	domains := configuration.ReadDomains()
+	domains := configDirectory.ReadDomains()
 	log.Printf("Loaded %d domains from domain list", len(domains.Domains))
 
-	whoisCache := configuration.ReadWhoisCache()
-	log.Printf("Found %d cached whois entries", len(whoisCache.Entries))
+	whoisCache := configDirectory.ReadWhoisCache()
+	log.Printf("Found %d cached whois entries", len(whoisCache.FileContents.Entries))
 
 	app := echo.New()
 

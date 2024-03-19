@@ -7,4 +7,10 @@ const AppConfig = "config.yaml"
 const Domains = "domain.yaml"
 
 // Location for the whois cache
-const WhoisCacheFile = "whois-cache.yaml"
+const WhoisCacheName = "whois-cache.yaml"
+
+// struct for tracking the directory
+type ConfigDirectory struct {
+	// The directory to store configuration and cache files
+	DataDir string
+}

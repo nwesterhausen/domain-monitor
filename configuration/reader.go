@@ -8,11 +8,11 @@ import (
 )
 
 // Read the app configuration from the config file
-func ReadAppConfig() Configuration {
+func (dir ConfigDirectory) ReadAppConfig() Configuration {
 	config := Configuration{}
 
-	// read config file
-	file, err := os.ReadFile(AppConfig)
+	// read config file from the provided base path
+	file, err := os.ReadFile(dir.DataDir + "/" + AppConfig)
 	if err != nil {
 		log.Printf("\nerror: %v\n", err)
 		config = DefaultConfiguration()
@@ -34,11 +34,11 @@ func ReadAppConfig() Configuration {
 
 
 // Read the domain configuration from the config file
-func ReadDomains() DomainConfiguration {
+func (dir ConfigDirectory) ReadDomains() DomainConfiguration {
 	config := DomainConfiguration{}
 
 	// read config file
-	file, err := os.ReadFile(Domains)
+	file, err := os.ReadFile(dir.DataDir + "/" + Domains)
 	if err != nil {
 		log.Printf("\nerror: %v\n", err)
 		config = DefaultDomainConfiguration()
@@ -60,17 +60,17 @@ func ReadDomains() DomainConfiguration {
 
 
 // Read the whois cache from the config file
-func ReadWhoisCache() WhoisCacheStorage {
+func (dir ConfigDirectory) ReadWhoisCache() WhoisCacheStorage {
 	config := WhoisCacheStorage{}
 
 	// read config file
-	file, err := os.ReadFile(WhoisCacheFile)
+	file, err := os.ReadFile(dir.DataDir + "/" + WhoisCacheName)
 	if err != nil {
 		log.Printf("\nerror: %v\n", err)
-		config = DefaultWhoisCacheStorage()
-		log.Println("🆕 Using default (empty) cache to create " + WhoisCacheFile)
+		config = DefaultWhoisCacheStorage(dir.DataDir + "/" + WhoisCacheName)
+		log.Println("🆕 Using default (empty) cache to create " + WhoisCacheName)
 		// write default config to file
-		WriteWhoisCache(config)
+		config.Flush()
 		return config
 	}
 

@@ -1,0 +1,14 @@
+# Ignore all, then unignore some
+/**
+
+!go.mod
+!go.sum
+!LICENSE
+!pnpm-lock.yaml
+!package.json
+!/assets
+!/cmd
+!/configuration
+!/handlers
+!/service
+!/views

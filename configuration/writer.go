@@ -53,26 +53,3 @@ func WriteAppConfig(config Configuration) {
 		log.Fatalf("error: %v", err)
 	}
 }
-
-// Write the whois cache to the config file
-func WriteWhoisCache(config WhoisCacheStorage) {
-	data, dataErr := yaml.Marshal(config)
-	if dataErr != nil {
-		log.Println("Error while marshalling whois cache")
-		log.Fatalf("error: %v", dataErr)
-	}
-
-	file, err := os.Create(WhoisCacheFile)
-	if err != nil {
-		log.Println("Error while creating whois cache file")
-		log.Fatalf("error: %v", err)
-	}
-
-	defer file.Close()
-
-	_, err = io.WriteString(file, string(data))
-	if err != nil {
-		log.Println("Error while writing whois cache file")
-		log.Fatalf("error: %v", err)
-	}
-}
