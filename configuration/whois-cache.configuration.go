@@ -33,10 +33,8 @@ type WhoisCacheStorage struct {
 
 func DefaultWhoisCacheStorage(path string) WhoisCacheStorage {
 	return WhoisCacheStorage{
-		FileContents: WhoisCacheFile{
-			Entries: []WhoisCache{},
-		},
-		Filepath: path,
+		FileContents: WhoisCacheFile{},
+		Filepath:     path,
 	}
 }
 

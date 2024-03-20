@@ -10,9 +10,9 @@ import (
 
 type AppConfiguration struct {
 	// The port the application listens on
-	Port int `yaml:"port" json:"port"`
+	Port int `yaml:"port" json:"port" default:"3124"`
 	// Allow automtic WHOIS refresh
-	AutomateWHOISRefresh bool `yaml:"automateWHOISRefresh" json:"automateWHOISRefresh"`
+	AutomateWHOISRefresh bool `yaml:"automateWHOISRefresh" json:"automateWHOISRefresh" default:"true"`
 }
 
 type AlertsConfiguration struct {
@@ -23,13 +23,13 @@ type AlertsConfiguration struct {
 	// Send 2-month alert for domain expiry date
 	Send2MonthAlert bool `yaml:"send2MonthAlert" json:"send2MonthAlert"`
 	// Send 1-month alert for domain expiry date
-	Send1MonthAlert bool `yaml:"send1MonthAlert" json:"send1MonthAlert"`
+	Send1MonthAlert bool `yaml:"send1MonthAlert" json:"send1MonthAlert" default:"true"`
 	// Send 2-week alert for domain expiry date
 	Send2WeekAlert bool `yaml:"send2WeekAlert" json:"send2WeekAlert"`
 	// Send 1-week alert for domain expiry date
 	Send1WeekAlert bool `yaml:"send1WeekAlert" json:"send1WeekAlert"`
 	// Send 3-day alert for domain expiry date
-	Send3DayAlert bool `yaml:"send3DayAlert" json:"send3DayAlert"`
+	Send3DayAlert bool `yaml:"send3DayAlert" json:"send3DayAlert" default:"true"`
 	// Send daily alerts within 7 days of domain expiry
 	SendDailyExpiryAlert bool `yaml:"sendDailyExpiryAlert" json:"sendDailyExpiryAlert"`
 }
@@ -96,29 +96,16 @@ func DefaultConfiguration(filepath string) Configuration {
 				Port:                 3124,
 				AutomateWHOISRefresh: true,
 			},
-			Alerts: AlertsConfiguration{
-				Admin:                "",
-				SendAlerts:           false,
-				Send2MonthAlert:      false,
-				Send1MonthAlert:      true,
-				Send2WeekAlert:       false,
-				Send1WeekAlert:       false,
-				Send3DayAlert:        true,
-				SendDailyExpiryAlert: false,
-			},
-			SMTP: SMTPConfiguration{
-				Host:     "smtp.example.com",
-				Port:     587,
-				Secure:   true,
-				AuthUser: "",
-				AuthPass: "",
-				Enabled:  false,
-			},
 			Scheduler: SchedulerConfiguration{
-				WhoisCacheStaleInterval:         270,
+				WhoisCacheStaleInterval:         190,
 				UseStandardWhoisRefreshSchedule: true,
 			},
-		}}
+			Alerts: AlertsConfiguration{
+				Send1MonthAlert: true,
+				Send3DayAlert:   true,
+			},
+		},
+	}
 }
 
 // Write the app configuration to the config file

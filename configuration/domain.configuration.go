@@ -60,10 +60,8 @@ func (dc DomainConfiguration) Flush() {
 // Returns a default domain configuration (empty)
 func DefaultDomainConfiguration(filepath string) DomainConfiguration {
 	return DomainConfiguration{
-		Filepath: filepath,
-		DomainFile: DomainFile{
-			Domains: []Domain{},
-		},
+		Filepath:   filepath,
+		DomainFile: DomainFile{},
 	}
 }
 
