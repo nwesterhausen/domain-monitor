@@ -4,15 +4,15 @@ import (
 	"log"
 
 	"github.com/labstack/echo/v4"
-	"github.com/nwesterhausen/domain-monitor/mailer"
+	"github.com/nwesterhausen/domain-monitor/service"
 )
 
 type MailerHandler struct {
-	MailerService *mailer.MailerService
+	MailerService *service.MailerService
 	Recipient     string
 }
 
-func NewMailerHandler(ms *mailer.MailerService, recipient string) *MailerHandler {
+func NewMailerHandler(ms *service.MailerService, recipient string) *MailerHandler {
 	// confirm that the mailer service is not nil
 	if ms == nil {
 		log.Fatal("🚨 Mailer service not properly initialized.")

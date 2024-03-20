@@ -6,9 +6,13 @@
 !LICENSE
 !pnpm-lock.yaml
 !package.json
-!/assets
+!tailwind.config.js
 !/cmd
 !/configuration
 !/handlers
 !/service
 !/views
+
+!/assets/
+/assets/css/tailwind.css
+/assets/js/*.min.js

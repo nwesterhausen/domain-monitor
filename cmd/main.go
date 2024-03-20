@@ -9,7 +9,6 @@ import (
 
 	"github.com/nwesterhausen/domain-monitor/configuration"
 	"github.com/nwesterhausen/domain-monitor/handlers"
-	"github.com/nwesterhausen/domain-monitor/mailer"
 	"github.com/nwesterhausen/domain-monitor/service"
 
 	"github.com/labstack/echo/v4"
@@ -29,7 +28,7 @@ func main() {
 	log.Println("Loading configuration and cache files...")
 
 	config := configDirectory.ReadAppConfig()
-	var _mailer *mailer.MailerService = nil
+	var _mailer *service.MailerService = nil
 	if config.Config.Alerts.SendAlerts {
 		if !config.Config.SMTP.Enabled {
 			log.Println("Email notifications are disabled")
@@ -37,7 +36,7 @@ func main() {
 			log.Println("SMTP is not configured")
 			config.Config.SMTP.Enabled = false
 		} else {
-			_mailer = mailer.NewMailerService(config.Config.SMTP)
+			_mailer = service.NewMailerService(config.Config.SMTP)
 			log.Printf("Alerts configured to be sent to %s", config.Config.Alerts.Admin)
 		}
 	} else {
@@ -61,7 +60,9 @@ func main() {
 	handlers.SetupRoutes(app)
 	handlers.SetupConfigRoutes(app, config)
 	handlers.SetupDomainRoutes(app, domains)
-	handlers.SetupMailerRoutes(app, _mailer, config.Config.Alerts.Admin)
+	if _mailer != nil {
+		handlers.SetupMailerRoutes(app, _mailer, config.Config.Alerts.Admin)
+	}
 
 	// Setup whois routes
 	_whoisService := service.NewWhoisService(whoisCache)
@@ -80,7 +81,7 @@ func main() {
 	})
 
 	// Start server on configured port
-	app.Logger.Fatal(app.Start("localhost:" + fmt.Sprint(config.Config.App.Port)))
+	app.Logger.Fatal(app.Start(":" + fmt.Sprint(config.Config.App.Port)))
 }
 
 // Refresh the whois cache on a schedule, and flush the cache. This runs every 6 hours.

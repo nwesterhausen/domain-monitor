@@ -102,4 +102,12 @@ func (c Configuration) Flush() {
 		log.Println("Error while writing configuration file")
 		log.Fatalf("error: %v", err)
 	}
+
+	// Check if the file has been written
+	fileInfo, err := file.Stat()
+	if err != nil {
+		log.Println("Error while checking configuration file")
+		log.Fatalf("error: %v", err)
+	}
+	println("Configuration file written:", fileInfo.Name())
 }
