@@ -1,4 +1,9 @@
 {
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nwesterhausen/domain-monitor"
+  },
   "scripts": {
     "build": "pnpm build:tailwind && pnpm build:htmx && pnpm build:hyperscript",
     "build:hyperscript": "cp node_modules/hyperscript.org/dist/_hyperscript.min.js assets/js/_hyperscript.min.js",
