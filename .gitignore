@@ -2,13 +2,10 @@
 bin
 tmp
 
-# old project files
-client
-server
-
 # "built" assets
 assets/css/tailwind.css
 assets/js/*.min.js
+views/**/*_templ.go
 
 # project files
 config.yaml
