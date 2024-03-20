@@ -17,7 +17,7 @@ RUN npx pnpm install --frozen-lockfile
 # "Build" the frontend files
 RUN npx pnpm build
 # Compile the templ files
-RUN templ compile
+RUN templ generate
 # Build the Go app
 RUN go build -o /app/main ./cmd/main.go
 

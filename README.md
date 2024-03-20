@@ -157,6 +157,6 @@ monitor. Each domain has the following properties:
 
 In root of repository do `pnpm i` to install node dependencies
 
-To compile the templates, run `templ compile` in the root of the repository.
+To compile the templates, run `templ generate` in the root of the repository.
 
 Run dev server with `air`
