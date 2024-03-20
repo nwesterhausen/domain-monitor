@@ -11,8 +11,8 @@ import (
 type AppConfiguration struct {
 	// The port the application listens on
 	Port int `yaml:"port" json:"port"`
-	// WHOIS Cache Refresh Interval in hours
-	WhoisRefreshInterval int `yaml:"whoisRefreshInterval" json:"whoisRefreshInterval"`
+	// Allow automtic WHOIS refresh
+	AutomateWHOISRefresh bool `yaml:"automateWHOISRefresh" json:"automateWHOISRefresh"`
 }
 
 type AlertsConfiguration struct {
@@ -20,6 +20,18 @@ type AlertsConfiguration struct {
 	Admin string `yaml:"admin" json:"admin"`
 	// Send alerts for monitored domains
 	SendAlerts bool `yaml:"send_alerts" json:"send_alerts"`
+	// Send 2-month alert for domain expiry date
+	Send2MonthAlert bool `yaml:"send2MonthAlert" json:"send2MonthAlert"`
+	// Send 1-month alert for domain expiry date
+	Send1MonthAlert bool `yaml:"send1MonthAlert" json:"send1MonthAlert"`
+	// Send 2-week alert for domain expiry date
+	Send2WeekAlert bool `yaml:"send2WeekAlert" json:"send2WeekAlert"`
+	// Send 1-week alert for domain expiry date
+	Send1WeekAlert bool `yaml:"send1WeekAlert" json:"send1WeekAlert"`
+	// Send 3-day alert for domain expiry date
+	Send3DayAlert bool `yaml:"send3DayAlert" json:"send3DayAlert"`
+	// Send daily alerts within 7 days of domain expiry
+	SendDailyExpiryAlert bool `yaml:"sendDailyExpiryAlert" json:"sendDailyExpiryAlert"`
 }
 
 type SMTPConfiguration struct {
@@ -41,6 +53,22 @@ type SMTPConfiguration struct {
 	FromAddress string `yaml:"fromAddress" json:"fromAddress"`
 }
 
+type SchedulerConfiguration struct {
+	// Interval after which WHOIS cache data is considered stale (in days)
+	WhoisCacheStaleInterval int `yaml:"whoisCacheStaleInterval" json:"whoisCacheStaleInterval"`
+	// Use standard WHOIS refresh schedule:
+	//
+	// 0. Cache miss for domain
+	// 1. Cache becomes WhoisCacheStaleInterval old
+	// 2. 3 months before expiry
+	// 3. 2 months before expiry
+	// 4. 1 month before expiry
+	// 5. 2 weeks before expiry
+	//
+	// As always, manual refresh is possible, and can be triggered via the API or the web interface
+	UseStandardWhoisRefreshSchedule bool `yaml:"useStandardWhoisRefreshSchedule" json:"useStandardWhoisRefreshSchedule"`
+}
+
 type ConfigurationFile struct {
 	// The application configuration
 	App AppConfiguration `yaml:"app" json:"app"`
@@ -48,6 +76,8 @@ type ConfigurationFile struct {
 	Alerts AlertsConfiguration `yaml:"alerts" json:"alerts"`
 	// The SMTP configuration
 	SMTP SMTPConfiguration `yaml:"smtp" json:"smtp"`
+	// The scheduler configuration
+	Scheduler SchedulerConfiguration `yaml:"scheduler" json:"scheduler"`
 }
 
 type Configuration struct {
@@ -64,11 +94,17 @@ func DefaultConfiguration(filepath string) Configuration {
 		Config: ConfigurationFile{
 			App: AppConfiguration{
 				Port:                 3124,
-				WhoisRefreshInterval: 5,
+				AutomateWHOISRefresh: true,
 			},
 			Alerts: AlertsConfiguration{
-				Admin:      "",
-				SendAlerts: false,
+				Admin:                "",
+				SendAlerts:           false,
+				Send2MonthAlert:      false,
+				Send1MonthAlert:      true,
+				Send2WeekAlert:       false,
+				Send1WeekAlert:       false,
+				Send3DayAlert:        true,
+				SendDailyExpiryAlert: false,
 			},
 			SMTP: SMTPConfiguration{
 				Host:     "smtp.example.com",
@@ -77,6 +113,10 @@ func DefaultConfiguration(filepath string) Configuration {
 				AuthUser: "",
 				AuthPass: "",
 				Enabled:  false,
+			},
+			Scheduler: SchedulerConfiguration{
+				WhoisCacheStaleInterval:         270,
+				UseStandardWhoisRefreshSchedule: true,
 			},
 		}}
 }

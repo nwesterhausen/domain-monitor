@@ -31,7 +31,7 @@ func (dir ConfigDirectory) ReadAppConfig() Configuration {
 	}
 
 	// spot check for empty config
-	if configInner.App.Port == 0 && configInner.App.WhoisRefreshInterval == 0 && configInner.Alerts.Admin == "" && configInner.SMTP.Host == "" {
+	if configInner.App.Port == 0 && configInner.Alerts.Admin == "" && configInner.SMTP.Host == "" {
 		log.Println("🚨 Configuration file may be empty.")
 		// pretty print the config
 		log.Printf("🚨 %+v\n", configInner)
