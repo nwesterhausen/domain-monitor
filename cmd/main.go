@@ -72,7 +72,7 @@ func main() {
 	// Does not automatically update the interval if the config changes, so a server reset is required to change the interval
 	time.AfterFunc(5*time.Second, func() {
 		if !config.Config.App.AutomateWHOISRefresh {
-			log.Println("🚫 WHOIS cache refresh is disabled by configuration. (Check `whoisRefreshInterval` in config.yaml)")
+			log.Println("🚫 WHOIS cache refresh is disabled by configuration. (Check `automateWHOISRefresh` in config.yaml)")
 			return
 		}
 

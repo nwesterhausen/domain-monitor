@@ -20,12 +20,13 @@ func NewWhoisHandler(ws *service.ServicesWhois) *WhoisHandler {
 
 // Get the inner card HTML content for a domain's whois information
 func (h *WhoisHandler) GetCard(c echo.Context) error {
-	fqdn := c.Param("fqdn")
+	fqdn := c.FormValue("fqdn")
 	if len(fqdn) == 0 {
 		return errors.New("Invalid domain to fetch (FQDN required)")
 	}
 
 	whois := h.WhoisService.GetWhois(fqdn)
 	card := domains.WhoisDetail(whois)
+
 	return View(c, card)
 }

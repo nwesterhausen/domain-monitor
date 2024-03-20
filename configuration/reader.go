@@ -37,10 +37,15 @@ func (dir ConfigDirectory) ReadAppConfig() Configuration {
 		log.Printf("🚨 %+v\n", configInner)
 	}
 
-	return Configuration{
+	config := Configuration{
 		Filepath: filepath,
 		Config:   configInner,
 	}
+
+	// Flush the config to ensure it's up to date
+	config.Flush()
+
+	return config
 }
 
 // Read the domain configuration from the config file
@@ -66,10 +71,16 @@ func (dir ConfigDirectory) ReadDomains() DomainConfiguration {
 		log.Fatalf("error: %v", err)
 	}
 
-	return DomainConfiguration{
+	domainConfig := DomainConfiguration{
+
 		Filepath:   filepath,
 		DomainFile: domains,
 	}
+
+	// Flush the config to ensure it's up to date
+	domainConfig.Flush()
+
+	return domainConfig
 }
 
 // Read the whois cache from the config file
@@ -95,8 +106,13 @@ func (dir ConfigDirectory) ReadWhoisCache() WhoisCacheStorage {
 		log.Fatalf("error: %v", err)
 	}
 
-	return WhoisCacheStorage{
+	whoisConfig := WhoisCacheStorage{
 		Filepath:     filepath,
 		FileContents: cache,
 	}
+
+	// Flush the config to ensure it's up to date
+	whoisConfig.Flush()
+
+	return whoisConfig
 }

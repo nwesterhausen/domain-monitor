@@ -55,7 +55,7 @@ func SetupWhoisRoutes(app *echo.Echo, ws *service.ServicesWhois) {
 
 	wh := NewWhoisHandler(ws)
 
-	whoisGroup.GET("/:fqdn", wh.GetCard)
+	whoisGroup.POST("/", wh.GetCard)
 }
 
 func View(c echo.Context, cmp templ.Component) error {

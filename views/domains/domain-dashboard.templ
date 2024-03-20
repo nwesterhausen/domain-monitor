@@ -1,6 +1,7 @@
 package domains
 
 import (
+    whoisparser "github.com/likexian/whois-parser"
     "github.com/nwesterhausen/domain-monitor/configuration"
     "strings"
 )
@@ -10,7 +11,9 @@ templ DomainCard(domain configuration.Domain) {
       <div class="card-body">
         <h2 class="card-title">{ domain.Name }</h2>
         <pre>{ domain.FQDN }</pre>
-        <div hx-get={"/whois/" + domain.FQDN} hx-trigger="load" ></div>
+        <div hx-post="/whois/" hx-trigger="load" hx-include="this">
+            <input type="hidden" name="fqdn" value={ domain.FQDN } />
+        </div>
         <div class="card-actions justify-end">
         <div class={ "badge", templ.KV("badge-outline", !domain.Enabled), templ.KV("badge-success", domain.Enabled) }>Periodic Updates</div>
           <div class={ "badge", templ.KV("badge-outline", !domain.Alerts), templ.KV("badge-success", domain.Alerts) }>Alerts Enabled</div>
@@ -28,10 +31,23 @@ templ DomainCards(domains []configuration.Domain) {
 }
 
 templ WhoisDetail(whois configuration.WhoisCache) {
+    if (whoisparser.WhoisInfo{}) == whois.WhoisInfo {
+        <div class="text-center text-2xl">No WHOIS data available</div>
+        return
+    }
+
     <div class="flex flex-col">
-    <pre>Registrar: { whois.WhoisInfo.Registrar.Name }</pre>
-    <pre>Name Servers: { strings.Join(whois.WhoisInfo.Domain.NameServers, ", ") }</pre>
-    <pre>Creation Date: { whois.WhoisInfo.Domain.CreatedDate }</pre>
-    <pre>Expiration Date: { whois.WhoisInfo.Domain.ExpirationDate }</pre>
+    @WhoisDetailItem("Registrar", whois.WhoisInfo.Registrar.Name)
+    @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
+    @WhoisDetailItem("Creation Date", whois.WhoisInfo.Domain.CreatedDateInTime.Format("2006-01-02"))
+    @WhoisDetailItem("Expiration Date", whois.WhoisInfo.Domain.ExpirationDateInTime.Format("2006-01-02"))
+    @WhoisDetailItem("WHOIS Query Date", whois.LastUpdated.Format("2006-01-02"))
+    </div>
+}
+
+templ WhoisDetailItem(label string, value string) {
+    <div class="flex flex-col">
+        <div class="text-xs text-secondary">{ label }</div>
+        <div class="ps-2 text-md">{ value }</div>
     </div>
 }
