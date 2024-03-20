@@ -41,3 +41,13 @@ func (h *DomainHandler) GetCards(c echo.Context) error {
 	cards := domains.DomainCards(domainList)
 	return View(c, cards)
 }
+
+// Get HTML for domain list as tbody
+func (h *DomainHandler) GetListTbody(c echo.Context) error {
+	domainList, err := h.DomainService.GetDomains()
+	if err != nil {
+		return err
+	}
+	list := domains.DomainListingTbody(domainList)
+	return View(c, list)
+}

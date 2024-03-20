@@ -1,23 +1,24 @@
 package configuration
 
 templ Configuration() {
-    <h1>Configuration</h1>
-    <p>
+    <div class="px-2">
+    <h1 class="text-xl text-secondary">Configuration</h1>
+    <p class="p-2">
     Changes here are applied to the two config files located in a config dir where you run this server. If you want to
     modify those files directly, changes will be realized upon restarting the server. Committing changes using this
     configuration page will cause the server to restart so whatever changes you make take immediate effect.
     </p>
-    <h3>Monitored Domains</h3>
-    <p>
+    <div class="flex flex-row gap-2">
+    <button class="btn btn-xs btn-info">Add Domain</button>
+    <button class="btn btn-xs btn-accent">Test SMTP</button>
+    <button class="btn btn-xs btn-error" disabled?={true}>Clear Changes</button>
+    <button class="btn btn-xs btn-success" disabled?={true}>Commit Changes</button>
+    </div>
+    <h3 class="text-lg text-accent">Monitored Domains</h3>
+    <p class="p-2">
     If you attempt to update a domain and change its FQDN, right now it will just add a new domain entry to watch. In
     the future, there will be an uuid for each entry.
     </p>
-    <div>
-    <a href="#" class="btn btn-success" id="btnNewDomain">
-        <i class="bi bi-plus-square"></i>
-        &nbsp;Add Domain
-    </a>
-    </div>
     <table class="table" id="configuredDomainTable">
     <thead>
         <tr>
@@ -28,7 +29,7 @@ templ Configuration() {
         <th scope="col"></th>
         </tr>
     </thead>
-    <tbody></tbody>
+    <tbody hx-get="/domain/tbody" hx-trigger="load" hx-swap="outerHTML"></tbody>
     </table>
     <div>
     <h3>Web App</h3>
@@ -78,5 +79,6 @@ templ Configuration() {
         <div id="smtpPassHelp" class="form-text">Auth password for SMTP server</div>
     </div>
     <button type="button" id="btnCommitConfigChanges" class="btn btn-primary">Commit Changes</button>
+    </div>
     </div>
 }

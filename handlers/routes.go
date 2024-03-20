@@ -30,6 +30,7 @@ func SetupDomainRoutes(app *echo.Echo, domains configuration.DomainConfiguration
 
 	domainHtmx.GET("/:fqdn/card", dh.GetCard)
 	domainHtmx.GET("/cards", dh.GetCards)
+	domainHtmx.GET("/tbody", dh.GetListTbody)
 }
 
 func SetupConfigRoutes(app *echo.Echo, config configuration.Configuration) {

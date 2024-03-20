@@ -5,6 +5,7 @@ import (
     "github.com/nwesterhausen/domain-monitor/configuration"
     "strings"
     "time"
+    "fmt"
 
     "github.com/hako/durafmt"
 )
@@ -54,4 +55,17 @@ templ WhoisDetailItem(label string, value string) {
         <div class="text-xs text-secondary">{ label }</div>
         <div class="ps-2 text-md">{ value }</div>
     </div>
+}
+
+templ DomainListingTbody(domains []configuration.Domain) {
+    <tbody>
+        for _,domain := range domains {
+            <tr>
+                <td>{ domain.Name }</td>
+                <td>{ domain.FQDN }</td>
+                <td>{ fmt.Sprintf("%v", domain.Enabled) }</td>
+                <td>{ fmt.Sprintf("%v", domain.Alerts) }</td>
+            </tr>
+        }
+    </tbody>
 }
