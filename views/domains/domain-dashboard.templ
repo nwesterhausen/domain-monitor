@@ -4,6 +4,9 @@ import (
     whoisparser "github.com/likexian/whois-parser"
     "github.com/nwesterhausen/domain-monitor/configuration"
     "strings"
+    "time"
+
+    "github.com/hako/durafmt"
 )
 
 templ DomainCard(domain configuration.Domain) {
@@ -41,6 +44,7 @@ templ WhoisDetail(whois configuration.WhoisCache) {
     @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
     @WhoisDetailItem("Creation Date", whois.WhoisInfo.Domain.CreatedDateInTime.Format("2006-01-02"))
     @WhoisDetailItem("Expiration Date", whois.WhoisInfo.Domain.ExpirationDateInTime.Format("2006-01-02"))
+    @WhoisDetailItem("Time Until Expiration", durafmt.Parse(whois.WhoisInfo.Domain.ExpirationDateInTime.Sub(time.Now())).LimitFirstN(2).String())
     @WhoisDetailItem("WHOIS Query Date", whois.LastUpdated.Format("2006-01-02"))
     </div>
 }
