@@ -15,8 +15,8 @@ dependencies:
     specifier: ^1.10.0
     version: 1.10.0
   nodemailer:
-    specifier: ^6.7.2
-    version: 6.7.2
+    specifier: ^6.9.9
+    version: 6.9.9
   socket.io:
     specifier: ^4.4.1
     version: 4.4.1
@@ -1961,8 +1961,8 @@ packages:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
 
-  /nodemailer@6.7.2:
-    resolution: {integrity: sha512-Dz7zVwlef4k5R71fdmxwR8Q39fiboGbu3xgswkzGwczUfjp873rVxt1O46+Fh0j1ORnAC6L9+heI8uUpO6DT7Q==}
+  /nodemailer@6.9.9:
+    resolution: {integrity: sha512-dexTll8zqQoVJEZPwQAKzxxtFn0qTnjdQTchoU6Re9BUUGBJiOy3YMn/0ShTW6J5M0dfQ1NeDeRTTl4oIWgQMA==}
     engines: {node: '>=6.0.0'}
     dev: false
 
