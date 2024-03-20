@@ -6,7 +6,8 @@
 # Requires jq and ~/.gh_token
 
 # Build if needed
-yarn build
+pnpm i
+pnpm build
 
 # Github Username
 USERNAME=nwesterhausen
@@ -33,7 +34,7 @@ GH_TAGBASE="docker.pkg.github.com/$USERNAME/$IMAGE_PREFIX/$IMAGE"
 DOCKER_TAGBASE="$USERNAME/$IMAGE_PREFIX"
 
 # Build the docker image
-docker build \
+podman build \
     -t "$DOCKER_TAGBASE:$BUILDTAG" \
     -t "$DOCKER_TAGBASE:$TAG" \
     -t "$GH_TAGBASE:$BUILDTAG" \

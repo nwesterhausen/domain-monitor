@@ -23,20 +23,20 @@
   "author": "Nicholas Westerhausen",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.3",
+    "express": "^4.18.3",
     "js-yaml": "^4.1.0",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.7.2",
-    "socket.io": "^4.4.1",
+    "nodemailer": "^6.9.13",
+    "socket.io": "^4.7.5",
     "whois-promise": "^1.2.4"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^1.0.0",
-    "clean-css": "^5.2.4",
-    "eslint": "^8.10.0",
+    "@11ty/eleventy": "^1.0.2",
+    "clean-css": "^5.3.3",
+    "eslint": "^8.57.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.4.0",
-    "prettier": "^2.5.1",
-    "rollup": "^2.68.0"
+    "eslint-config-prettier": "^8.10.0",
+    "prettier": "^2.8.8",
+    "rollup": "^2.79.1"
   }
 }

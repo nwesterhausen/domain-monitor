@@ -1,12 +1,12 @@
-FROM node:14-alpine
+FROM node:20-alpine
 
 # Create app directory
 WORKDIR /app
 
 # App Dependecies
-COPY package.json yarn.lock ./
+COPY package.json pnpm-lock.yaml ./
 
-RUN yarn install --frozen-lockfile --production=true
+RUN npx pnpm i ci
 
 # Bundle app source
 COPY server/sample* server/index.js ./
