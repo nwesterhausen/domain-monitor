@@ -41,26 +41,26 @@ podman build \
     -t "$GH_TAGBASE:$TAG" .
 
 # Grab the image ID
-IMAGE_ID=$(docker images -q "$DOCKER_TAGBASE")
+IMAGE_ID=$(podman images -q "$DOCKER_TAGBASE")
 echo $IMAGE_ID
 
 # Login to gh packages docker repo
-cat ~/.gh_token | docker login docker.pkg.github.com -u nwesterhausen --password-stdin
+cat ~/.gh_token | podman login docker.pkg.github.com -u nwesterhausen --password-stdin
 
 # Push the images
 if ! [[ -z ${PRODRUN+x} ]]; then
-    docker push "$GH_TAGBASE:$TAG";
+    podman push "$GH_TAGBASE:$TAG";
 fi
-docker push "$GH_TAGBASE:$BUILDTAG"
+podman push "$GH_TAGBASE:$BUILDTAG"
 
 # Login to docker.io
-docker login
+cat ~/.docker_token | podman login docker.io -u nwesterhausen --password-stdin
 
 # Push the images
 if ! [[ -z ${PRODRUN+x} ]]; then
-    docker push "$DOCKER_TAGBASE:$TAG";
+    podman push "$DOCKER_TAGBASE:$TAG";
 fi
-docker push "$DOCKER_TAGBASE:$BUILDTAG"
+podman push "$DOCKER_TAGBASE:$BUILDTAG"
 
 # You could then go on to include other docker package repositories here,
 # by tagging and pushing as appropriate.
