@@ -1,11 +1,11 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.0-rc1",
   "repository": {
     "type": "git",
     "url": "https://github.com/nwesterhausen/domain-monitor"
   },
   "scripts": {
-    "build": "pnpm build:tailwind && pnpm build:htmx && pnpm build:hyperscript",
+    "build": "pnpm build:htmx && pnpm build:hyperscript && pnpm build:tailwind",
     "build:hyperscript": "cp node_modules/hyperscript.org/dist/_hyperscript.min.js assets/js/_hyperscript.min.js",
     "build:htmx": "cp node_modules/htmx.org/dist/htmx.min.js assets/js/htmx.min.js",
     "build:tailwind": "tailwindcss -o ./assets/css/tailwind.css"

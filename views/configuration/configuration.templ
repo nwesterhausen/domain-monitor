@@ -2,6 +2,7 @@ package configuration
 
 templ Configuration() {
     <div class="px-2">
+    <div>
     <h1 class="text-xl text-secondary">Configuration</h1>
     <p class="p-2">
     Changes here are applied to the two config files located in a config dir where you run this server. If you want to
@@ -14,6 +15,20 @@ templ Configuration() {
     <button class="btn btn-xs btn-error" disabled?={true}>Clear Changes</button>
     <button class="btn btn-xs btn-success" disabled?={true}>Commit Changes</button>
     </div>
+    </div>
+    <div role="tablist" class="tabs tabs-boxed">
+        <a role="tab" class="tab">Domains</a>
+        <a role="tab" class="tab tab-active">Application</a>
+        <a role="tab" class="tab">Alerts</a>
+        <a role="tab" class="tab">SMTP</a>
+        <a role="tab" class="tab">Scheduler</a>
+    </div>
+    <div id="tabContent" class="p-2"></div>
+    </div>
+}
+
+templ DomainTab() {
+    <div>
     <h3 class="text-lg text-accent">Monitored Domains</h3>
     <p class="p-2">
     If you attempt to update a domain and change its FQDN, right now it will just add a new domain entry to watch. In
@@ -21,12 +36,11 @@ templ Configuration() {
     </p>
     <table class="table" id="configuredDomainTable">
     <thead>
-        <tr>
+        <tr class="text-secondary">
         <th scope="col">Name</th>
         <th scope="col">FQDN</th>
         <th scope="col">Send Alert</th>
         <th scope="col">WHOIS Enabled</th>
-        <th scope="col"></th>
         </tr>
     </thead>
     <tbody hx-get="/domain/tbody" hx-trigger="load" hx-swap="outerHTML"></tbody>
