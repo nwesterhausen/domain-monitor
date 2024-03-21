@@ -1,6 +1,7 @@
 # go stuff
 bin
 tmp
+main
 
 # "built" assets
 assets/css/tailwind.css
