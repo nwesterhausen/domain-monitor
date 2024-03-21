@@ -138,3 +138,31 @@ func (c Configuration) Flush() {
 	}
 	println("Configuration file written:", fileInfo.Name())
 }
+
+// Update the app configuration with the given data
+func (c *Configuration) UpdateAppConfiguration(data AppConfiguration) {
+	c.Config.App = data
+
+	c.Flush()
+}
+
+// Update the alerts configuration with the given data
+func (c *Configuration) UpdateAlertsConfiguration(data AlertsConfiguration) {
+	c.Config.Alerts = data
+
+	c.Flush()
+}
+
+// Update the SMTP configuration with the given data
+func (c *Configuration) UpdateSMTPConfiguration(data SMTPConfiguration) {
+	c.Config.SMTP = data
+
+	c.Flush()
+}
+
+// Update the scheduler configuration with the given data
+func (c *Configuration) UpdateSchedulerConfiguration(data SchedulerConfiguration) {
+	c.Config.Scheduler = data
+
+	c.Flush()
+}

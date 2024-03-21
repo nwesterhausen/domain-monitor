@@ -82,6 +82,8 @@ func (w *WhoisCacheStorage) Refresh() {
 	// If nothing was refreshed, log a short message that the cache is up to date
 	if nothingRefreshed {
 		log.Println("✅ WHOIS cache not reporting any expired entries. Cache is up to date.")
+	} else {
+		w.Flush()
 	}
 }
 
@@ -105,6 +107,8 @@ func (w *WhoisCacheStorage) Remove(fqdn string) {
 			return
 		}
 	}
+
+	w.Flush()
 }
 
 func (w *WhoisCache) IsExpired() bool {

@@ -77,6 +77,8 @@ func (dc *DomainConfiguration) AddDomain(domain Domain) {
 	}
 
 	dc.DomainFile.Domains = append(dc.DomainFile.Domains, domain)
+
+	dc.Flush()
 }
 
 // RemoveDomain removes a domain from the configuration
@@ -90,6 +92,8 @@ func (dc *DomainConfiguration) RemoveDomain(domain Domain) {
 			break
 		}
 	}
+
+	dc.Flush()
 }
 
 // UpdateDomain updates a domain in the configuration
@@ -97,4 +101,5 @@ func (dc *DomainConfiguration) RemoveDomain(domain Domain) {
 // The domain is identified by its FQDN. If the domain doesn't exist, it is added to the list.
 func (dc *DomainConfiguration) UpdateDomain(domain Domain) {
 	dc.AddDomain(domain)
+	dc.Flush()
 }
