@@ -34,13 +34,13 @@ func SetupDomainRoutes(app *echo.Echo, domains configuration.DomainConfiguration
 }
 
 func SetupConfigRoutes(app *echo.Echo, config configuration.Configuration) {
-	//	configGroup := app.Group("/config")
+	configGroup := app.Group("/config")
 
-	// cs := service.NewConfigService(config)
-	// ch := NewConfigHandler(cs)
+	cs := service.NewConfigurationService(config)
+	ch := NewConfigurationHandler(cs)
 
-	// configGroup.GET("/", ch.HandleConfigShow)
-	// configGroup.PUT("/", ch.HandleConfigUpdate)
+	configGroup.GET("/:section/:key", ch.GetSectionKey)
+	configGroup.POST("/:section/:key", ch.SetSectionKey)
 }
 
 func SetupMailerRoutes(app *echo.Echo, ms *service.MailerService, alertRecipient string) {

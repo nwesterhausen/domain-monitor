@@ -19,7 +19,7 @@ type AlertsConfiguration struct {
 	// The admin email address for receiving alerts
 	Admin string `yaml:"admin" json:"admin"`
 	// Send alerts for monitored domains
-	SendAlerts bool `yaml:"send_alerts" json:"send_alerts"`
+	SendAlerts bool `yaml:"sendAlerts" json:"sendAlerts"`
 	// Send 2-month alert for domain expiry date
 	Send2MonthAlert bool `yaml:"send2MonthAlert" json:"send2MonthAlert"`
 	// Send 1-month alert for domain expiry date
