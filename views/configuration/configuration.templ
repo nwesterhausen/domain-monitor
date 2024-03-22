@@ -2,97 +2,114 @@ package configuration
 
 templ Configuration() {
     <div class="px-2">
-    <div>
-    <h1 class="text-xl text-secondary">Configuration</h1>
-    <p class="p-2">
-    Changes here are applied to the two config files located in a config dir where you run this server. If you want to
-    modify those files directly, changes will be realized upon restarting the server. Committing changes using this
-    configuration page will cause the server to restart so whatever changes you make take immediate effect.
-    </p>
-    <div class="flex flex-row gap-2">
-    <button class="btn btn-xs btn-info">Add Domain</button>
-    <button class="btn btn-xs btn-accent">Test SMTP</button>
-    <button class="btn btn-xs btn-error" disabled?={true}>Clear Changes</button>
-    <button class="btn btn-xs btn-success" disabled?={true}>Commit Changes</button>
-    </div>
-    </div>
-    <div role="tablist" class="tabs tabs-boxed">
-        <a role="tab" class="tab">Domains</a>
-        <a role="tab" class="tab tab-active">Application</a>
-        <a role="tab" class="tab">Alerts</a>
-        <a role="tab" class="tab">SMTP</a>
-        <a role="tab" class="tab">Scheduler</a>
-    </div>
-    <div id="tabContent" class="p-2"></div>
+        <div>
+        <h1 class="text-xl text-secondary">Configuration</h1>
+        <p class="p-2">
+        Changes here are applied to the two config files located in a config dir where you run this server. If you want to
+        modify those files directly, changes will be realized upon restarting the server. Committing changes using this
+        configuration page will cause the server to restart so whatever changes you make take immediate effect.
+        </p>
+        <div class="flex flex-row gap-2">
+            <button class="btn btn-xs btn-info">Add Domain</button>
+            <button class="btn btn-xs btn-accent">Test SMTP</button>
+            <button class="btn btn-xs btn-error" disabled?={true}>Clear Changes</button>
+            <button class="btn btn-xs btn-success" disabled?={true}>Commit Changes</button>
+        </div>
+        </div>
+        <div role="tablist" class="tabs tabs-boxed">
+            <a role="tab" hx-target="#tabContent" hx-get="/config/domain" hx-trigger="load" class="tab config-tab tab-active" _="on click remove .tab-active from .config-tab then add .tab-active to me">Domains</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/app" class="tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Application</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/alerts" class="tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Alerts</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/smtp" class="tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">SMTP</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/scheduler" class="tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Scheduler</a>
+        </div>
+        <div id="tabContent" class="p-2 mt-3"></div>
     </div>
 }
 
 templ DomainTab() {
     <div>
-    <h3 class="text-lg text-accent">Monitored Domains</h3>
-    <p class="p-2">
-    If you attempt to update a domain and change its FQDN, right now it will just add a new domain entry to watch. In
-    the future, there will be an uuid for each entry.
-    </p>
-    <table class="table" id="configuredDomainTable">
-    <thead>
-        <tr class="text-secondary">
-        <th scope="col">Name</th>
-        <th scope="col">FQDN</th>
-        <th scope="col">Send Alert</th>
-        <th scope="col">WHOIS Enabled</th>
-        </tr>
-    </thead>
-    <tbody hx-get="/domain/tbody" hx-trigger="load" hx-swap="outerHTML"></tbody>
-    </table>
+        <h3 class="text-lg text-accent">Monitored Domains</h3>
+        <p class="p-2">
+        If you attempt to update a domain and change its FQDN, right now it will just add a new domain entry to watch. In
+        the future, there will be an uuid for each entry.
+        </p>
+        <table class="table" id="configuredDomainTable">
+        <thead>
+            <tr class="text-secondary">
+            <th scope="col">Name</th>
+            <th scope="col">FQDN</th>
+            <th scope="col">Send Alert</th>
+            <th scope="col">WHOIS Enabled</th>
+            </tr>
+        </thead>
+        <tbody hx-get="/domain/tbody" hx-trigger="load" hx-swap="outerHTML"></tbody>
+        </table>
+    </div>
+}
+
+templ AppTab() {
     <div>
-    <h3>Web App</h3>
-    <div class="mb-3">
-        <label for="webappPort" class="form-label">Listen Port</label>
-        <input type="number" class="form-control" id="webappPort" aria-describedby="webappPortHelp" />
-        <div id="webappPortHelp" class="form-text">The port the web app listens to.</div>
-    </div>
-    <h3>Alerts</h3>
-    <div class="mb-3">
-        <label for="smtpTarget" class="form-label">Admin Email</label>
-        <input type="email" class="form-control" id="smtpTarget" aria-describedby="smtpHostHelp" />
-        <div id="smtpTargetHelp" class="form-text">The email that alerts should be sent to.</div>
-    </div>
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="enableSmtpCheck" />
-        <label class="form-check-label" for="enableSmtpCheck">Send email on whois changes</label>
-        <div id="enableSmtpCheckHelp" class="form-text">
-        If checked, email will be sent when whois information changes.
+        <h3>Web App</h3>
+        <div class="mb-3">
+            <label for="webappPort" class="form-label">Listen Port</label>
+            <input type="number" class="form-control" id="webappPort" aria-describedby="webappPortHelp" />
+            <div id="webappPortHelp" class="form-text">The port the web app listens to.</div>
         </div>
     </div>
-    <h3>SMTP Settings</h3>
-    <p>To receive email alerts on whois content changes, these settings need to be correct.</p>
-    <div class="mb-3">
-        <label for="smtpHost" class="form-label">Listen Port</label>
-        <input type="text" class="form-control" id="smtpHost" aria-describedby="smtpHostHelp" />
-        <div id="smtpHostHelp" class="form-text">The SMTP server hostname.</div>
+}
+
+templ AlertsTab() {
+    <div>
+        <h3>Alerts</h3>
+        <div class="mb-3">
+            <label for="smtpTarget" class="form-label">Admin Email</label>
+            <input type="email" class="form-control" id="smtpTarget" aria-describedby="smtpHostHelp" />
+            <div id="smtpTargetHelp" class="form-text">The email that alerts should be sent to.</div>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="enableSmtpCheck" />
+            <label class="form-check-label" for="enableSmtpCheck">Send email on whois changes</label>
+            <div id="enableSmtpCheckHelp" class="form-text">
+            If checked, email will be sent when whois information changes.
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label for="smtpPort" class="form-label">Port</label>
-        <input type="number" class="form-control" id="smtpPort" aria-describedby="smtpPortHelp" />
-        <div id="smtpPortHelp" class="form-text">The port the SMTP server.</div>
+}
+
+templ SmtpTab() {
+    <div>
+        <h3>SMTP Settings</h3>
+        <p>To receive email alerts on whois content changes, these settings need to be correct.</p>
+        <div class="mb-3">
+            <label for="smtpHost" class="form-label">Listen Port</label>
+            <input type="text" class="form-control" id="smtpHost" aria-describedby="smtpHostHelp" />
+            <div id="smtpHostHelp" class="form-text">The SMTP server hostname.</div>
+        </div>
+        <div class="mb-3">
+            <label for="smtpPort" class="form-label">Port</label>
+            <input type="number" class="form-control" id="smtpPort" aria-describedby="smtpPortHelp" />
+            <div id="smtpPortHelp" class="form-text">The port the SMTP server.</div>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="secureSmtpCheck" />
+            <label class="form-check-label" for="secureSmtpCheck">Secure</label>
+            <div id="secureSmtpCheckHelp" class="form-text">True for 465, false for other ports</div>
+        </div>
+        <div class="mb-3">
+            <label for="smtpUser" class="form-label">Username</label>
+            <input type="text" class="form-control" id="smtpUser" aria-describedby="smtpUserHelp" />
+            <div id="smtpUserHelp" class="form-text">Auth username for SMTP server</div>
+        </div>
+        <div class="mb-3">
+            <label for="smtpPass" class="form-label">Password</label>
+            <input type="password" class="form-control" id="smtpPass" aria-describedby="smtpPassHelp" />
+            <div id="smtpPassHelp" class="form-text">Auth password for SMTP server</div>
+        </div>
+        <button type="button" id="btnCommitConfigChanges" class="btn btn-primary">Commit Changes</button>
     </div>
-    <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="secureSmtpCheck" />
-        <label class="form-check-label" for="secureSmtpCheck">Secure</label>
-        <div id="secureSmtpCheckHelp" class="form-text">True for 465, false for other ports</div>
-    </div>
-    <div class="mb-3">
-        <label for="smtpUser" class="form-label">Username</label>
-        <input type="text" class="form-control" id="smtpUser" aria-describedby="smtpUserHelp" />
-        <div id="smtpUserHelp" class="form-text">Auth username for SMTP server</div>
-    </div>
-    <div class="mb-3">
-        <label for="smtpPass" class="form-label">Password</label>
-        <input type="password" class="form-control" id="smtpPass" aria-describedby="smtpPassHelp" />
-        <div id="smtpPassHelp" class="form-text">Auth password for SMTP server</div>
-    </div>
-    <button type="button" id="btnCommitConfigChanges" class="btn btn-primary">Commit Changes</button>
-    </div>
-    </div>
+}
+
+templ SchedulerTab() {
+    <div>Not implemented yet</div>
 }

@@ -35,12 +35,19 @@ func SetupDomainRoutes(app *echo.Echo, domains configuration.DomainConfiguration
 
 func SetupConfigRoutes(app *echo.Echo, config configuration.Configuration) {
 	configGroup := app.Group("/config")
+	configApi := app.Group("/api/config")
 
 	cs := service.NewConfigurationService(config)
 	ch := NewConfigurationHandler(cs)
 
-	configGroup.GET("/:section/:key", ch.GetSectionKey)
-	configGroup.POST("/:section/:key", ch.SetSectionKey)
+	configApi.GET("/:section/:key", ch.GetSectionKey)
+	configApi.POST("/:section/:key", ch.SetSectionKey)
+
+	configGroup.GET("/app", ch.RenderAppConfiguration)
+	configGroup.GET("/domain", ch.RenderDomainConfiguration)
+	configGroup.GET("/smtp", ch.RenderSmtpConfiguration)
+	configGroup.GET("/scheduler", ch.RenderSchedulerConfiguration)
+	configGroup.GET("/alerts", ch.RenderAlertsConfiguration)
 }
 
 func SetupMailerRoutes(app *echo.Echo, ms *service.MailerService, alertRecipient string) {

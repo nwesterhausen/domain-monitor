@@ -57,3 +57,28 @@ func (h *ConfigurationHandler) SetSectionKey(c echo.Context) error {
 
 	return c.JSON(200, value)
 }
+
+// Render the domain configuration page.
+func (h *ConfigurationHandler) RenderDomainConfiguration(c echo.Context) error {
+	return View(c, configuration.DomainTab())
+}
+
+// Render the app configuration page.
+func (h *ConfigurationHandler) RenderAppConfiguration(c echo.Context) error {
+	return View(c, configuration.AppTab())
+}
+
+// Render the smtp configuration page.
+func (h *ConfigurationHandler) RenderSmtpConfiguration(c echo.Context) error {
+	return View(c, configuration.SmtpTab())
+}
+
+// Render the scheduler configuration page.
+func (h *ConfigurationHandler) RenderSchedulerConfiguration(c echo.Context) error {
+	return View(c, configuration.SchedulerTab())
+}
+
+// Render the alerts configuration page.
+func (h *ConfigurationHandler) RenderAlertsConfiguration(c echo.Context) error {
+	return View(c, configuration.AlertsTab())
+}
