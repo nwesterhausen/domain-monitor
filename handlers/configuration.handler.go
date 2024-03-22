@@ -70,7 +70,7 @@ func (h *ConfigurationHandler) RenderAppConfiguration(c echo.Context) error {
 
 // Render the smtp configuration page.
 func (h *ConfigurationHandler) RenderSmtpConfiguration(c echo.Context) error {
-	return View(c, configuration.SmtpTab())
+	return View(c, configuration.SmtpTab(h.ConfigurationService.GetSMTPConfiguration()))
 }
 
 // Render the scheduler configuration page.
@@ -80,5 +80,5 @@ func (h *ConfigurationHandler) RenderSchedulerConfiguration(c echo.Context) erro
 
 // Render the alerts configuration page.
 func (h *ConfigurationHandler) RenderAlertsConfiguration(c echo.Context) error {
-	return View(c, configuration.AlertsTab())
+	return View(c, configuration.AlertsTab(h.ConfigurationService.GetAlertsConfiguration()))
 }

@@ -1,29 +1,28 @@
 package configuration
 
+import (
+    "github.com/nwesterhausen/domain-monitor/configuration"
+    "strconv"
+)
+
 templ Configuration() {
     <div class="px-2">
         <div>
-        <h1 class="text-xl text-secondary">Configuration</h1>
-        <p class="p-2">
-        Changes here are applied to the two config files located in a config dir where you run this server. If you want to
-        modify those files directly, changes will be realized upon restarting the server. Committing changes using this
-        configuration page will cause the server to restart so whatever changes you make take immediate effect.
-        </p>
-        <div class="flex flex-row gap-2">
-            <button class="btn btn-xs btn-info">Add Domain</button>
-            <button class="btn btn-xs btn-accent">Test SMTP</button>
-            <button class="btn btn-xs btn-error" disabled?={true}>Clear Changes</button>
-            <button class="btn btn-xs btn-success" disabled?={true}>Commit Changes</button>
-        </div>
+            <h1 class="text-xl text-secondary">Configuration</h1>
+            <p class="p-2">
+            Changes here are applied to the two config files located in a config dir where you run this server. If you want to
+            modify those files directly, changes will be realized upon restarting the server. Committing changes using this
+            configuration page will cause the server to restart so whatever changes you make take immediate effect.
+            </p>
         </div>
         <div role="tablist" class="tabs tabs-boxed">
-            <a role="tab" hx-target="#tabContent" hx-get="/config/domain" hx-trigger="load" class="tab config-tab tab-active" _="on click remove .tab-active from .config-tab then add .tab-active to me">Domains</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/app" class="tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Application</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/alerts" class="tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Alerts</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/smtp" class="tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">SMTP</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/scheduler" class="tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Scheduler</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/domain" class="transition-color duration-500 ease-linear tab config-tab tab-active" _="on click remove .tab-active from .config-tab then add .tab-active to me">Domains</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/app" class="transition-color duration-500 ease-linear tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Application</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/alerts" class="transition-color duration-500 ease-linear tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Alerts</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/smtp" class="transition-color duration-500 ease-linear tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">SMTP</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/scheduler" class="transition-color duration-500 ease-linear tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Scheduler</a>
         </div>
-        <div id="tabContent" class="p-2 mt-3"></div>
+        <div id="tabContent" class="p-2 mt-3" hx-get="/config/domain" hx-trigger="load"></div>
     </div>
 }
 
@@ -41,6 +40,7 @@ templ DomainTab() {
             <th scope="col">FQDN</th>
             <th scope="col">Send Alert</th>
             <th scope="col">WHOIS Enabled</th>
+            <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody hx-get="/domain/tbody" hx-trigger="load" hx-swap="outerHTML"></tbody>
@@ -50,63 +50,162 @@ templ DomainTab() {
 
 templ AppTab() {
     <div>
-        <h3>Web App</h3>
+        <h3 class="text-lg text-accent">Web App</h3>
+        <p class="p-2">Settings here will make changes to the web app configuration.</p>
+        <div class="flex flex-col gap-3">
         <div class="mb-3">
             <label for="webappPort" class="form-label">Listen Port</label>
             <input type="number" class="form-control" id="webappPort" aria-describedby="webappPortHelp" />
             <div id="webappPortHelp" class="form-text">The port the web app listens to.</div>
         </div>
+        </div>
     </div>
 }
 
-templ AlertsTab() {
+templ AlertsTab(conf configuration.AlertsConfiguration) {
     <div>
-        <h3>Alerts</h3>
-        <div class="mb-3">
-            <label for="smtpTarget" class="form-label">Admin Email</label>
-            <input type="email" class="form-control" id="smtpTarget" aria-describedby="smtpHostHelp" />
-            <div id="smtpTargetHelp" class="form-text">The email that alerts should be sent to.</div>
+        <h3 class="text-lg text-accent">Alerts</h3>
+        <p class="p-2">Alerts are sent when a domain becomes close to expiration at any of these configured timers.</p>
+        <div class="flex flex-col gap-3 p-2 w-full max-w-xl">
+        <h4 class="text-md font-bold">Configuration</h4>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Enable Alerts</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.SendAlerts} />
+          </label>
         </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="enableSmtpCheck" />
-            <label class="form-check-label" for="enableSmtpCheck">Send email on whois changes</label>
-            <div id="enableSmtpCheckHelp" class="form-text">
-            If checked, email will be sent when whois information changes.
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">Admin Email</span>
             </div>
+            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} />
+            <div class="label">
+                <span class="label-text-alt">The email that any alerts should be sent to</span>
+            </div>
+        </label>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 2 months until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" name="send2MonthAlert" checked?={conf.Send2MonthAlert} />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 1 month until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" name="send1MonthAlert" checked?={conf.Send1MonthAlert} />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 2 weeks until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" name="send2WeekAlert" checked?={conf.Send2WeekAlert} />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 1 week until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" name="send1WeekAlert" checked?={conf.Send1WeekAlert} />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 3-days until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" name="send3DayAlert" checked?={conf.Send3DayAlert} />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Daily Alerts for Exiration within 1 Week</span>
+            <input type="checkbox" class="toggle toggle-success" name="sendDailyExpiryAlert" checked?={conf.SendDailyExpiryAlert} />
+          </label>
+        </div>
+        <div class="flex flex-row gap-2 justify-end">
+            <button type="button" id="btnCommitConfigChanges" class="btn btn-md btn-success">Commit Changes</button>
+        </div>
         </div>
     </div>
 }
 
-templ SmtpTab() {
+templ SmtpTab(conf configuration.SMTPConfiguration) {
     <div>
-        <h3>SMTP Settings</h3>
-        <p>To receive email alerts on whois content changes, these settings need to be correct.</p>
-        <div class="mb-3">
-            <label for="smtpHost" class="form-label">Listen Port</label>
-            <input type="text" class="form-control" id="smtpHost" aria-describedby="smtpHostHelp" />
-            <div id="smtpHostHelp" class="form-text">The SMTP server hostname.</div>
+        <h3 class="text-lg text-accent">SMTP Settings</h3>
+        <p class="p-2">To receive email alerts on whois content changes, these settings need to be correct.</p>
+        <div class='my-2 flex flex-row gap-2'>
+            <button class="btn btn-sm btn-success btn-outline">Send Test Email</button>
+            <div id="smtpTestResult"></div>
         </div>
-        <div class="mb-3">
-            <label for="smtpPort" class="form-label">Port</label>
-            <input type="number" class="form-control" id="smtpPort" aria-describedby="smtpPortHelp" />
-            <div id="smtpPortHelp" class="form-text">The port the SMTP server.</div>
+        <div class="flex flex-col gap-3 p-2 w-full max-w-xl">
+        <h4 class="text-md font-bold">Configuration</h4>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Enable SMTP</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Enabled} />
+          </label>
         </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="secureSmtpCheck" />
-            <label class="form-check-label" for="secureSmtpCheck">Secure</label>
-            <div id="secureSmtpCheckHelp" class="form-text">True for 465, false for other ports</div>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">SMTP Host</span>
+            </div>
+            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Host} />
+            <div class="label">
+                <span class="label-text-alt">The SMTP hostname (or IP address)</span>
+            </div>
+        </label>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">SMTP Port</span>
+            </div>
+            <input type="text" placeholder="25" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} />
+            <div class="label">
+                <span class="label-text-alt">The SMTP port to connect to</span>
+            </div>
+        </label>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Force Secure</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Secure} />
+          </label>
         </div>
-        <div class="mb-3">
-            <label for="smtpUser" class="form-label">Username</label>
-            <input type="text" class="form-control" id="smtpUser" aria-describedby="smtpUserHelp" />
-            <div id="smtpUserHelp" class="form-text">Auth username for SMTP server</div>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">SMTP Username</span>
+            </div>
+            <input type="text" placeholder="smtpuser" class="input input-bordered w-full max-w-lg" value={conf.AuthUser} />
+            <div class="label">
+                <span class="label-text-alt">Username if required to login to SMTP server</span>
+            </div>
+        </label>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">SMTP Password</span>
+            </div>
+            <input type="password" placeholder="" class="input input-bordered w-full max-w-lg" value={conf.AuthPass} />
+            <div class="label">
+                <span class="label-text-alt">Password if required to login to SMTP server</span>
+            </div>
+        </label>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">From Name</span>
+            </div>
+            <input type="text" placeholder="Domain Monitor" class="input input-bordered w-full max-w-lg" value={conf.FromName} />
+            <div class="label">
+                <span class="label-text-alt">Name to use in the from field for email messages</span>
+            </div>
+        </label>
+        <label class="form-control w-full max-w-md">
+            <div class="label">
+                <span class="label-text">From Address</span>
+            </div>
+            <input type="text" placeholder="monitor@domains.example.com" class="input input-bordered w-full max-w-lg" value={conf.FromAddress} />
+            <div class="label">
+                <span class="label-text-alt">Email address to use in the from field for messages</span>
+            </div>
+        </label>
+        <div class="flex flex-row gap-2 justify-end">
+            <button type="button" id="btnCommitConfigChanges" class="btn btn-md btn-success">Commit Changes</button>
         </div>
-        <div class="mb-3">
-            <label for="smtpPass" class="form-label">Password</label>
-            <input type="password" class="form-control" id="smtpPass" aria-describedby="smtpPassHelp" />
-            <div id="smtpPassHelp" class="form-text">Auth password for SMTP server</div>
         </div>
-        <button type="button" id="btnCommitConfigChanges" class="btn btn-primary">Commit Changes</button>
     </div>
 }
 

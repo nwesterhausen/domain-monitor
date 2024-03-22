@@ -65,7 +65,22 @@ templ DomainListingTbody(domains []configuration.Domain) {
                 <td>{ domain.FQDN }</td>
                 <td>{ fmt.Sprintf("%v", domain.Enabled) }</td>
                 <td>{ fmt.Sprintf("%v", domain.Alerts) }</td>
+                <td>@DomainTableActions()</td>
             </tr>
         }
+        <tr>
+            <td><input name="displayName" type="text" class="input input-bordered w-full max-w-xs"/></td>
+            <td><input name="fqdn" type="text" class="input input-bordered w-full max-w-xs"/></td>
+            <td><input name="enabled" type="checkbox" class="toggle toggle-sm toggle-success" /></td>
+            <td><input name="alerts" type="checkbox" class="toggle toggle-sm toggle-success"/></td>
+            <td><button class="btn btn-xs">Add</button></td>
+        </tr>
     </tbody>
+}
+
+templ DomainTableActions() {
+    <div class="flex flex-row gap-2">
+        <button class="btn btn-xs">Edit</button>
+        <button class="btn btn-xs btn-error btn-outline">Delete</button>
+    </div>
 }
