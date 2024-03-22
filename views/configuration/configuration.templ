@@ -48,16 +48,28 @@ templ DomainTab() {
     </div>
 }
 
-templ AppTab() {
+templ AppTab(conf configuration.AppConfiguration) {
     <div>
         <h3 class="text-lg text-accent">Web App</h3>
         <p class="p-2">Settings here will make changes to the web app configuration.</p>
         <div class="flex flex-col gap-3">
-        <div class="mb-3">
-            <label for="webappPort" class="form-label">Listen Port</label>
-            <input type="number" class="form-control" id="webappPort" aria-describedby="webappPortHelp" />
-            <div id="webappPortHelp" class="form-text">The port the web app listens to.</div>
+        <h4 class="text-md font-bold">Configuration</h4>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">Port</span>
+            </div>
+            <input type="text" placeholder="3124" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} />
+            <div class="label">
+                <span class="label-text-alt">What port the web app will listen on</span>
+            </div>
+        </label>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Allow Automated WHOIS Refresh</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.AutomateWHOISRefresh} />
+          </label>
         </div>
+        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
         </div>
     </div>
 }
@@ -119,9 +131,7 @@ templ AlertsTab(conf configuration.AlertsConfiguration) {
             <input type="checkbox" class="toggle toggle-success" name="sendDailyExpiryAlert" checked?={conf.SendDailyExpiryAlert} />
           </label>
         </div>
-        <div class="flex flex-row gap-2 justify-end">
-            <button type="button" id="btnCommitConfigChanges" class="btn btn-md btn-success">Commit Changes</button>
-        </div>
+        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
         </div>
     </div>
 }
@@ -131,7 +141,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
         <h3 class="text-lg text-accent">SMTP Settings</h3>
         <p class="p-2">To receive email alerts on whois content changes, these settings need to be correct.</p>
         <div class='my-2 flex flex-row gap-2'>
-            <button class="btn btn-sm btn-success btn-outline">Send Test Email</button>
+            <button class="btn btn-sm btn-info btn-outline">Send Test Email</button>
             <div id="smtpTestResult"></div>
         </div>
         <div class="flex flex-col gap-3 p-2 w-full max-w-xl">
@@ -202,13 +212,45 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
                 <span class="label-text-alt">Email address to use in the from field for messages</span>
             </div>
         </label>
-        <div class="flex flex-row gap-2 justify-end">
-            <button type="button" id="btnCommitConfigChanges" class="btn btn-md btn-success">Commit Changes</button>
-        </div>
+        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
         </div>
     </div>
 }
 
-templ SchedulerTab() {
-    <div>Not implemented yet</div>
+templ SchedulerTab(conf configuration.SchedulerConfiguration) {
+    <div>
+    <h3 class="text-lg text-accent">Web App</h3>
+        <p class="p-2">Settings here will make changes to the web app configuration.</p>
+        <div class="flex flex-col gap-3">
+        <h4 class="text-md font-bold">Configuration</h4>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">WHOIS Cache Stale Interval</span>
+            </div>
+            <input type="text" placeholder="190" class="input input-bordered w-full max-w-lg" name="whoisCacheStaleInterval" value={strconv.Itoa(conf.WhoisCacheStaleInterval)} />
+            <div class="label">
+                <span class="label-text-alt">How many days before cached WHOIS information is considered stale and should be refreshed</span>
+            </div>
+        </label>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Allow Automated WHOIS Refresh*</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.UseStandardWhoisRefreshSchedule} />
+          </label>
+          <div class="p-2 text-sm text-neutral">
+          The standard WHOIS refresh schedule:
+           	<ol class="list-decimal ms-8">
+               	<li>Cache miss for domain</li>
+               	<li>Cache becomes WhoisCacheStaleInterval old</li>
+               	<li>3 months before expiry</li>
+               	<li>2 months before expiry</li>
+               	<li>1 month before expiry</li>
+               	<li>2 weeks before expiry</li>
+           	</ol>
+        </div>
+        </div>
+        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
+        </div>
+        <div class="text-sm my-4">* Manual refresh is always possible, and can be triggered via the API or the web interface</div>
+        </div>
 }
