@@ -58,7 +58,9 @@ templ AppTab(conf configuration.AppConfiguration) {
             <div class="label">
                 <span class="label-text">Port</span>
             </div>
-            <input type="text" placeholder="3124" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} />
+            <input type="text" name="value" placeholder="3124" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)}
+            hx-on:htmx:validation:validate="if parseInt(this.value) < 1 || parseInt(this.value) > 65535 { this.setCustomValidity('Port must be between 1 and 65535'); } else { this.setCustomValidity(''); }"
+            />
             <div class="label">
                 <span class="label-text-alt">What port the web app will listen on</span>
             </div>
@@ -66,7 +68,9 @@ templ AppTab(conf configuration.AppConfiguration) {
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Allow Automated WHOIS Refresh</span>
-            <input type="checkbox" class="toggle toggle-success" checked?={conf.AutomateWHOISRefresh} />
+            <input type="checkbox" name="value" class="toggle toggle-success" checked?={conf.AutomateWHOISRefresh}
+            hx-post="/api/config/app/automateWHOISRefresh" hx-trigger="click throttle:10ms" hx-inclue="this"
+            />
           </label>
         </div>
         <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
@@ -83,14 +87,15 @@ templ AlertsTab(conf configuration.AlertsConfiguration) {
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Enable Alerts</span>
-            <input type="checkbox" class="toggle toggle-success" checked?={conf.SendAlerts} />
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.SendAlerts}  name="value"
+            hx-post="/api/config/alerts/sendAlerts" hx-trigger="click throttle:10ms" hx-inclue="this"/>
           </label>
         </div>
         <label class="form-control w-full max-w-lg">
             <div class="label">
                 <span class="label-text">Admin Email</span>
             </div>
-            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} />
+            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} name="value" />
             <div class="label">
                 <span class="label-text-alt">The email that any alerts should be sent to</span>
             </div>
@@ -98,40 +103,45 @@ templ AlertsTab(conf configuration.AlertsConfiguration) {
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 2 months until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send2MonthAlert" checked?={conf.Send2MonthAlert} />
+            <input type="checkbox" class="toggle toggle-success" name="send2MonthAlert" checked?={conf.Send2MonthAlert} name="value"
+            hx-post="/api/config/alerts/send2MonthAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 1 month until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send1MonthAlert" checked?={conf.Send1MonthAlert} />
+            <input type="checkbox" class="toggle toggle-success" name="send1MonthAlert" checked?={conf.Send1MonthAlert} name="value"
+            hx-post="/api/config/alerts/send1MonthAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 2 weeks until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send2WeekAlert" checked?={conf.Send2WeekAlert} />
+            <input type="checkbox" class="toggle toggle-success" name="send2WeekAlert" checked?={conf.Send2WeekAlert} name="value"
+            hx-post="/api/config/alerts/send2WeekAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 1 week until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send1WeekAlert" checked?={conf.Send1WeekAlert} />
+            <input type="checkbox" class="toggle toggle-success" name="send1WeekAlert" checked?={conf.Send1WeekAlert} name="value"
+            hx-post="/api/config/alerts/send1WeekAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 3-days until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send3DayAlert" checked?={conf.Send3DayAlert} />
+            <input type="checkbox" class="toggle toggle-success" name="send3DayAlert" checked?={conf.Send3DayAlert} name="value"
+            hx-post="/api/config/alerts/send3DayAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Daily Alerts for Exiration within 1 Week</span>
-            <input type="checkbox" class="toggle toggle-success" name="sendDailyExpiryAlert" checked?={conf.SendDailyExpiryAlert} />
+            <input type="checkbox" class="toggle toggle-success" name="sendDailyExpiryAlert" checked?={conf.SendDailyExpiryAlert} name="value"
+            hx-post="/api/config/alerts/sendDailyExpiryAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
-        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
         </div>
     </div>
 }
@@ -149,7 +159,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Enable SMTP</span>
-            <input type="checkbox" class="toggle toggle-success" checked?={conf.Enabled} />
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Enabled}  name="value"
+            hx-post="/api/config/smtp/enabled" hx-trigger="click throttle:10ms" hx-inclue="this"/>
           </label>
         </div>
         <label class="form-control w-full max-w-lg">
@@ -173,7 +184,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Force Secure</span>
-            <input type="checkbox" class="toggle toggle-success" checked?={conf.Secure} />
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Secure}   name="value"
+            hx-post="/api/config/smtp/secure" hx-trigger="click throttle:10ms" hx-inclue="this"/>
           </label>
         </div>
         <label class="form-control w-full max-w-lg">
@@ -235,7 +247,8 @@ templ SchedulerTab(conf configuration.SchedulerConfiguration) {
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Allow Automated WHOIS Refresh*</span>
-            <input type="checkbox" class="toggle toggle-success" checked?={conf.UseStandardWhoisRefreshSchedule} />
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.UseStandardWhoisRefreshSchedule}  name="value"
+            hx-post="/api/config/scheduler/useStandardWhoisRefreshSchedule" hx-trigger="click throttle:10ms" hx-inclue="this"/>
           </label>
           <div class="p-2 text-sm text-neutral">
           The standard WHOIS refresh schedule:

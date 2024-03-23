@@ -55,7 +55,7 @@ func (h *ConfigurationHandler) SetSectionKey(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(200, value)
+	return c.NoContent(201)
 }
 
 // Render the domain configuration page.

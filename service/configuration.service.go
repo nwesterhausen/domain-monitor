@@ -1,6 +1,12 @@
 package service
 
-import "github.com/nwesterhausen/domain-monitor/configuration"
+import (
+	"errors"
+	"log"
+	"strconv"
+
+	"github.com/nwesterhausen/domain-monitor/configuration"
+)
 
 type ConfigurationService struct {
 	store configuration.Configuration
@@ -151,13 +157,26 @@ func (s *ConfigurationService) GetConfigurationValue(section string, key string)
 
 // Set each specific configuration value
 func (s *ConfigurationService) SetConfigurationValue(section string, key string, value interface{}) error {
+	stringVal, ok := value.(string)
+	if !ok {
+		log.Println("Value is not expected type (string)")
+		return errors.New("Value is not expected type (string)")
+	}
+	intVal, intErr := strconv.Atoi(stringVal)
+	// The toggles just send "on" or "" as the string for the value
+	boolVal := stringVal == "on"
+
 	switch section {
 	case "app":
 		switch key {
 		case "port":
-			s.store.Config.App.Port = value.(int)
+			if intErr != nil {
+				log.Printf("Error converting port '%s' to int", stringVal)
+				return intErr
+			}
+			s.store.Config.App.Port = intVal
 		case "automateWHOISRefresh":
-			s.store.Config.App.AutomateWHOISRefresh = value.(bool)
+			s.store.Config.App.AutomateWHOISRefresh = boolVal
 		default:
 			return &ErrInvalidConfigurationKey{
 				Key: key,
@@ -166,19 +185,19 @@ func (s *ConfigurationService) SetConfigurationValue(section string, key string,
 	case "alerts":
 		switch key {
 		case "admin":
-			s.store.Config.Alerts.Admin = value.(string)
+			s.store.Config.Alerts.Admin = stringVal
 		case "sendAlerts":
-			s.store.Config.Alerts.SendAlerts = value.(bool)
-		case "send2MonthAlert":
-			s.store.Config.Alerts.Send1MonthAlert = value.(bool)
+			s.store.Config.Alerts.SendAlerts = boolVal
+		case "send1MonthAlert":
+			s.store.Config.Alerts.Send1MonthAlert = boolVal
 		case "send2WeekAlert":
-			s.store.Config.Alerts.Send2WeekAlert = value.(bool)
+			s.store.Config.Alerts.Send2WeekAlert = boolVal
 		case "send1WeekAlert":
-			s.store.Config.Alerts.Send1WeekAlert = value.(bool)
+			s.store.Config.Alerts.Send1WeekAlert = boolVal
 		case "send3DayAlert":
-			s.store.Config.Alerts.Send3DayAlert = value.(bool)
+			s.store.Config.Alerts.Send3DayAlert = boolVal
 		case "sendDailyExpiryAlert":
-			s.store.Config.Alerts.SendDailyExpiryAlert = value.(bool)
+			s.store.Config.Alerts.SendDailyExpiryAlert = boolVal
 		default:
 			return &ErrInvalidConfigurationKey{
 				Key: key,
@@ -189,15 +208,19 @@ func (s *ConfigurationService) SetConfigurationValue(section string, key string,
 		case "host":
 			s.store.Config.SMTP.Host = value.(string)
 		case "port":
-			s.store.Config.SMTP.Port = value.(int)
+			if intErr != nil {
+				log.Printf("Error converting port '%s' to int", stringVal)
+				return intErr
+			}
+			s.store.Config.SMTP.Port = intVal
 		case "secure":
-			s.store.Config.SMTP.Secure = value.(bool)
+			s.store.Config.SMTP.Secure = boolVal
 		case "authUser":
 			s.store.Config.SMTP.AuthUser = value.(string)
 		case "authPass":
 			s.store.Config.SMTP.AuthPass = value.(string)
 		case "enabled":
-			s.store.Config.SMTP.Enabled = value.(bool)
+			s.store.Config.SMTP.Enabled = boolVal
 		case "fromName":
 			s.store.Config.SMTP.FromName = value.(string)
 		case "fromAddress":
@@ -210,9 +233,13 @@ func (s *ConfigurationService) SetConfigurationValue(section string, key string,
 	case "scheduler":
 		switch key {
 		case "whoisCacheStaleInterval":
-			s.store.Config.Scheduler.WhoisCacheStaleInterval = value.(int)
+			if intErr != nil {
+				log.Printf("Error converting whoisCacheStaleInterval '%s' to int", stringVal)
+				return intErr
+			}
+			s.store.Config.Scheduler.WhoisCacheStaleInterval = intVal
 		case "useStandardWhoisRefreshSchedule":
-			s.store.Config.Scheduler.UseStandardWhoisRefreshSchedule = value.(bool)
+			s.store.Config.Scheduler.UseStandardWhoisRefreshSchedule = boolVal
 		default:
 			return &ErrInvalidConfigurationKey{
 				Key: key,
