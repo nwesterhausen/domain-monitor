@@ -3,26 +3,23 @@
 {
 	"name": "Go",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/go:1-1.22-bookworm",
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	"postCreateCommand": "go mod tidy && pnpm install",
+	"postCreateCommand": "templ generate && go mod tidy && pnpm install",
 
 	"onCreateCommand": {
-		"air": "go install github.com/cosmtrek/air@latest",
-		"templ": "go install github.com/a-h/templ/cmd/templ@latest"
+		"install air": "go install github.com/cosmtrek/air@latest",
+		"install templ": "go install github.com/a-h/templ/cmd/templ@latest"
 	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
-		"ghcr.io/devcontainers/features/node:1": {
-			"nodeGypDependencies": true,
-			"version": "lts",
-			"nvmVersion": "latest"
-		}
-	},
+		"ghcr.io/devcontainers/features/node:1": {},
+		"ghcr.io/devcontainers/features/go:1": {}
+	}
 
 
 
