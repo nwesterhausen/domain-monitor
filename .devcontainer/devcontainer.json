@@ -6,7 +6,7 @@
 	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [3124],
 
 	"postCreateCommand": "templ generate && go mod tidy && pnpm install",
 
