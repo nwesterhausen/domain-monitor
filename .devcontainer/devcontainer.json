@@ -1,31 +1,29 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/go
 {
-	"name": "Go",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "name": "domain-monitor Go/Node with air/templ",
+  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [3124],
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [3124],
 
-	"postCreateCommand": "templ generate && go mod tidy && pnpm install",
+  "postCreateCommand": "templ generate && go mod tidy && pnpm install",
 
-	"onCreateCommand": {
-		"install air": "go install github.com/cosmtrek/air@latest",
-		"install templ": "go install github.com/a-h/templ/cmd/templ@latest"
-	},
+  "onCreateCommand": {
+    "install air": "go install github.com/cosmtrek/air@latest",
+    "install templ": "go install github.com/a-h/templ/cmd/templ@latest"
+  },
 
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	"features": {
-		"ghcr.io/devcontainers/features/node:1": {},
-		"ghcr.io/devcontainers/features/go:1": {}
-	}
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/go:1": {}
+  }
 
+  // Configure tool-specific properties.
+  // "customizations": {},
 
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
 }
