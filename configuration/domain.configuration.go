@@ -11,13 +11,13 @@ import (
 // Domain represents a domain that is monitored
 type Domain struct {
 	// Display name for the domain
-	Name string `yaml:"name" json:"name"`
+	Name string `yaml:"name" json:"name" form:"name" query:"name"`
 	// Fully qualified domain name
-	FQDN string `yaml:"fqdn" json:"fqdn"`
+	FQDN string `yaml:"fqdn" json:"fqdn" form:"fqdn" query:"fqdn"`
 	// Send alerts for this domain
-	Alerts bool `yaml:"alerts" json:"alerts"`
+	Alerts bool `yaml:"alerts" json:"alerts" form:"alerts" query:"alerts"`
 	// Monitoring enabled for this domain
-	Enabled bool `yaml:"enabled" json:"enabled"`
+	Enabled bool `yaml:"enabled" json:"enabled" form:"enabled" query:"enabled"`
 }
 
 // The file content of the domain configuration file

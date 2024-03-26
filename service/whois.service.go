@@ -2,9 +2,7 @@ package service
 
 import (
 	"log"
-	"time"
 
-	whoisparser "github.com/likexian/whois-parser"
 	"github.com/nwesterhausen/domain-monitor/configuration"
 )
 
@@ -24,9 +22,5 @@ func (s *ServicesWhois) GetWhois(fqdn string) configuration.WhoisCache {
 	}
 	log.Println("WHOIS entry cache miss for", fqdn)
 
-	return configuration.WhoisCache{
-		FQDN:        fqdn,
-		WhoisInfo:   whoisparser.WhoisInfo{},
-		LastUpdated: time.Time{},
-	}
+	return configuration.WhoisCache{}
 }

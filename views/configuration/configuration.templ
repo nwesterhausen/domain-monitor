@@ -16,11 +16,11 @@ templ Configuration() {
             </p>
         </div>
         <div role="tablist" class="tabs tabs-boxed">
-            <a role="tab" hx-target="#tabContent" hx-get="/config/domain" class="transition-color duration-500 ease-linear tab config-tab tab-active" _="on click remove .tab-active from .config-tab then add .tab-active to me">Domains</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/app" class="transition-color duration-500 ease-linear tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Application</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/alerts" class="transition-color duration-500 ease-linear tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Alerts</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/smtp" class="transition-color duration-500 ease-linear tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">SMTP</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/scheduler" class="transition-color duration-500 ease-linear tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Scheduler</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/domain" class="transition-color tab config-tab tab-active" _="on click remove .tab-active from .config-tab then add .tab-active to me">Domains</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/app" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Application</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/alerts" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Alerts</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/smtp" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">SMTP</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/scheduler" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Scheduler</a>
         </div>
         <div id="tabContent" class="p-2 mt-3" hx-get="/config/domain" hx-trigger="load"></div>
     </div>

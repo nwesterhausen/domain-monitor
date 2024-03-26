@@ -31,6 +31,10 @@ func SetupDomainRoutes(app *echo.Echo, domains configuration.DomainConfiguration
 	domainHtmx.GET("/:fqdn/card", dh.GetCard)
 	domainHtmx.GET("/cards", dh.GetCards)
 	domainHtmx.GET("/tbody", dh.GetListTbody)
+	domainHtmx.GET("/edit/:fqdn", dh.GetEditDomain)
+	domainHtmx.POST("/update", dh.PostUpdateDomain)
+	domainHtmx.POST("/new", dh.PostNewDomain)
+	domainHtmx.DELETE("/:fqdn", dh.DeleteDomain)
 }
 
 func SetupConfigRoutes(app *echo.Echo, config configuration.Configuration) {

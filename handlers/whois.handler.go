@@ -22,7 +22,7 @@ func NewWhoisHandler(ws *service.ServicesWhois) *WhoisHandler {
 func (h *WhoisHandler) GetCard(c echo.Context) error {
 	fqdn := c.FormValue("fqdn")
 	if len(fqdn) == 0 {
-		return errors.New("Invalid domain to fetch (FQDN required)")
+		return errors.New("invalid domain to fetch (FQDN required)")
 	}
 
 	whois := h.WhoisService.GetWhois(fqdn)
