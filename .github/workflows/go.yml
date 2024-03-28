@@ -19,4 +19,4 @@ jobs:
           go install github.com/a-h/templ/cmd/templ@latest
           templ generate
       - name: Build
-        run: go build -v .\cmd\main.go
+        run: go build -v ./cmd/main.go
