@@ -19,6 +19,14 @@
   "features": {
     "ghcr.io/devcontainers/features/node:1": {},
     "ghcr.io/devcontainers/features/go:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "a-h.templ",
+        "golang.go"
+      ]
+    }
   }
 
   // Configure tool-specific properties.

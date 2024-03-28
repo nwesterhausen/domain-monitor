@@ -1,5 +1,9 @@
 # domain-monitor
 
+[![Test Build Go Project](https://github.com/nwesterhausen/domain-monitor/actions/workflows/go.yml/badge.svg)](https://github.com/nwesterhausen/domain-monitor/actions/workflows/go.yml)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/nwesterhausen/domain-monitor?style=flat)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/nwesterhausen/domain-monitor?style=flat)
+
 Self-hosted server to monitor WHOIS records for specified domains, to help alert you of unwanted/unexpected changes
 to your domains and to help remind you when they need renewed.
 
