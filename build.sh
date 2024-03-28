@@ -24,6 +24,9 @@ if [ `git branch --show-current` == "master" ]; then
     echo "Running on master, using 'latest' and version tag.";
     PRODRUN=true;
     BUILDTAG=latest;
+elif [ `git branch --show-current` == "go-rewrite" ]; then
+    echo "Running on the go-rewrite development branch, using 'beta' tag only.";
+    BUILDTAG=beta;
 else
     echo "Running on a development branch, using 'develop' tag only.";
     BUILDTAG=develop;
