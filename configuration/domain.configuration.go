@@ -37,13 +37,13 @@ type DomainConfiguration struct {
 func (dc DomainConfiguration) Flush() {
 	data, dataErr := yaml.Marshal(dc.DomainFile)
 	if dataErr != nil {
-		log.Println("Error while marshalling configuration")
+		log.Println("Error while marshalling domain table")
 		log.Fatalf("error: %v", dataErr)
 	}
 
 	file, err := os.Create(dc.Filepath)
 	if err != nil {
-		log.Println("Error while creating configuration file")
+		log.Println("Error while creating domain table file")
 		log.Fatalf("error: %v", err)
 	}
 
@@ -51,10 +51,18 @@ func (dc DomainConfiguration) Flush() {
 
 	_, err = io.WriteString(file, string(data))
 	if err != nil {
-		log.Println("Error while writing configuration file")
+		log.Println("Error while writing domain table file")
 		log.Fatalf("error: %v", err)
 	}
 
+	// Check if the file has been written
+	fileInfo, err := file.Stat()
+	if err != nil {
+		log.Println("Error while checking domain table file")
+		log.Fatalf("error: %v", err)
+	}
+
+	log.Printf("💾 Flushed domain table to %s", fileInfo.Name())
 }
 
 // Returns a default domain configuration (empty)
@@ -72,11 +80,14 @@ func (dc *DomainConfiguration) AddDomain(domain Domain) {
 	for i, d := range dc.DomainFile.Domains {
 		if d.FQDN == domain.FQDN {
 			dc.DomainFile.Domains[i] = domain
+			log.Println("🔄 Updated domain " + domain.FQDN)
+			dc.Flush()
 			return
 		}
 	}
-
 	dc.DomainFile.Domains = append(dc.DomainFile.Domains, domain)
+
+	log.Println("🆕 Added domain " + domain.FQDN)
 
 	dc.Flush()
 }
@@ -93,6 +104,8 @@ func (dc *DomainConfiguration) RemoveDomain(domain Domain) {
 		}
 	}
 
+	log.Println("🗑 Removed domain " + domain.FQDN)
+
 	dc.Flush()
 }
 
@@ -101,5 +114,4 @@ func (dc *DomainConfiguration) RemoveDomain(domain Domain) {
 // The domain is identified by its FQDN. If the domain doesn't exist, it is added to the list.
 func (dc *DomainConfiguration) UpdateDomain(domain Domain) {
 	dc.AddDomain(domain)
-	dc.Flush()
 }

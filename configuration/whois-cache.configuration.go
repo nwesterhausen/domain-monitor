@@ -91,6 +91,7 @@ func (w *WhoisCacheStorage) RefreshWithDomains(domains DomainConfiguration) {
 	// Make sure we have whois entries for all the domains
 	for _, domain := range domains.DomainFile.Domains {
 		if w.Get(domain.FQDN) == nil {
+			log.Printf("📄 Adding WHOIS entry for %s", domain.FQDN)
 			w.Add(domain.FQDN)
 		}
 	}
@@ -104,6 +105,8 @@ func (w *WhoisCacheStorage) Remove(fqdn string) {
 		if w.FileContents.Entries[i].FQDN == fqdn {
 			// Remove the entry
 			w.FileContents.Entries = append(w.FileContents.Entries[:i], w.FileContents.Entries[i+1:]...)
+			log.Printf("🗑 Removed WHOIS entry for %s", fqdn)
+			w.Flush()
 			return
 		}
 	}
@@ -135,12 +138,11 @@ func (w *WhoisCache) Refresh() {
 	w.WhoisInfo = whoisInfo
 	w.LastUpdated = time.Now()
 
-	log.Printf("Refreshed whois for %s", w.FQDN)
+	log.Printf("📄 Refreshed whois for %s", w.FQDN)
 }
 
 // Flush the whois cache to its storage
 func (w WhoisCacheStorage) Flush() {
-	log.Println("Flushing WHOIS cache to " + w.Filepath)
 	// Write the FileContents to the FilePath
 	yaml, yamlerr := yaml.Marshal(w.FileContents)
 	if yamlerr != nil {
@@ -161,4 +163,12 @@ func (w WhoisCacheStorage) Flush() {
 		log.Println("Error while writing WHOIS cache file")
 		log.Fatalf("error: %v", err)
 	}
+	// Check if the file has been written
+	fileInfo, err := file.Stat()
+	if err != nil {
+		log.Println("Error while checking WHOIS cache file")
+		log.Fatalf("error: %v", err)
+	}
+
+	log.Printf("💾 Flushed WHOIS data cache to %s", fileInfo.Name())
 }

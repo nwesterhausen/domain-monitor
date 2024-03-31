@@ -136,7 +136,8 @@ func (c Configuration) Flush() {
 		log.Println("Error while checking configuration file")
 		log.Fatalf("error: %v", err)
 	}
-	println("Configuration file written:", fileInfo.Name())
+
+	log.Printf("💾 Configuration flushed to %s", fileInfo.Name())
 }
 
 // Update the app configuration with the given data

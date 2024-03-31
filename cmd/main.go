@@ -20,35 +20,35 @@ func main() {
 	dataDirectory := flag.String("data-dir", "./data", "Directory to store configuration and cache files")
 	flag.Parse()
 
-	log.Println("Data directory set to", *dataDirectory)
+	log.Println("📁 Data directory set to", *dataDirectory)
 	validateDirectory(*dataDirectory)
 
 	configDirectory := configuration.ConfigDirectory{DataDir: *dataDirectory}
 
-	log.Println("Loading configuration and cache files...")
+	log.Println("⤴️ Loading configuration and cache files...")
 
 	config := configDirectory.ReadAppConfig()
 	var _mailer *service.MailerService = nil
 	if config.Config.Alerts.SendAlerts {
 		if !config.Config.SMTP.Enabled {
-			log.Println("Email notifications are disabled")
+			log.Println("❌ Email notifications are disabled")
 		} else if len(config.Config.SMTP.Host) == 0 || config.Config.SMTP.Host == "smtp.example.com" {
-			log.Println("SMTP is not configured")
+			log.Println("❌ SMTP is not configured")
 			config.Config.SMTP.Enabled = false
 		} else {
 			_mailer = service.NewMailerService(config.Config.SMTP)
-			log.Printf("Alerts configured to be sent to %s", config.Config.Alerts.Admin)
+			log.Printf("📧 Alerts configured to be sent to %s", config.Config.Alerts.Admin)
 		}
 	} else {
-		log.Println("Alerts are disabled")
+		log.Println("📵 Alerts are disabled")
 	}
-	log.Printf("WHOIS cache refresh interval set to %s", configuration.WhoisRefreshInterval)
+	log.Printf("📆 WHOIS cache refresh interval set to %s", configuration.WhoisRefreshInterval)
 
 	domains := configDirectory.ReadDomains()
-	log.Printf("Loaded %d domains from domain list", len(domains.DomainFile.Domains))
+	log.Printf("📄 Loaded %d domains from domain list", len(domains.DomainFile.Domains))
 
 	whoisCache := configDirectory.ReadWhoisCache()
-	log.Printf("Found %d cached whois entries", len(whoisCache.FileContents.Entries))
+	log.Printf("📄 Found %d cached whois entries", len(whoisCache.FileContents.Entries))
 
 	app := echo.New()
 
