@@ -24,3 +24,13 @@ func (s *ServicesWhois) GetWhois(fqdn string) configuration.WhoisCache {
 
 	return configuration.WhoisCache{}
 }
+
+func (s *ServicesWhois) MarkAlertSent(fqdn string, alert configuration.Alert) bool {
+	for i := range s.store.FileContents.Entries {
+		if s.store.FileContents.Entries[i].FQDN == fqdn {
+			s.store.FileContents.Entries[i].MarkAlertSent(alert)
+			return true
+		}
+	}
+	return false
+}

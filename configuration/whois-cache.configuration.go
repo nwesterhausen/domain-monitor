@@ -17,6 +17,18 @@ type WhoisCache struct {
 	WhoisInfo whoisparser.WhoisInfo `yaml:"whoisInfo" json:"whoisInfo"`
 	// Date this entry was last updated
 	LastUpdated time.Time `yaml:"lastUpdated" json:"lastUpdated"`
+	// Sent the 2 month alert
+	Sent2MonthAlert bool `yaml:"sent2MonthAlert" json:"sent2MonthAlert"`
+	// Sent the 1 month alert
+	Sent1MonthAlert bool `yaml:"sent1MonthAlert" json:"sent1MonthAlert"`
+	// Sent the 2 week alert
+	Sent2WeekAlert bool `yaml:"sent2WeekAlert" json:"sent2WeekAlert"`
+	// Sent the 1 week alert
+	Sent1WeekAlert bool `yaml:"sent1WeekAlert" json:"sent1WeekAlert"`
+	// Send the 3 day alert
+	Sent3DayAlert bool `yaml:"sent3DayAlert" json:"sent3DayAlert"`
+	// Date of the last alert sent
+	LastAlertSent time.Time `yaml:"lastAlertSent" json:"lastAlertSent"`
 }
 
 type WhoisCacheFile struct {
@@ -171,4 +183,48 @@ func (w WhoisCacheStorage) Flush() {
 	}
 
 	log.Printf("💾 Flushed WHOIS data cache to %s", fileInfo.Name())
+}
+
+// Mark an alert as sent, by specifying the Alert type
+func (w *WhoisCache) MarkAlertSent(alert Alert) {
+	switch alert {
+	case Alert2Months:
+		// Check if the alert has already been sent, and log the inconsistency
+		if w.Sent2MonthAlert {
+			log.Printf("⚠️ %s was already marked as sent for %s!", alert, w.FQDN)
+		}
+		w.Sent2MonthAlert = true
+	case Alert1Month:
+		// Check if the alert has already been sent, and log the inconsistency
+		if w.Sent1MonthAlert {
+			log.Printf("⚠️ %s was already marked as sent for %s!", alert, w.FQDN)
+		}
+		w.Sent1MonthAlert = true
+	case Alert2Weeks:
+		// Check if the alert has already been sent, and log the inconsistency
+		if w.Sent2WeekAlert {
+			log.Printf("⚠️ %s was already marked as sent for %s!", alert, w.FQDN)
+		}
+		w.Sent2WeekAlert = true
+	case Alert1Week:
+		// Check if the alert has already been sent, and log the inconsistency
+		if w.Sent1WeekAlert {
+			log.Printf("⚠️ %s was already marked as sent for %s!", alert, w.FQDN)
+		}
+		w.Sent1WeekAlert = true
+	case Alert3Days:
+		// Check if the alert has already been sent, and log the inconsistency
+		if w.Sent3DayAlert {
+			log.Printf("⚠️ %s was already marked as sent for %s!", alert, w.FQDN)
+		}
+		w.Sent3DayAlert = true
+	case AlertDaily:
+		// Check if the alert has already been sent, and log the inconsistency
+		// We have to check if the date stored is today to know if we sent it already
+		if w.LastAlertSent == time.Now() {
+			log.Printf("⚠️ %s was already marked as sent for %s!", alert, w.FQDN)
+		}
+	}
+	// Update the last alert sent date
+	w.LastAlertSent = time.Now()
 }
