@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"log"
 
 	"github.com/nwesterhausen/domain-monitor/configuration"
 )
@@ -40,6 +41,9 @@ func (s *ServicesDomain) GetDomains() ([]configuration.Domain, error) {
 }
 
 func (s *ServicesDomain) UpdateDomain(domain configuration.Domain) error {
+	// Log the received domain configuration
+	log.Printf("🛰️ Received domain update: %+v\n", domain)
+
 	s.store.UpdateDomain(domain)
 	// Return nil to indicate success (we can confirm the domain was updated by checking the list)
 	for _, d := range s.store.DomainFile.Domains {

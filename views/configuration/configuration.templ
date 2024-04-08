@@ -239,7 +239,9 @@ templ SchedulerTab(conf configuration.SchedulerConfiguration) {
             <div class="label">
                 <span class="label-text">WHOIS Cache Stale Interval</span>
             </div>
-            <input type="text" placeholder="190" class="input input-bordered w-full max-w-lg" name="whoisCacheStaleInterval" value={strconv.Itoa(conf.WhoisCacheStaleInterval)} />
+            <input type="text" placeholder="190" class="input input-bordered w-full max-w-lg" name="value"
+            value={strconv.Itoa(conf.WhoisCacheStaleInterval)} hx-trigger="change throttle:50ms"
+            hx-post="/api/config/scheduler/whoisCacheStaleInterval" hx-include="this" />
             <div class="label">
                 <span class="label-text-alt">How many days before cached WHOIS information is considered stale and should be refreshed</span>
             </div>
@@ -254,7 +256,7 @@ templ SchedulerTab(conf configuration.SchedulerConfiguration) {
           The standard WHOIS refresh schedule:
            	<ol class="list-decimal ms-8">
                	<li>Cache miss for domain</li>
-               	<li>Cache becomes WhoisCacheStaleInterval old</li>
+               	<li>Cache becomes "WhoisCacheStaleInterval" days old</li>
                	<li>3 months before expiry</li>
                	<li>2 months before expiry</li>
                	<li>1 month before expiry</li>
@@ -262,7 +264,6 @@ templ SchedulerTab(conf configuration.SchedulerConfiguration) {
            	</ol>
         </div>
         </div>
-        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
         </div>
         <div class="text-sm my-4">* Manual refresh is always possible, and can be triggered via the API or the web interface</div>
         </div>

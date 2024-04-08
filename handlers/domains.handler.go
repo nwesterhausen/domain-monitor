@@ -2,7 +2,8 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
+	"log"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 	"github.com/nwesterhausen/domain-monitor/configuration"
@@ -55,13 +56,13 @@ func (h *DomainHandler) GetListTbody(c echo.Context) error {
 }
 
 // Add a domain and return an updated tbody
-func (h* DomainHandler) PostNewDomain(c echo.Context) error {
+func (h *DomainHandler) PostNewDomain(c echo.Context) error {
 	var domain configuration.Domain
 	if err := c.Bind(&domain); err != nil {
 		return err
 	}
 
-	fmt.Printf("Adding domain: %+v\n", domain)
+	log.Printf("🆕 Adding domain: %+v\n", domain)
 
 	_, err := h.DomainService.CreateDomain(domain)
 	if err != nil {
@@ -78,7 +79,7 @@ func (h *DomainHandler) DeleteDomain(c echo.Context) error {
 		return errors.New("invalid domain to delete (FQDN required)")
 	}
 
-	fmt.Printf("Deleting domain: %s\n", fqdn)
+	log.Printf("🙅 Deleting domain: %s\n", fqdn)
 
 	err := h.DomainService.DeleteDomain(fqdn)
 	if err != nil {
@@ -100,9 +101,9 @@ func (h *DomainHandler) GetEditDomain(c echo.Context) error {
 		return err
 	}
 
-	fmt.Printf("Editing domain: %+v\n", domain)
+	log.Printf("🛰️ Editing domain: %+v\n", domain)
 
-	return View(c, domains.DomainTableRowInput("edit", domain))
+	return View(c, domains.DomainTableRowInput(strings.ReplaceAll(domain.FQDN, ".", "_"), domain))
 }
 
 // Update a domain and return an updated tbody
@@ -112,12 +113,18 @@ func (h *DomainHandler) PostUpdateDomain(c echo.Context) error {
 		return err
 	}
 
-	fmt.Printf("Updating domain: %+v\n", domain)
+	log.Printf("🛰️ Updating domain: %+v\n", domain)
 
 	err := h.DomainService.UpdateDomain(domain)
 	if err != nil {
 		return err
 	}
 
-	return h.GetListTbody(c)
+	return h.GetListDomainRow(domain, c)
+}
+
+// Get the HTML for a single domain row
+func (h *DomainHandler) GetListDomainRow(domain configuration.Domain, c echo.Context) error {
+	row := domains.DomainTableRow(domain)
+	return View(c, row)
 }

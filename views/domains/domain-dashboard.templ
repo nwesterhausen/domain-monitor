@@ -81,20 +81,20 @@ templ DomainTableRow(domain configuration.Domain) {
         <td>{ domain.FQDN }</td>
         <td><input checked?={domain.Enabled} type="checkbox" class="checkbox checkbox-sm" disabled /></td>
         <td><input checked?={domain.Alerts} type="checkbox" class="checkbox checkbox-sm" disabled /></td>
-        <td>@DomainTableActions(domain.FQDN)</td>
+        <td>@DomainTableActions(strings.ReplaceAll(domain.FQDN, ".", "_"), domain.FQDN)</td>
     </tr>
 }
 
 templ DomainTableRowInput(key string, domain configuration.Domain) {
-        <tr id={key+"domain-input"}>
+        <tr id={"domain-input-"+key}>
             <td><input name="name" value={domain.Name} type="text" class="input input-bordered w-full max-w-xs"/></td>
             <td><input name="fqdn" value={domain.FQDN} type="text" class="input input-bordered w-full max-w-xs"/></td>
             <td><input name="enabled" value="true" checked?={domain.Enabled} type="checkbox" class="checkbox checkbox-sm"/></td>
             <td><input name="alerts" value="true" checked?={domain.Alerts} type="checkbox" class="checkbox checkbox-sm"/></td>
-            <td><button class="btn btn-xs" hx-include={"#"+key+"domain-input input"} hx-post="/domain/update" hx-target="#domain-listing-tbody"
-            hx-swap="outerHTML" hx-trigger="click" hx-indicator={"#"+key+"-"+strings.ReplaceAll(domain.FQDN, ".", "_")+"-indication"}>
+            <td><button class="btn btn-xs" hx-include={"#domain-input-"+key+" input"} hx-post="/domain/update" hx-target={"#domain-input-"+key}
+            hx-swap="outerHTML" hx-trigger="click" hx-indicator={"#indication-"+key}>
                 Save
-                <div id={key+"-"+strings.ReplaceAll(domain.FQDN, ".", "_")+"-indication"} class="htmx-indicator">
+                <div id={"indication-"+key} class="htmx-indicator">
                     Loading <span class="loading loading-dots loading-xs"></span>
                 </div>
             </button></td>
@@ -102,16 +102,16 @@ templ DomainTableRowInput(key string, domain configuration.Domain) {
 
 }
 
-templ DomainTableActions(fqdn string) {
+templ DomainTableActions(key string, fqdn string) {
     <div class="flex flex-row gap-2">
-        <button class="btn btn-xs" hx-target={"#trow-"+strings.ReplaceAll(fqdn, ".", "_")} hx-swap="outerHTML"
+        <button class="btn btn-xs" hx-target={"#trow-"+key} hx-swap="outerHTML"
             hx-get={"/domain/edit/"+fqdn} hx-trigger="click">Edit</button>
         <button class="btn btn-xs btn-error btn-outline" hx-delete={"/domain/" + fqdn}
-            hx-target="#domain-listing-tbody" hx-swap="outerHTML" hx-trigger="click" hx-indicator={"#indicate-delete-"+strings.ReplaceAll(fqdn, ".", "_")}
+            hx-target="#domain-listing-tbody" hx-swap="outerHTML" hx-trigger="click" hx-indicator={"#indicate-delete-"+key}
             hx-confirm={"Really delete domain " + fqdn + "? This cannot be undone. (Although you can add it back.)"}>
             Delete
         </button>
-        <div id={"#indicate-delete-"+strings.ReplaceAll(fqdn, ".", "_")} class="htmx-indicator">
+        <div id={"#indicate-delete-"+key} class="htmx-indicator">
             Loading <span class="loading loading-dots loading-xs"></span>
         </div>
     </div>
