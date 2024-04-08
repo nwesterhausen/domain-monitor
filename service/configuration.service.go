@@ -166,6 +166,9 @@ func (s *ConfigurationService) SetConfigurationValue(section string, key string,
 	// The toggles just send "on" or "" as the string for the value
 	boolVal := stringVal == "on"
 
+	// Log the received values
+	log.Printf("🛰️ Setting '%s:%s' to %s (%d, %t)", section, key, stringVal, intVal, boolVal)
+
 	switch section {
 	case "app":
 		switch key {
@@ -188,6 +191,8 @@ func (s *ConfigurationService) SetConfigurationValue(section string, key string,
 			s.store.Config.Alerts.Admin = stringVal
 		case "sendAlerts":
 			s.store.Config.Alerts.SendAlerts = boolVal
+		case "send2MonthAlert":
+			s.store.Config.Alerts.Send2MonthAlert = boolVal
 		case "send1MonthAlert":
 			s.store.Config.Alerts.Send1MonthAlert = boolVal
 		case "send2WeekAlert":

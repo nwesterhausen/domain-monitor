@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"log"
+
 	"github.com/labstack/echo/v4"
 	"github.com/nwesterhausen/domain-monitor/service"
 	"github.com/nwesterhausen/domain-monitor/views/configuration"
@@ -52,6 +54,7 @@ func (h *ConfigurationHandler) SetSectionKey(c echo.Context) error {
 
 	err := h.ConfigurationService.SetConfigurationValue(section, key, value)
 	if err != nil {
+		log.Printf("🚨 Error setting configuration value: %s", err.Error())
 		return err
 	}
 

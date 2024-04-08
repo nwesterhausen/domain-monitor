@@ -103,42 +103,42 @@ templ AlertsTab(conf configuration.AlertsConfiguration) {
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 2 months until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send2MonthAlert" checked?={conf.Send2MonthAlert} name="value"
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send2MonthAlert} name="value"
             hx-post="/api/config/alerts/send2MonthAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 1 month until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send1MonthAlert" checked?={conf.Send1MonthAlert} name="value"
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send1MonthAlert} name="value"
             hx-post="/api/config/alerts/send1MonthAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 2 weeks until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send2WeekAlert" checked?={conf.Send2WeekAlert} name="value"
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send2WeekAlert} name="value"
             hx-post="/api/config/alerts/send2WeekAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 1 week until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send1WeekAlert" checked?={conf.Send1WeekAlert} name="value"
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send1WeekAlert} name="value"
             hx-post="/api/config/alerts/send1WeekAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Send Alert at 3-days until expiration</span>
-            <input type="checkbox" class="toggle toggle-success" name="send3DayAlert" checked?={conf.Send3DayAlert} name="value"
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send3DayAlert} name="value"
             hx-post="/api/config/alerts/send3DayAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
             <span class="label-text">Daily Alerts for Exiration within 1 Week</span>
-            <input type="checkbox" class="toggle toggle-success" name="sendDailyExpiryAlert" checked?={conf.SendDailyExpiryAlert} name="value"
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.SendDailyExpiryAlert} name="value"
             hx-post="/api/config/alerts/sendDailyExpiryAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
         </div>
