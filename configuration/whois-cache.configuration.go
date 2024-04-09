@@ -74,11 +74,13 @@ func (w *WhoisCacheStorage) Add(fqdn string) {
 		LastUpdated: time.Time{},
 	}
 
-	// Perform the whois query
+	// Perform the whois query for the new domain
 	newEntry.Refresh()
 
 	// Add the entry to the list
 	w.FileContents.Entries = append(w.FileContents.Entries, newEntry)
+	// Flush the cache to disk
+	w.Flush()
 }
 
 func (w *WhoisCacheStorage) Refresh() {
