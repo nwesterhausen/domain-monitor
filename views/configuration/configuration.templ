@@ -1,0 +1,270 @@
+package configuration
+
+import (
+    "github.com/nwesterhausen/domain-monitor/configuration"
+    "strconv"
+)
+
+templ Configuration() {
+    <div class="px-2">
+        <div>
+            <h1 class="text-xl text-secondary">Configuration</h1>
+            <p class="p-2">
+            Changes here are applied to the two config files located in a config dir where you run this server. If you want to
+            modify those files directly, changes will be realized upon restarting the server. Committing changes using this
+            configuration page will cause the server to restart so whatever changes you make take immediate effect.
+            </p>
+        </div>
+        <div role="tablist" class="tabs tabs-boxed">
+            <a role="tab" hx-target="#tabContent" hx-get="/config/domain" class="transition-color tab config-tab tab-active" _="on click remove .tab-active from .config-tab then add .tab-active to me">Domains</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/app" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Application</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/alerts" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Alerts</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/smtp" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">SMTP</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/scheduler" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Scheduler</a>
+        </div>
+        <div id="tabContent" class="p-2 mt-3" hx-get="/config/domain" hx-trigger="load"></div>
+    </div>
+}
+
+templ DomainTab() {
+    <div>
+        <h3 class="text-lg text-accent">Monitored Domains</h3>
+        <p class="p-2">
+        If you attempt to update a domain and change its FQDN, right now it will just add a new domain entry to watch. In
+        the future, there will be an uuid for each entry.
+        </p>
+        <table class="table" id="configuredDomainTable">
+        <thead>
+            <tr class="text-secondary">
+            <th scope="col">Name</th>
+            <th scope="col">FQDN</th>
+            <th scope="col">Send Alert</th>
+            <th scope="col">WHOIS Enabled</th>
+            <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody hx-get="/domain/tbody" hx-trigger="load" hx-swap="outerHTML"></tbody>
+        </table>
+    </div>
+}
+
+templ AppTab(conf configuration.AppConfiguration) {
+    <div>
+        <h3 class="text-lg text-accent">Web App</h3>
+        <p class="p-2">Settings here will make changes to the web app configuration.</p>
+        <div class="flex flex-col gap-3">
+        <h4 class="text-md font-bold">Configuration</h4>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">Port</span>
+            </div>
+            <input type="text" name="value" placeholder="3124" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)}
+            hx-on:htmx:validation:validate="if parseInt(this.value) < 1 || parseInt(this.value) > 65535 { this.setCustomValidity('Port must be between 1 and 65535'); } else { this.setCustomValidity(''); }"
+            />
+            <div class="label">
+                <span class="label-text-alt">What port the web app will listen on</span>
+            </div>
+        </label>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Allow Automated WHOIS Refresh</span>
+            <input type="checkbox" name="value" class="toggle toggle-success" checked?={conf.AutomateWHOISRefresh}
+            hx-post="/api/config/app/automateWHOISRefresh" hx-trigger="click throttle:10ms" hx-inclue="this"
+            />
+          </label>
+        </div>
+        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
+        </div>
+    </div>
+}
+
+templ AlertsTab(conf configuration.AlertsConfiguration) {
+    <div>
+        <h3 class="text-lg text-accent">Alerts</h3>
+        <p class="p-2">Alerts are sent when a domain becomes close to expiration at any of these configured timers.</p>
+        <div class="flex flex-col gap-3 p-2 w-full max-w-xl">
+        <h4 class="text-md font-bold">Configuration</h4>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Enable Alerts</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.SendAlerts}  name="value"
+            hx-post="/api/config/alerts/sendAlerts" hx-trigger="click throttle:10ms" hx-inclue="this"/>
+          </label>
+        </div>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">Admin Email</span>
+            </div>
+            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} name="value" />
+            <div class="label">
+                <span class="label-text-alt">The email that any alerts should be sent to</span>
+            </div>
+        </label>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 2 months until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send2MonthAlert} name="value"
+            hx-post="/api/config/alerts/send2MonthAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 1 month until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send1MonthAlert} name="value"
+            hx-post="/api/config/alerts/send1MonthAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 2 weeks until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send2WeekAlert} name="value"
+            hx-post="/api/config/alerts/send2WeekAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 1 week until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send1WeekAlert} name="value"
+            hx-post="/api/config/alerts/send1WeekAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Send Alert at 3-days until expiration</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Send3DayAlert} name="value"
+            hx-post="/api/config/alerts/send3DayAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
+          </label>
+        </div>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Daily Alerts for Exiration within 1 Week</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.SendDailyExpiryAlert} name="value"
+            hx-post="/api/config/alerts/sendDailyExpiryAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
+          </label>
+        </div>
+        </div>
+    </div>
+}
+
+templ SmtpTab(conf configuration.SMTPConfiguration) {
+    <div>
+        <h3 class="text-lg text-accent">SMTP Settings</h3>
+        <p class="p-2">To receive email alerts on whois content changes, these settings need to be correct.</p>
+        <div class='my-2 flex flex-row gap-2'>
+            <button class="btn btn-sm btn-info btn-outline">Send Test Email</button>
+            <div id="smtpTestResult"></div>
+        </div>
+        <div class="flex flex-col gap-3 p-2 w-full max-w-xl">
+        <h4 class="text-md font-bold">Configuration</h4>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Enable SMTP</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Enabled}  name="value"
+            hx-post="/api/config/smtp/enabled" hx-trigger="click throttle:10ms" hx-inclue="this"/>
+          </label>
+        </div>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">SMTP Host</span>
+            </div>
+            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Host} />
+            <div class="label">
+                <span class="label-text-alt">The SMTP hostname (or IP address)</span>
+            </div>
+        </label>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">SMTP Port</span>
+            </div>
+            <input type="text" placeholder="25" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} />
+            <div class="label">
+                <span class="label-text-alt">The SMTP port to connect to</span>
+            </div>
+        </label>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Force Secure</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.Secure}   name="value"
+            hx-post="/api/config/smtp/secure" hx-trigger="click throttle:10ms" hx-inclue="this"/>
+          </label>
+        </div>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">SMTP Username</span>
+            </div>
+            <input type="text" placeholder="smtpuser" class="input input-bordered w-full max-w-lg" value={conf.AuthUser} />
+            <div class="label">
+                <span class="label-text-alt">Username if required to login to SMTP server</span>
+            </div>
+        </label>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">SMTP Password</span>
+            </div>
+            <input type="password" placeholder="" class="input input-bordered w-full max-w-lg" value={conf.AuthPass} />
+            <div class="label">
+                <span class="label-text-alt">Password if required to login to SMTP server</span>
+            </div>
+        </label>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">From Name</span>
+            </div>
+            <input type="text" placeholder="Domain Monitor" class="input input-bordered w-full max-w-lg" value={conf.FromName} />
+            <div class="label">
+                <span class="label-text-alt">Name to use in the from field for email messages</span>
+            </div>
+        </label>
+        <label class="form-control w-full max-w-md">
+            <div class="label">
+                <span class="label-text">From Address</span>
+            </div>
+            <input type="text" placeholder="monitor@domains.example.com" class="input input-bordered w-full max-w-lg" value={conf.FromAddress} />
+            <div class="label">
+                <span class="label-text-alt">Email address to use in the from field for messages</span>
+            </div>
+        </label>
+        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
+        </div>
+    </div>
+}
+
+templ SchedulerTab(conf configuration.SchedulerConfiguration) {
+    <div>
+    <h3 class="text-lg text-accent">Web App</h3>
+        <p class="p-2">Settings here will make changes to the web app configuration.</p>
+        <div class="flex flex-col gap-3">
+        <h4 class="text-md font-bold">Configuration</h4>
+        <label class="form-control w-full max-w-lg">
+            <div class="label">
+                <span class="label-text">WHOIS Cache Stale Interval</span>
+            </div>
+            <input type="text" placeholder="190" class="input input-bordered w-full max-w-lg" name="value"
+            value={strconv.Itoa(conf.WhoisCacheStaleInterval)} hx-trigger="change throttle:50ms"
+            hx-post="/api/config/scheduler/whoisCacheStaleInterval" hx-include="this" />
+            <div class="label">
+                <span class="label-text-alt">How many days before cached WHOIS information is considered stale and should be refreshed</span>
+            </div>
+        </label>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Allow Automated WHOIS Refresh*</span>
+            <input type="checkbox" class="toggle toggle-success" checked?={conf.UseStandardWhoisRefreshSchedule}  name="value"
+            hx-post="/api/config/scheduler/useStandardWhoisRefreshSchedule" hx-trigger="click throttle:10ms" hx-inclue="this"/>
+          </label>
+          <div class="p-2 text-sm text-neutral">
+          The standard WHOIS refresh schedule:
+           	<ol class="list-decimal ms-8">
+               	<li>Cache miss for domain</li>
+               	<li>Cache becomes "WhoisCacheStaleInterval" days old</li>
+               	<li>3 months before expiry</li>
+               	<li>2 months before expiry</li>
+               	<li>1 month before expiry</li>
+               	<li>2 weeks before expiry</li>
+           	</ol>
+        </div>
+        </div>
+        </div>
+        <div class="text-sm my-4">* Manual refresh is always possible, and can be triggered via the API or the web interface</div>
+        </div>
+}

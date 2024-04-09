@@ -1,42 +1,19 @@
 {
-  "name": "domain-monitor",
-  "version": "0.3.4",
-  "description": "Node-js server for monitoring domain WHOIS records.",
-  "main": "server/index.js",
+  "version": "1.0.0-rc1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nwesterhausen/domain-monitor.git"
+    "url": "https://github.com/nwesterhausen/domain-monitor"
   },
-  "bugs": {
-    "url": "https://github.com/nwesterhausen/domain-monitor/issues"
-  },
-  "homepage": "https://github.com/nwesterhausen/domain-monitor",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint-check": "eslint server/lib/**/*.js client/src/**/*.js",
-    "lint": "eslint --fix server/lib/**/*.js client/src/**/*.js",
-    "pretty-check": "prettier --check server/**/*.js client/src/**/*.js client/src/**/*.css client/src/_includes/*/*.njk",
-    "pretty": "prettier --write server/**/*.js client/src/**/*.js client/src/**/*.css client/src/_includes/*/*.njk",
-    "build": "eleventy"
-  },
-  "keywords": [],
-  "author": "Nicholas Westerhausen",
-  "license": "MIT",
-  "dependencies": {
-    "express": "^4.18.3",
-    "js-yaml": "^4.1.0",
-    "morgan": "^1.10.0",
-    "nodemailer": "^6.9.13",
-    "socket.io": "^4.7.5",
-    "whois-promise": "^1.2.4"
+    "build": "pnpm build:htmx && pnpm build:hyperscript && pnpm build:tailwind",
+    "build:hyperscript": "cp node_modules/hyperscript.org/dist/_hyperscript.min.js assets/js/_hyperscript.min.js",
+    "build:htmx": "cp node_modules/htmx.org/dist/htmx.min.js assets/js/htmx.min.js",
+    "build:tailwind": "tailwindcss -o ./assets/css/tailwind.css"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^1.0.2",
-    "clean-css": "^5.3.3",
-    "eslint": "^8.57.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.10.0",
-    "prettier": "^2.8.8",
-    "rollup": "^2.79.1"
+    "daisyui": "^4.7.3",
+    "htmx.org": "^1.9.11",
+    "hyperscript.org": "^0.9.12",
+    "tailwindcss": "^3.4.1"
   }
 }

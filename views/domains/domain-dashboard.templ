@@ -1,0 +1,118 @@
+package domains
+
+import (
+    "github.com/nwesterhausen/domain-monitor/configuration"
+    "strings"
+    "time"
+
+    "github.com/hako/durafmt"
+)
+
+templ DomainCard(domain configuration.Domain) {
+    <div class="card w-72 bg-base-100 text-light shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title">{ domain.Name }</h2>
+        <pre>{ domain.FQDN }</pre>
+        <div hx-post="/whois/" hx-trigger="load" hx-include="this">
+            <input type="hidden" name="fqdn" value={ domain.FQDN } />
+        </div>
+        <div class="card-actions justify-end">
+        <div class={ "badge", templ.KV("badge-outline", !domain.Enabled), templ.KV("badge-success", domain.Enabled) }>Periodic Updates</div>
+          <div class={ "badge", templ.KV("badge-outline", !domain.Alerts), templ.KV("badge-success", domain.Alerts) }>Alerts Enabled</div>
+        </div>
+      </div>
+    </div>
+}
+
+templ DomainCards(domains []configuration.Domain) {
+    <div class="container grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 p-2">
+        for _,domain := range domains {
+            @DomainCard(domain)
+        }
+        </div>
+}
+
+templ WhoisDetail(whois configuration.WhoisCache) {
+    if (configuration.WhoisCache{}) == whois {
+        <div class="text-center text-2xl">No WHOIS data available</div>
+        return
+    }
+
+    <div class="flex flex-col">
+    @WhoisDetailItem("Registrar", whois.WhoisInfo.Registrar.Name)
+    @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
+    @WhoisDetailItem("Creation Date", whois.WhoisInfo.Domain.CreatedDateInTime.Format("2006-01-02"))
+    @WhoisDetailItem("Expiration Date", whois.WhoisInfo.Domain.ExpirationDateInTime.Format("2006-01-02"))
+    @WhoisDetailItem("Time Until Expiration", durafmt.Parse(whois.WhoisInfo.Domain.ExpirationDateInTime.Sub(time.Now())).LimitFirstN(2).String())
+    @WhoisDetailItem("WHOIS Query Date", whois.LastUpdated.Format("2006-01-02"))
+    </div>
+}
+
+templ WhoisDetailItem(label string, value string) {
+    <div class="flex flex-col">
+        <div class="text-xs text-secondary">{ label }</div>
+        <div class="ps-2 text-md">{ value }</div>
+    </div>
+}
+
+templ DomainListingTbody(domains []configuration.Domain) {
+    <tbody id="domain-listing-tbody">
+        for _,domain := range domains {
+            @DomainTableRow(domain)
+        }
+        <tr id="new-domain-input">
+            <td><input name="name" type="text" class="input input-bordered w-full max-w-xs"/></td>
+            <td><input name="fqdn" type="text" class="input input-bordered w-full max-w-xs"/></td>
+            <td><input name="enabled" value="true" type="checkbox" class="checkbox checkbox-sm" /></td>
+            <td><input name="alerts" value="true" type="checkbox" class="checkbox checkbox-sm"/></td>
+            <td><button class="btn btn-xs" hx-include="#new-domain-input input" hx-post="/domain/new" hx-target="#domain-listing-tbody"
+            hx-swap="outerHTML" hx-trigger="click" hx-indicator="#add-new-domain-indication">Add
+                <div id="add-new-domain-indication" class="htmx-indicator">
+                    Loading <span class="loading loading-dots loading-xs"></span>
+                </div>
+            </button></td>
+        </tr>
+    </tbody>
+}
+
+templ DomainTableRow(domain configuration.Domain) {
+    <tr id={"trow-"+strings.ReplaceAll(domain.FQDN, ".", "_")}>
+        <td>{ domain.Name }</td>
+        <td>{ domain.FQDN }</td>
+        <td><input checked?={domain.Enabled} type="checkbox" class="checkbox checkbox-sm" disabled /></td>
+        <td><input checked?={domain.Alerts} type="checkbox" class="checkbox checkbox-sm" disabled /></td>
+        <td>@DomainTableActions(strings.ReplaceAll(domain.FQDN, ".", "_"), domain.FQDN)</td>
+    </tr>
+}
+
+templ DomainTableRowInput(key string, domain configuration.Domain) {
+        <tr id={"domain-input-"+key}>
+            <td><input name="name" value={domain.Name} type="text" class="input input-bordered w-full max-w-xs"/></td>
+            <td><input name="fqdn" value={domain.FQDN} type="text" class="input input-bordered w-full max-w-xs"/></td>
+            <td><input name="enabled" value="true" checked?={domain.Enabled} type="checkbox" class="checkbox checkbox-sm"/></td>
+            <td><input name="alerts" value="true" checked?={domain.Alerts} type="checkbox" class="checkbox checkbox-sm"/></td>
+            <td><button class="btn btn-xs" hx-include={"#domain-input-"+key+" input"} hx-post="/domain/update" hx-target={"#domain-input-"+key}
+            hx-swap="outerHTML" hx-trigger="click" hx-indicator={"#indication-"+key}>
+                Save
+                <div id={"indication-"+key} class="htmx-indicator">
+                    Loading <span class="loading loading-dots loading-xs"></span>
+                </div>
+            </button></td>
+        </tr>
+
+}
+
+templ DomainTableActions(key string, fqdn string) {
+    <div class="flex flex-row gap-2">
+        <button class="btn btn-xs" hx-target={"#trow-"+key} hx-swap="outerHTML"
+            hx-get={"/domain/edit/"+fqdn} hx-trigger="click">Edit</button>
+        <button class="btn btn-xs btn-error btn-outline" hx-delete={"/domain/" + fqdn}
+            hx-target="#domain-listing-tbody" hx-swap="outerHTML" hx-trigger="click" hx-indicator={"#indicate-delete-"+key}
+            hx-confirm={"Really delete domain " + fqdn + "? This cannot be undone. (Although you can add it back.)"}>
+            Delete
+        </button>
+        <div id={"#indicate-delete-"+key} class="htmx-indicator">
+            Loading <span class="loading loading-dots loading-xs"></span>
+        </div>
+    </div>
+}

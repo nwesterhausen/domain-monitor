@@ -1,3 +1,18 @@
+# go stuff
+bin
+tmp
+main
+
+# "built" assets
+assets/css/tailwind.css
+assets/js/*.min.js
+views/**/*_templ.go
+
+# project files
+config.yaml
+domain.yaml
+whois-cache.yaml
+
 # Logs
 logs
 *.log
