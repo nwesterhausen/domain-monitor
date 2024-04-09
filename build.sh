@@ -21,7 +21,7 @@ IMAGE=server
 TAG=$(jq .version package.json | cut -d\" -f 2)
 
 # Set build tag depending if we are development or not
-if [ `git branch --show-current` == "master" ]; then
+if [ `git branch --show-current` == "main" ]; then
     echo "Running on master, using 'latest' and version tag."
     PRODRUN=true
     BUILDTAG=latest
@@ -71,14 +71,14 @@ IMAGE_ID=$(podman images -q "$DOCKER_TAGBASE")
 echo "Successfully build image: $IMAGE_ID"
 
 # Login to gh packages docker repo
-echo "Logging into GitHub Packages Container Repo"
-cat ~/.gh_token | podman login ghcr.io -u nwesterhausen --password-stdin
-
-# Push the images
-if ! [[ -z ${PRODRUN+x} ]]; then
-    podman push "$IMAGE:$TAG" "$GH_TAGBASE:$TAG";
-fi
-podman push "$IMAGE:$BUILDTAG" "$GH_TAGBASE:$BUILDTAG"
+#echo "Logging into GitHub Packages Container Repo"
+#cat ~/.gh_token | podman login ghcr.io -u nwesterhausen --password-stdin
+#
+## Push the images
+#if ! [[ -z ${PRODRUN+x} ]]; then
+#    podman push "$IMAGE:$TAG" "$GH_TAGBASE:$TAG";
+#fi
+#podman push "$IMAGE:$BUILDTAG" "$GH_TAGBASE:$BUILDTAG"
 
 # Login to docker.io
 echo "Logging into Docker.io"
