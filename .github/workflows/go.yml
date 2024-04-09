@@ -1,6 +1,9 @@
 name: Test Build Go Project
 on:
   push:
+  pull_request:
+    branches:
+      - main
 
 permissions: read-all
 
