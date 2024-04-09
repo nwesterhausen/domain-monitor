@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"log"
 
 	"github.com/nwesterhausen/domain-monitor/configuration"
@@ -14,15 +15,24 @@ func NewWhoisService(store configuration.WhoisCacheStorage) *ServicesWhois {
 	return &ServicesWhois{store: store}
 }
 
-func (s *ServicesWhois) GetWhois(fqdn string) configuration.WhoisCache {
+func (s *ServicesWhois) GetWhois(fqdn string) (configuration.WhoisCache, error) {
 	for _, entry := range s.store.FileContents.Entries {
 		if entry.FQDN == fqdn {
-			return entry
+			return entry, nil
 		}
 	}
-	log.Println("WHOIS entry cache miss for", fqdn)
+	log.Println("🙅 WHOIS entry cache miss for", fqdn)
 
-	return configuration.WhoisCache{}
+	// Since we cache missed, let's try to fetch the WHOIS entry instead
+	s.store.Add(fqdn)
+	// Try to get the entry again
+	for _, entry := range s.store.FileContents.Entries {
+		if entry.FQDN == fqdn {
+			return entry, nil
+		}
+	}
+
+	return configuration.WhoisCache{}, errors.New("entry missing")
 }
 
 func (s *ServicesWhois) MarkAlertSent(fqdn string, alert configuration.Alert) bool {

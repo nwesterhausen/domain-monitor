@@ -74,11 +74,13 @@ func (w *WhoisCacheStorage) Add(fqdn string) {
 		LastUpdated: time.Time{},
 	}
 
-	// Perform the whois query
+	// Perform the whois query for the new domain
 	newEntry.Refresh()
 
 	// Add the entry to the list
 	w.FileContents.Entries = append(w.FileContents.Entries, newEntry)
+	// Flush the cache to disk
+	w.Flush()
 }
 
 func (w *WhoisCacheStorage) Refresh() {
@@ -221,7 +223,7 @@ func (w *WhoisCache) MarkAlertSent(alert Alert) {
 	case AlertDaily:
 		// Check if the alert has already been sent, and log the inconsistency
 		// We have to check if the date stored is today to know if we sent it already
-		if w.LastAlertSent == time.Now() {
+		if w.LastAlertSent.Day() == time.Now().Day() && w.LastAlertSent.Month() == time.Now().Month() && w.LastAlertSent.Year() == time.Now().Year() {
 			log.Printf("⚠️ %s was already marked as sent for %s!", alert, w.FQDN)
 		}
 	}

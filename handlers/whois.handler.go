@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 
+	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/nwesterhausen/domain-monitor/service"
 	"github.com/nwesterhausen/domain-monitor/views/domains"
@@ -25,8 +26,14 @@ func (h *WhoisHandler) GetCard(c echo.Context) error {
 		return errors.New("invalid domain to fetch (FQDN required)")
 	}
 
-	whois := h.WhoisService.GetWhois(fqdn)
-	card := domains.WhoisDetail(whois)
+	var card templ.Component
+	whois, err := h.WhoisService.GetWhois(fqdn)
+
+	if err != nil {
+		card = domains.WhoisError(err)
+	} else {
+	card = domains.WhoisDetail(whois)
+	}
 
 	return View(c, card)
 }

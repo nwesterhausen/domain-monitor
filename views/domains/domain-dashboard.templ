@@ -4,6 +4,7 @@ import (
     "github.com/nwesterhausen/domain-monitor/configuration"
     "strings"
     "time"
+    "fmt"
 
     "github.com/hako/durafmt"
 )
@@ -32,12 +33,11 @@ templ DomainCards(domains []configuration.Domain) {
         </div>
 }
 
-templ WhoisDetail(whois configuration.WhoisCache) {
-    if (configuration.WhoisCache{}) == whois {
-        <div class="text-center text-2xl">No WHOIS data available</div>
-        return
-    }
+templ WhoisError(err error) {
+    <div class="text-error">{ fmt.Sprintf("WHOIS Cache Miss. %v", err) }</div>
+}
 
+templ WhoisDetail(whois configuration.WhoisCache) {
     <div class="flex flex-col">
     @WhoisDetailItem("Registrar", whois.WhoisInfo.Registrar.Name)
     @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
