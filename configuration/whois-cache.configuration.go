@@ -221,7 +221,7 @@ func (w *WhoisCache) MarkAlertSent(alert Alert) {
 	case AlertDaily:
 		// Check if the alert has already been sent, and log the inconsistency
 		// We have to check if the date stored is today to know if we sent it already
-		if w.LastAlertSent == time.Now() {
+		if w.LastAlertSent.Day() == time.Now().Day() && w.LastAlertSent.Month() == time.Now().Month() && w.LastAlertSent.Year() == time.Now().Year() {
 			log.Printf("⚠️ %s was already marked as sent for %s!", alert, w.FQDN)
 		}
 	}

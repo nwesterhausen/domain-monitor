@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/nwesterhausen/domain-monitor/configuration"
@@ -74,6 +75,32 @@ func (m *MailerService) TestMail(to string) error {
 		log.Printf("failed to deliver mail: %s", err)
 		return err
 	}
+	log.Printf("📧 E-mail message sent to " + to)
+
+	return nil
+}
+
+func (m *MailerService) SendAlert(to string, fqdn string, alert configuration.Alert) error {
+	msg := mail.NewMsg()
+	if err := msg.From(m.from); err != nil {
+		log.Printf("❌ failed to set FROM address: %s", err)
+		return err
+	}
+	if err := msg.To(to); err != nil {
+		log.Printf("❌ failed to set TO address: %s", err)
+		return err
+	}
+	msg.Subject("Domain Expiration Alert: " + fqdn)
+
+	body := fmt.Sprintf("Your domain %s is expiring in %s. Please renew it as soon as possible.", fqdn, alert)
+
+	msg.SetBodyString(mail.TypeTextPlain, body)
+
+	if err := m.client.DialAndSend(msg); err != nil {
+		log.Printf("❌ failed to deliver mail: %s", err)
+		return err
+	}
+
 	log.Printf("📧 E-mail message sent to " + to)
 
 	return nil
