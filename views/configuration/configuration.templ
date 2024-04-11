@@ -184,7 +184,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
                 <span class="label-text">SMTP Port</span>
             </div>
             <input type="text" placeholder="25" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} name="value"
-            hx-post="/api/config/smtp/host" hx-trigger="input throttle:500ms" hx-inclue="this" />
+            hx-post="/api/config/smtp/port" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">The SMTP port to connect to</span>
             </div>
