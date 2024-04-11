@@ -5,6 +5,10 @@ import (
 	"github.com/nwesterhausen/domain-monitor/views/layout"
 )
 
-func HandlerShowBase(c echo.Context) error {
-	return View(c, layout.Base())
+type BaseHandler struct {
+	IncludeConfiguration bool
+}
+
+func (bh *BaseHandler) HandlerShowBase(c echo.Context) error {
+	return View(c, layout.Base(bh.IncludeConfiguration))
 }

@@ -70,9 +70,9 @@ func main() {
 	app.Use(middleware.Logger())
 
 	// set up our routes
-	handlers.SetupRoutes(app)
+	handlers.SetupRoutes(app, config.Config.App.ShowConfiguration)
 	handlers.SetupConfigRoutes(app, config)
-	handlers.SetupDomainRoutes(app, domains)
+	handlers.SetupDomainRoutes(app, domains, config.Config.App.ShowConfiguration)
 
 	// if the mailer was configured, add the routes
 	if _mailer != nil {

@@ -1,0 +1,7 @@
+// Workspace settings
+{
+  "files.exclude": {
+    "**/*_templ.go": true,
+    "node_modules/": true,
+  }
+}

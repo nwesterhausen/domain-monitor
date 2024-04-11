@@ -10,19 +10,18 @@ templ Configuration() {
         <div>
             <h1 class="text-xl text-secondary">Configuration</h1>
             <p class="p-2">
-            Changes here are applied to the two config files located in a config dir where you run this server. If you want to
-            modify those files directly, changes will be realized upon restarting the server. Committing changes using this
-            configuration page will cause the server to restart so whatever changes you make take immediate effect.
+            Changes here are applied to the two config files located in a config dir where you run this server (<code>domain.yaml</code> and <code>config.yaml</code>).
+            After making changes, you will need to restart the server for them to take effect.
             </p>
         </div>
         <div role="tablist" class="tabs tabs-boxed">
-            <a role="tab" hx-target="#tabContent" hx-get="/config/domain" class="transition-color tab config-tab tab-active" _="on click remove .tab-active from .config-tab then add .tab-active to me">Domains</a>
-            <a role="tab" hx-target="#tabContent" hx-get="/config/app" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Application</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/app" class="transition-color tab config-tab tab-active" _="on click remove .tab-active from .config-tab then add .tab-active to me">Application</a>
+            <a role="tab" hx-target="#tabContent" hx-get="/config/domain" class="transition-color tab config-tab " _="on click remove .tab-active from .config-tab then add .tab-active to me">Domains</a>
             <a role="tab" hx-target="#tabContent" hx-get="/config/alerts" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Alerts</a>
             <a role="tab" hx-target="#tabContent" hx-get="/config/smtp" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">SMTP</a>
             <a role="tab" hx-target="#tabContent" hx-get="/config/scheduler" class="transition-color tab config-tab" _="on click remove .tab-active from .config-tab then add .tab-active to me">Scheduler</a>
         </div>
-        <div id="tabContent" class="p-2 mt-3" hx-get="/config/domain" hx-trigger="load"></div>
+        <div id="tabContent" class="p-2 mt-3" hx-get="/config/app" hx-trigger="load"></div>
     </div>
 }
 
@@ -73,7 +72,14 @@ templ AppTab(conf configuration.AppConfiguration) {
             />
           </label>
         </div>
-        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
+        <div class="form-control max-w-md">
+          <label class="label cursor-pointer">
+            <span class="label-text">Allow Configuration from Web GUI</span>
+            <input type="checkbox" name="value" class="toggle toggle-success" checked?={conf.ShowConfiguration}
+            hx-post="/api/config/app/showConfiguration" hx-trigger="click throttle:10ms" hx-inclue="this"
+            />
+          </label>
+        </div>
         </div>
     </div>
 }
@@ -95,7 +101,7 @@ templ AlertsTab(conf configuration.AlertsConfiguration) {
             <div class="label">
                 <span class="label-text">Admin Email</span>
             </div>
-            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} name="value" />
+            <input type="text" placeholder="admin@example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} name="value" />
             <div class="label">
                 <span class="label-text-alt">The email that any alerts should be sent to</span>
             </div>
@@ -167,7 +173,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">SMTP Host</span>
             </div>
-            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Host} />
+            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Host}  name="value"
+            hx-post="/api/config/smtp/host" hx-trigger="input throttle:500ms" hx-inclue="this"/>
             <div class="label">
                 <span class="label-text-alt">The SMTP hostname (or IP address)</span>
             </div>
@@ -176,7 +183,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">SMTP Port</span>
             </div>
-            <input type="text" placeholder="25" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} />
+            <input type="text" placeholder="25" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} name="value"
+            hx-post="/api/config/smtp/host" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">The SMTP port to connect to</span>
             </div>
@@ -192,7 +200,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">SMTP Username</span>
             </div>
-            <input type="text" placeholder="smtpuser" class="input input-bordered w-full max-w-lg" value={conf.AuthUser} />
+            <input type="text" placeholder="smtpuser" class="input input-bordered w-full max-w-lg" value={conf.AuthUser}  name="value"
+            hx-post="/api/config/smtp/authUser" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Username if required to login to SMTP server</span>
             </div>
@@ -201,7 +210,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">SMTP Password</span>
             </div>
-            <input type="password" placeholder="" class="input input-bordered w-full max-w-lg" value={conf.AuthPass} />
+            <input type="password" placeholder="" class="input input-bordered w-full max-w-lg" value={conf.AuthPass} name="value"
+            hx-post="/api/config/smtp/authPass" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Password if required to login to SMTP server</span>
             </div>
@@ -210,7 +220,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">From Name</span>
             </div>
-            <input type="text" placeholder="Domain Monitor" class="input input-bordered w-full max-w-lg" value={conf.FromName} />
+            <input type="text" placeholder="Domain Monitor" class="input input-bordered w-full max-w-lg" value={conf.FromName} name="value"
+            hx-post="/api/config/smtp/fromName" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Name to use in the from field for email messages</span>
             </div>
@@ -219,12 +230,12 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">From Address</span>
             </div>
-            <input type="text" placeholder="monitor@domains.example.com" class="input input-bordered w-full max-w-lg" value={conf.FromAddress} />
+            <input type="text" placeholder="monitor@domains.example.com" class="input input-bordered w-full max-w-lg" value={conf.FromAddress} name="value"
+            hx-post="/api/config/smtp/fromAddress" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Email address to use in the from field for messages</span>
             </div>
         </label>
-        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
         </div>
     </div>
 }

@@ -1,6 +1,6 @@
 package layout
 
-templ Navigation() {
+templ Navigation(withConfiguration bool) {
 <div class="navbar bg-base-100">
   <div class="navbar-start">
     <span class="text-xl">Domain Monitor</span>
@@ -13,10 +13,16 @@ templ Navigation() {
         Loading <span class="loading loading-dots loading-xs"></span>
     </div>
   </div>
+    if withConfiguration {
+      @ConfigurationButton()
+    }
+</div>
+}
+
+templ ConfigurationButton() {
   <div class="navbar-end">
     <ul class="menu menu-horizontal px-1">
       <li><a hx-get="/configuration" hx-indicator="#loading-indication" hx-target="#content">Configuration</a></li>
     </ul>
   </div>
-</div>
 }

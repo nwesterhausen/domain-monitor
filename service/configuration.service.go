@@ -86,6 +86,8 @@ func (s *ConfigurationService) GetConfigurationValue(section string, key string)
 			return s.GetAppConfiguration().Port, nil
 		case "automateWHOISRefresh":
 			return s.GetAppConfiguration().AutomateWHOISRefresh, nil
+		case "showConfiguration":
+			return s.GetAppConfiguration().ShowConfiguration, nil
 		default:
 			return nil, &ErrInvalidConfigurationKey{
 				Key: key,
@@ -94,6 +96,10 @@ func (s *ConfigurationService) GetConfigurationValue(section string, key string)
 	case "alerts":
 		switch key {
 		case "admin":
+			if !s.GetAppConfiguration().ShowConfiguration {
+				log.Println("🚨 Configuration editing is disabled in config.yaml (Admin email is not accessible via GET)")
+				return nil, errors.New("configuration editing is disabled")
+			}
 			return s.GetAlertsConfiguration().Admin, nil
 		case "sendAlerts":
 			return s.GetAlertsConfiguration().SendAlerts, nil
@@ -115,6 +121,11 @@ func (s *ConfigurationService) GetConfigurationValue(section string, key string)
 			}
 		}
 	case "smtp":
+		if !s.GetAppConfiguration().ShowConfiguration {
+			log.Println("🚨 Configuration editing is disabled in config.yaml (SMTP settings are not accessible via GET)")
+			return nil, errors.New("configuration editing is disabled")
+		}
+
 		switch key {
 		case "host":
 			return s.GetSMTPConfiguration().Host, nil
@@ -157,10 +168,16 @@ func (s *ConfigurationService) GetConfigurationValue(section string, key string)
 
 // Set each specific configuration value
 func (s *ConfigurationService) SetConfigurationValue(section string, key string, value interface{}) error {
+	if !s.GetAppConfiguration().ShowConfiguration {
+		log.Println("🚨 Configuration editing is disabled in config.yaml")
+		return errors.New("configuration editing is disabled")
+	}
+
+
 	stringVal, ok := value.(string)
 	if !ok {
 		log.Println("Value is not expected type (string)")
-		return errors.New("Value is not expected type (string)")
+		return errors.New("value is not expected type (string)")
 	}
 	intVal, intErr := strconv.Atoi(stringVal)
 	// The toggles just send "on" or "" as the string for the value
@@ -180,6 +197,8 @@ func (s *ConfigurationService) SetConfigurationValue(section string, key string,
 			s.store.Config.App.Port = intVal
 		case "automateWHOISRefresh":
 			s.store.Config.App.AutomateWHOISRefresh = boolVal
+		case "showConfiguration":
+			s.store.Config.App.ShowConfiguration = boolVal
 		default:
 			return &ErrInvalidConfigurationKey{
 				Key: key,
