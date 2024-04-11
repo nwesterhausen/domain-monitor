@@ -95,7 +95,7 @@ templ AlertsTab(conf configuration.AlertsConfiguration) {
             <div class="label">
                 <span class="label-text">Admin Email</span>
             </div>
-            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} name="value" />
+            <input type="text" placeholder="admin@example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} name="value" />
             <div class="label">
                 <span class="label-text-alt">The email that any alerts should be sent to</span>
             </div>
@@ -167,7 +167,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">SMTP Host</span>
             </div>
-            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Host} />
+            <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Host}  name="value"
+            hx-post="/api/config/smtp/host" hx-trigger="input throttle:500ms" hx-inclue="this"/>
             <div class="label">
                 <span class="label-text-alt">The SMTP hostname (or IP address)</span>
             </div>
@@ -176,7 +177,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">SMTP Port</span>
             </div>
-            <input type="text" placeholder="25" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} />
+            <input type="text" placeholder="25" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} name="value"
+            hx-post="/api/config/smtp/host" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">The SMTP port to connect to</span>
             </div>
@@ -192,7 +194,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">SMTP Username</span>
             </div>
-            <input type="text" placeholder="smtpuser" class="input input-bordered w-full max-w-lg" value={conf.AuthUser} />
+            <input type="text" placeholder="smtpuser" class="input input-bordered w-full max-w-lg" value={conf.AuthUser}  name="value"
+            hx-post="/api/config/smtp/authUser" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Username if required to login to SMTP server</span>
             </div>
@@ -201,7 +204,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">SMTP Password</span>
             </div>
-            <input type="password" placeholder="" class="input input-bordered w-full max-w-lg" value={conf.AuthPass} />
+            <input type="password" placeholder="" class="input input-bordered w-full max-w-lg" value={conf.AuthPass} name="value"
+            hx-post="/api/config/smtp/authPass" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Password if required to login to SMTP server</span>
             </div>
@@ -210,7 +214,8 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">From Name</span>
             </div>
-            <input type="text" placeholder="Domain Monitor" class="input input-bordered w-full max-w-lg" value={conf.FromName} />
+            <input type="text" placeholder="Domain Monitor" class="input input-bordered w-full max-w-lg" value={conf.FromName} name="value"
+            hx-post="/api/config/smtp/fromName" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Name to use in the from field for email messages</span>
             </div>
@@ -219,12 +224,12 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
             <div class="label">
                 <span class="label-text">From Address</span>
             </div>
-            <input type="text" placeholder="monitor@domains.example.com" class="input input-bordered w-full max-w-lg" value={conf.FromAddress} />
+            <input type="text" placeholder="monitor@domains.example.com" class="input input-bordered w-full max-w-lg" value={conf.FromAddress} name="value"
+            hx-post="/api/config/smtp/fromAddress" hx-trigger="input throttle:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Email address to use in the from field for messages</span>
             </div>
         </label>
-        <button class="btn btn-xs btn-outline btn-success max-w-md ms-8">Save</button>
         </div>
     </div>
 }
