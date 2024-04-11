@@ -13,6 +13,8 @@ type AppConfiguration struct {
 	Port int `yaml:"port" json:"port" default:"3124"`
 	// Allow automtic WHOIS refresh
 	AutomateWHOISRefresh bool `yaml:"automateWHOISRefresh" json:"automateWHOISRefresh" default:"true"`
+	// Show the configuration in the web interface. This is a security risk and should be disabled in production
+	ShowConfiguration bool `yaml:"showConfiguration" json:"showConfiguration" default:"false"`
 }
 
 type AlertsConfiguration struct {
@@ -95,6 +97,7 @@ func DefaultConfiguration(filepath string) Configuration {
 			App: AppConfiguration{
 				Port:                 3124,
 				AutomateWHOISRefresh: true,
+				ShowConfiguration:    true,
 			},
 			Scheduler: SchedulerConfiguration{
 				WhoisCacheStaleInterval:         190,

@@ -2,7 +2,7 @@ package layout
 
 import "github.com/nwesterhausen/domain-monitor/views/modal"
 
-templ Base() {
+templ Base(includeConfig bool) {
 <!DOCTYPE html>
 <html lang="en" data-theme="fantasy">
 <head>
@@ -22,7 +22,7 @@ templ Base() {
 </head>
 <body>
 <div class="container-fluid">
-    @Navigation()
+    @Navigation(includeConfig)
     <div class="container-fluid" id="content">
     <div hx-get="/dashboard" hx-trigger="load">
     <p class="htmx-indicator">
@@ -35,4 +35,11 @@ templ Base() {
 </div>
 </body>
 </html>
+}
+
+templ BaseWithConfig() {
+    @Base(true)
+}
+templ BaseWithoutConfig() {
+    @Base(false)
 }
