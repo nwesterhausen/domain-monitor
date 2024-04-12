@@ -59,7 +59,7 @@ templ AppTab(conf configuration.AppConfiguration) {
             </div>
             <input type="text" name="value" placeholder="3124" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)}
             hx-on:htmx:validation:validate="if parseInt(this.value) < 1 || parseInt(this.value) > 65535 { this.setCustomValidity('Port must be between 1 and 65535'); } else { this.setCustomValidity(''); }"
-            />
+            hx-post="/api/config/app/port" hx-trigger="keyup changed delay:500ms" hx-include="this" />
             <div class="label">
                 <span class="label-text-alt">What port the web app will listen on</span>
             </div>
@@ -101,7 +101,8 @@ templ AlertsTab(conf configuration.AlertsConfiguration) {
             <div class="label">
                 <span class="label-text">Admin Email</span>
             </div>
-            <input type="text" placeholder="admin@example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} name="value" />
+            <input type="text" placeholder="admin@example.com" class="input input-bordered w-full max-w-lg" value={conf.Admin} name="value"
+            hx-post="/api/config/alerts/admin" hx-trigger="keyup changed delay:500ms" hx-include="this" />
             <div class="label">
                 <span class="label-text-alt">The email that any alerts should be sent to</span>
             </div>
@@ -157,7 +158,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
         <h3 class="text-lg text-accent">SMTP Settings</h3>
         <p class="p-2">To receive email alerts on whois content changes, these settings need to be correct.</p>
         <div class='my-2 flex flex-row gap-2'>
-            <button class="btn btn-sm btn-info btn-outline">Send Test Email</button>
+            <button class="btn btn-sm btn-info btn-outline" hx-post="/mailer/test" hx-trigger="click throttle:10ms">Send Test Email</button>
             <div id="smtpTestResult"></div>
         </div>
         <div class="flex flex-col gap-3 p-2 w-full max-w-xl">
@@ -174,7 +175,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
                 <span class="label-text">SMTP Host</span>
             </div>
             <input type="text" placeholder="smtp.example.com" class="input input-bordered w-full max-w-lg" value={conf.Host}  name="value"
-            hx-post="/api/config/smtp/host" hx-trigger="input throttle:500ms" hx-inclue="this"/>
+            hx-post="/api/config/smtp/host" hx-trigger="keyup changed delay:500ms" hx-inclue="this"/>
             <div class="label">
                 <span class="label-text-alt">The SMTP hostname (or IP address)</span>
             </div>
@@ -184,7 +185,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
                 <span class="label-text">SMTP Port</span>
             </div>
             <input type="text" placeholder="25" class="input input-bordered w-full max-w-lg" value={strconv.Itoa(conf.Port)} name="value"
-            hx-post="/api/config/smtp/port" hx-trigger="input throttle:500ms" hx-inclue="this" />
+            hx-post="/api/config/smtp/port" hx-trigger="keyup changed delay:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">The SMTP port to connect to</span>
             </div>
@@ -201,7 +202,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
                 <span class="label-text">SMTP Username</span>
             </div>
             <input type="text" placeholder="smtpuser" class="input input-bordered w-full max-w-lg" value={conf.AuthUser}  name="value"
-            hx-post="/api/config/smtp/authUser" hx-trigger="input throttle:500ms" hx-inclue="this" />
+            hx-post="/api/config/smtp/authUser" hx-trigger="keyup changed delay:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Username if required to login to SMTP server</span>
             </div>
@@ -211,7 +212,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
                 <span class="label-text">SMTP Password</span>
             </div>
             <input type="password" placeholder="" class="input input-bordered w-full max-w-lg" value={conf.AuthPass} name="value"
-            hx-post="/api/config/smtp/authPass" hx-trigger="input throttle:500ms" hx-inclue="this" />
+            hx-post="/api/config/smtp/authPass" hx-trigger="keyup changed delay:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Password if required to login to SMTP server</span>
             </div>
@@ -221,7 +222,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
                 <span class="label-text">From Name</span>
             </div>
             <input type="text" placeholder="Domain Monitor" class="input input-bordered w-full max-w-lg" value={conf.FromName} name="value"
-            hx-post="/api/config/smtp/fromName" hx-trigger="input throttle:500ms" hx-inclue="this" />
+            hx-post="/api/config/smtp/fromName" hx-trigger="keyup changed delay:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Name to use in the from field for email messages</span>
             </div>
@@ -231,7 +232,7 @@ templ SmtpTab(conf configuration.SMTPConfiguration) {
                 <span class="label-text">From Address</span>
             </div>
             <input type="text" placeholder="monitor@domains.example.com" class="input input-bordered w-full max-w-lg" value={conf.FromAddress} name="value"
-            hx-post="/api/config/smtp/fromAddress" hx-trigger="input throttle:500ms" hx-inclue="this" />
+            hx-post="/api/config/smtp/fromAddress" hx-trigger="keyup changed delay:500ms" hx-inclue="this" />
             <div class="label">
                 <span class="label-text-alt">Email address to use in the from field for messages</span>
             </div>
@@ -251,7 +252,7 @@ templ SchedulerTab(conf configuration.SchedulerConfiguration) {
                 <span class="label-text">WHOIS Cache Stale Interval</span>
             </div>
             <input type="text" placeholder="190" class="input input-bordered w-full max-w-lg" name="value"
-            value={strconv.Itoa(conf.WhoisCacheStaleInterval)} hx-trigger="change throttle:50ms"
+            value={strconv.Itoa(conf.WhoisCacheStaleInterval)} hx-trigger="keyup change delay:500ms"
             hx-post="/api/config/scheduler/whoisCacheStaleInterval" hx-include="this" />
             <div class="label">
                 <span class="label-text-alt">How many days before cached WHOIS information is considered stale and should be refreshed</span>
