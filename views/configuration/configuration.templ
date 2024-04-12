@@ -252,7 +252,7 @@ templ SchedulerTab(conf configuration.SchedulerConfiguration) {
                 <span class="label-text">WHOIS Cache Stale Interval</span>
             </div>
             <input type="text" placeholder="190" class="input input-bordered w-full max-w-lg" name="value"
-            value={strconv.Itoa(conf.WhoisCacheStaleInterval)} hx-trigger="change throttle:50ms"
+            value={strconv.Itoa(conf.WhoisCacheStaleInterval)} hx-trigger="keyup change delay:500ms"
             hx-post="/api/config/scheduler/whoisCacheStaleInterval" hx-include="this" />
             <div class="label">
                 <span class="label-text-alt">How many days before cached WHOIS information is considered stale and should be refreshed</span>
