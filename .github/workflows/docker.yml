@@ -55,7 +55,7 @@ jobs:
             ghcr.io/${{ env.IMAGE_NAME }}
           tags: |
             type=schedule
-            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}.{{patch}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=ref,event=branch
