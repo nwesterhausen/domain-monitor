@@ -4,7 +4,6 @@ go 1.22.1
 
 require (
 	github.com/a-h/templ v0.2.648
-	github.com/hako/durafmt v0.0.0-20210608085754-5c1018a4e16b
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/likexian/whois v1.15.1
 	github.com/likexian/whois-parser v1.24.11
@@ -21,7 +20,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.21.0 // indirect
-	golang.org/x/net v0.22.0 // indirect
+	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
