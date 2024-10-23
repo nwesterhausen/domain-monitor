@@ -67,7 +67,7 @@ Image is just `nwesterhausen/domain-monitor`, latest tag will be the most recent
 
 ### Running Locally
 
-Should by OS agnostic. Requires go and nodejs. Clone this repo and follow the [build instructions](#development). Then you can run the binary alongside the `assets` folder.
+Should be OS-agnostic. Requires Go and NodeJS. Clone this repo and follow the [build instructions](#development). Then you can run the binary alongside the `assets` folder.
 
 Configuration can be done via the configuration page of the web gui
 (default http://localhost:3124)
@@ -235,18 +235,10 @@ Requirements:
 - [golang](https://golang.org/)
 - [nodejs](https://nodejs.org/)
 - [pnpm](https://pnpm.io/)
-- [air](https://github.com/cosmtrek/air) `go install github.com/cosmtrek/air@latest`
+- [air](https://github.com/air-verse/air) `go install github.com/air-verse/air@latest`
 - [templ](https://github.com/a-h/templ/) `go install github.com/a-h/templ/cmd/templ@latest`
 
 ### Development server
-
-To run the development server, use the following command:
-
-```sh
-air
-```
-
-Air will take care of all the build steps whenever a change is detected.
 
 Build steps:
 
@@ -269,3 +261,11 @@ go build cmd/main.go
 ```
 
 The binary requires the `assets` folder to be in the same directory as the binary.
+
+To run the development server, use the following command:
+
+```sh
+air
+```
+
+Air will take care of all the build steps whenever a change is detected.
