@@ -19,6 +19,7 @@ jobs:
           go-version: 1.22.1
       - name: Install templ and run templ generate
         run: |
+          go get github.com/a-h/templ/runtime
           go install github.com/a-h/templ/cmd/templ@latest
           templ generate
       - name: Build
