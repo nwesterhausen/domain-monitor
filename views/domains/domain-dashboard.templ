@@ -5,8 +5,8 @@ import (
     "strings"
     "time"
     "fmt"
-
-    "github.com/hako/durafmt"
+	"github.com/likexian/whois-parser"
+	"github.com/hako/durafmt"
 )
 
 templ DomainCard(domain configuration.Domain) {
@@ -40,12 +40,12 @@ templ WhoisError(err error) {
 templ WhoisDetail(whois configuration.WhoisCache) {
     <div class="flex flex-col">
     if (!whois.NxDomain) {
-        @WhoisDetailItem("Registrar", whois.WhoisInfo.Registrar.Name)
+        @WhoisDetailItem("Registrar", GetRegistrar(whois.WhoisInfo))
         @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
-        @WhoisDetailItem("Creation Date", whois.WhoisInfo.Domain.CreatedDateInTime.Format("2006-01-02"))
-        @WhoisDetailItem("Expiration Date", whois.WhoisInfo.Domain.ExpirationDateInTime.Format("2006-01-02"))
-        @WhoisDetailItem("Time Until Expiration", durafmt.Parse(whois.WhoisInfo.Domain.ExpirationDateInTime.Sub(time.Now())).LimitFirstN(2).String())
-        @WhoisDetailItem("WHOIS Query Date", whois.LastUpdated.Format("2006-01-02"))
+        @WhoisDetailItem("Creation Date", FormatDate(whois.WhoisInfo.Domain.CreatedDateInTime))
+        @WhoisDetailItem("Expiration Date", FormatDate(whois.WhoisInfo.Domain.ExpirationDateInTime))
+        @WhoisDetailItem("Time Until Expiration", ExpiresIn(whois.WhoisInfo))
+        @WhoisDetailItem("WHOIS Query Date", FormatDate(&whois.LastUpdated))
     } else {
         <div class="flex flex-col">
             <div class="text-xs text-secondary">Error</div>
@@ -53,6 +53,31 @@ templ WhoisDetail(whois configuration.WhoisCache) {
         </div>
     }
     </div>
+}
+
+func GetRegistrar(info whoisparser.WhoisInfo) string {
+     if (info.Registrar == nil) {
+        return "N/A"
+    }
+    if (info.Registrar.Name == "") {
+        return "N/A"
+    }
+    return info.Registrar.Name
+}
+
+func FormatDate(date *time.Time) string {
+    if (date == nil) {
+        return "N/A"
+    }
+
+    return date.Format("2006-01-02")
+}
+
+func ExpiresIn(info whoisparser.WhoisInfo) string {
+    if (info.Domain.ExpirationDateInTime == nil) {
+        return "N/A"
+    }
+    return durafmt.Parse(info.Domain.ExpirationDateInTime.Sub(time.Now())).LimitFirstN(2).String()
 }
 
 templ WhoisDetailItem(label string, value string) {
