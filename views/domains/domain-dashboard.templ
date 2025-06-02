@@ -37,23 +37,31 @@ templ WhoisError(err error) {
     <div class="text-error">{ fmt.Sprintf("WHOIS Cache Miss. %v", err) }</div>
 }
 
+var nullinfo whoisparser.WhoisInfo
+
 templ WhoisDetail(whois configuration.WhoisCache) {
     <div class="flex flex-col">
-    if (!whois.NxDomain) {
+    if (whois.NxDomain) {
+        <div class="flex flex-col">
+            <div class="text-xs text-secondary">Error</div>
+            <div class="ps-2 text-md">NXDOMAIN</div>
+        </div>
+    } else if (whois.WhoisInfo == nullinfo) {
+        <div class="flex flex-col">
+            <div class="text-xs text-secondary">Error</div>
+            <div class="ps-2 text-md">WHOIS info missing</div>
+        </div>
+    } else {
         @WhoisDetailItem("Registrar", GetRegistrar(whois.WhoisInfo))
         @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
         @WhoisDetailItem("Creation Date", FormatDate(whois.WhoisInfo.Domain.CreatedDateInTime))
         @WhoisDetailItem("Expiration Date", FormatDate(whois.WhoisInfo.Domain.ExpirationDateInTime))
         @WhoisDetailItem("Time Until Expiration", ExpiresIn(whois.WhoisInfo))
         @WhoisDetailItem("WHOIS Query Date", FormatDate(&whois.LastUpdated))
-    } else {
-        <div class="flex flex-col">
-            <div class="text-xs text-secondary">Error</div>
-            <div class="ps-2 text-md">NXDOMAIN</div>
-        </div>
     }
     </div>
 }
+
 
 func GetRegistrar(info whoisparser.WhoisInfo) string {
      if (info.Registrar == nil) {
