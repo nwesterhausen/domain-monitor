@@ -12,7 +12,8 @@ import (
 
 type WhoisCache struct {
 	// FQDN this entry is for (this is the index used in this app)
-	FQDN string `yaml:"fqdn" json:"fqdn"`
+	FQDN     string `yaml:"fqdn" json:"fqdn"`
+	NxDomain bool   `yaml:"nxdomain" json:"nxdomain"`
 	// The WhoisInfo object
 	WhoisInfo whoisparser.WhoisInfo `yaml:"whoisInfo" json:"whoisInfo"`
 	// Date this entry was last updated
@@ -145,6 +146,9 @@ func (w *WhoisCache) Refresh() {
 	whoisInfo, err := whoisparser.Parse(whoisRaw)
 	if err != nil {
 		log.Printf("Error parsing whois for %s: %s", w.FQDN, err)
+		if err == whoisparser.ErrNotFoundDomain {
+			w.NxDomain = true
+		}
 		return
 	}
 

@@ -39,7 +39,7 @@ templ WhoisError(err error) {
 
 templ WhoisDetail(whois configuration.WhoisCache) {
     <div class="flex flex-col">
-    if (whois.WhoisInfo.Registrar != nil) {
+    if (!whois.NxDomain) {
         @WhoisDetailItem("Registrar", whois.WhoisInfo.Registrar.Name)
         @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
         @WhoisDetailItem("Creation Date", whois.WhoisInfo.Domain.CreatedDateInTime.Format("2006-01-02"))
