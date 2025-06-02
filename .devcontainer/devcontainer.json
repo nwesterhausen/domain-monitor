@@ -11,7 +11,7 @@
   "postCreateCommand": "templ generate && go mod tidy && pnpm install",
 
   "onCreateCommand": {
-    "install air": "go install github.com/cosmtrek/air@latest",
+    "install air": "go install github.com/air-verse/air@latest",
     "install templ": "go install github.com/a-h/templ/cmd/templ@latest"
   },
 
