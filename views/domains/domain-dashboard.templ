@@ -39,12 +39,19 @@ templ WhoisError(err error) {
 
 templ WhoisDetail(whois configuration.WhoisCache) {
     <div class="flex flex-col">
-    @WhoisDetailItem("Registrar", whois.WhoisInfo.Registrar.Name)
-    @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
-    @WhoisDetailItem("Creation Date", whois.WhoisInfo.Domain.CreatedDateInTime.Format("2006-01-02"))
-    @WhoisDetailItem("Expiration Date", whois.WhoisInfo.Domain.ExpirationDateInTime.Format("2006-01-02"))
-    @WhoisDetailItem("Time Until Expiration", durafmt.Parse(whois.WhoisInfo.Domain.ExpirationDateInTime.Sub(time.Now())).LimitFirstN(2).String())
-    @WhoisDetailItem("WHOIS Query Date", whois.LastUpdated.Format("2006-01-02"))
+    if (whois.WhoisInfo.Registrar != nil) {
+        @WhoisDetailItem("Registrar", whois.WhoisInfo.Registrar.Name)
+        @WhoisDetailItem("Name Servers", strings.Join(whois.WhoisInfo.Domain.NameServers, ", "))
+        @WhoisDetailItem("Creation Date", whois.WhoisInfo.Domain.CreatedDateInTime.Format("2006-01-02"))
+        @WhoisDetailItem("Expiration Date", whois.WhoisInfo.Domain.ExpirationDateInTime.Format("2006-01-02"))
+        @WhoisDetailItem("Time Until Expiration", durafmt.Parse(whois.WhoisInfo.Domain.ExpirationDateInTime.Sub(time.Now())).LimitFirstN(2).String())
+        @WhoisDetailItem("WHOIS Query Date", whois.LastUpdated.Format("2006-01-02"))
+    } else {
+        <div class="flex flex-col">
+            <div class="text-xs text-secondary">Error</div>
+            <div class="ps-2 text-md">NXDOMAIN</div>
+        </div>
+    }
     </div>
 }
 
