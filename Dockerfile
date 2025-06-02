@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # Use the official golang image to create a build artifact.
-FROM docker.io/golang:1.22-alpine as builder
+FROM docker.io/golang:1.23-alpine as builder
 WORKDIR /src
 RUN mkdir app
 
