@@ -15,9 +15,14 @@ func NewWhoisService(store configuration.WhoisCacheStorage) *ServicesWhois {
 	return &ServicesWhois{store: store}
 }
 
-func (s *ServicesWhois) GetWhois(fqdn string) (configuration.WhoisCache, error) {
-	for _, entry := range s.store.FileContents.Entries {
+func (s *ServicesWhois) GetWhois(fqdn string, noCache bool) (configuration.WhoisCache, error) {
+	for i, entry := range s.store.FileContents.Entries {
 		if entry.FQDN == fqdn {
+			if noCache {
+				s.store.FileContents.Entries[i].Refresh()
+				s.store.Flush()
+				return s.store.FileContents.Entries[i], nil
+			}
 			return entry, nil
 		}
 	}
