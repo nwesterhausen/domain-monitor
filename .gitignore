@@ -129,6 +129,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+.pnpm-store/
 
 # Specific to this project
 # Don't include anything from config unless manually added
