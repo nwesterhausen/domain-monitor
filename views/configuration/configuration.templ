@@ -144,7 +144,7 @@ templ AlertsTab(conf configuration.AlertsConfiguration) {
         </div>
         <div class="form-control max-w-md">
           <label class="label cursor-pointer">
-            <span class="label-text">Daily Alerts for Exiration within 1 Week</span>
+            <span class="label-text">Daily Alerts for Expiration within 1 Week</span>
             <input type="checkbox" class="toggle toggle-success" checked?={conf.SendDailyExpiryAlert} name="value"
             hx-post="/api/config/alerts/sendDailyExpiryAlert" hx-trigger="click throttle:10ms" hx-inclue="this" />
           </label>
